@@ -8,22 +8,32 @@ object Day01 extends App:
   val start1: Long =
     System.currentTimeMillis
 
-  val commands: List[Char] =
+  val input: List[String] =
     Source
       .fromResource(s"input$day.txt")
-      .mkString
-      .trim
+      .getLines
+      .map(_.trim)
       .toList
 
+  var cals: List[List[Int]] = List(List.empty[Int])
+  for (line <- input) {
+    if   line == "" then cals = cals :+ List.empty[Int]
+    else cals = cals.init :+ (cals.last :+ line.toInt)
+  }
+
   val answer1: Int =
-    667
+    cals.map(_.sum).sorted.last
 
   println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
+
+  assert(answer1 == 69501)
 
   val start2: Long =
     System.currentTimeMillis
 
   val answer2: Int =
-    667
+    cals.map(_.sum).sorted.takeRight(3).sum
 
   println(s"Answer day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
+
+  assert(answer2 == 202346)
