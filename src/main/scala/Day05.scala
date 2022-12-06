@@ -20,7 +20,7 @@ object Day05 extends App:
       .toList
 
   def isLabelLine(line: String): Boolean =
-    line.nonEmpty && line.head.isDigit
+    line.trim.nonEmpty && line.trim.head.isDigit
 
   def isStackLine(line: String): Boolean =
     line.dropWhile(_ == ' ').startsWith("[")
@@ -30,7 +30,7 @@ object Day05 extends App:
 
   val stack: List[List[Char]] =
     val columnSize: Int =
-      input.map(_.trim).filter(isLabelLine) match
+      input.filter(isLabelLine) match
         case List(cols) => cols.split(' ').last.toInt
         case _ => sys.error("multiple label lines")
     def crateExtractor(line: String)(idx: Int): Option[Char] =
