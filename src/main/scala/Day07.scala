@@ -20,7 +20,7 @@ object Day07 extends App:
 
   val input: List[Line] =
     Source
-      .fromResource("input07.txt")
+      .fromResource(s"input$day.txt")
       .getLines
       .map(parseLine)
       .toList
@@ -33,14 +33,12 @@ object Day07 extends App:
     val slash = "/"
     val up    = ".."
 
-    def fromList(l: List[String]): String = l.mkString(slash)
+    def flatten(l: List[String]): String = l.mkString(slash)
 
   case class File(name: Path, size: Long)
 
-  case class FileSystem( cur: List[String] = List(Path.empty)
-                       , fs: List[File] = List.empty
-                       , ds: List[Path] = List(Path.root)
-  ):
+  case class FileSystem(cur: List[String], fs: List[File] = List.empty, ds: List[Path]):
+
     private val path2Size: Map[String,Long] =
       ds.map(name => name -> sizeOf(name)).toMap
 
@@ -50,13 +48,16 @@ object Day07 extends App:
     val sizes: List[Long] =
       path2Size.view.values.toList
 
+  object FileSystem:
+    val empty = FileSystem(List(Path.empty), List.empty, List(Path.root))
+
   val fileSystem =
     import Path.*
     input
-      .foldLeft(FileSystem())((sys,line) =>
+      .foldLeft(FileSystem.empty)((sys,line) =>
         line match
-          case DirLine(name)        => sys.copy(ds = sys.ds :+ fromList(sys.cur :+ name))
-          case FileLine(name, size) => sys.copy(fs = sys.fs :+ File(fromList(sys.cur :+ name), size))
+          case DirLine(name)        => sys.copy(ds = sys.ds :+ flatten(sys.cur :+ name))
+          case FileLine(name, size) => sys.copy(fs = sys.fs :+ File(flatten(sys.cur :+ name), size))
           case CdLine(Path.up)      => sys.copy(cur = sys.cur.dropRight(1))
           case CdLine(name)         => sys.copy(cur = sys.cur :+ name)
           case _                    => sys
@@ -68,7 +69,7 @@ object Day07 extends App:
   val answer1: Long =
     fileSystem.sizes.filter(_ <= 100000L).sum
 
-  println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val free: Long =
     70000000L - fileSystem.sizeOf("/")
@@ -80,6 +81,6 @@ object Day07 extends App:
     System.currentTimeMillis
 
   val answer2 =
-    fileSystem.sizes.filter(_ >= clean).sorted.head
+    fileSystem.sizes.filter(_ >= clean).min
 
-  println(s"Answer day $day part 2: ${answer2} [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start1}ms]")
