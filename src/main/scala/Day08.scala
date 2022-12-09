@@ -2,8 +2,7 @@ import scala.io.Source
 
 object Day08 extends App:
 
-  val day: String =
-    this.getClass.getName.drop(3).init
+  val day: String = this.getClass.getName.drop(3).init
 
   case class Pos(x: Int, y: Int)
 
