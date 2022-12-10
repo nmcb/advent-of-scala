@@ -21,7 +21,7 @@ object Day09 extends App:
         case L => copy(x = x - 1)
         case R => copy(x = x + 1)
 
-    private def align(p: Pos): List[Dir] =
+    private def alignment(p: Pos): List[Dir] =
       val hor = x.compare(p.x) match
         case -1 if p.x - x >= 2 => // x < p.x
           y.compare(p.y) match
@@ -34,6 +34,7 @@ object Day09 extends App:
             case -1 => List(L,U)   // y < p.y
             case  0 => List(L)     // y = p.y
             case  1 => List(L,D)   // y > p.y
+
         case _ => List()
 
       val ver = y.compare(p.y) match
@@ -48,12 +49,13 @@ object Day09 extends App:
             case -1 => List(D,R)   // x < p.x
             case  0 => List(D)     // x = p.x
             case  1 => List(D,L)   // x > p.x
+
         case _ => List()
 
-      List(hor, ver).flatten.distinct
+      List(hor,ver).flatten.distinct
 
     def follow(h: Pos): Pos =
-      align(h).foldLeft(this)((t,d) => t.move(d))
+      alignment(h).foldLeft(this)(_ move _)
 
   object Pos:
     def of(x: Int, y: Int): Pos = Pos(x,y)
