@@ -15,9 +15,6 @@ object Day11 extends App:
       .map(Monkey.fromStrings)
       .toList
 
-  val leastCommonMultiple: Long =
-    monkeys.map(_.div).product
-
   object Monkey:
     def fromStrings(ss: List[String]): Monkey =
       def parseMonkey(s: String): Int =
@@ -32,34 +29,43 @@ object Day11 extends App:
       def parseTest(s: String): Long =
         s match
           case s"  Test: divisible by $d" => d.toLong
-      def parseTrue(s: String): Int =
+      def parseToIfTrue(s: String): Int =
         s match
           case s"    If true: throw to monkey $m" => m.toInt
-      def parseFalse(s: String): Int =
+      def parseToIfFalse(s: String): Int =
         s match
           case s"    If false: throw to monkey $m" => m.toInt
 
-      val nr    = parseMonkey(ss(0))
-      val is    = parseItems(ss(1))
-      val (o,r) = parseOperation(ss(2))
-      val test  = parseTest(ss(3))
-      val tt    = parseTrue(ss(4))
-      val tf    = parseFalse(ss(5))
+      val nr        = parseMonkey(ss(0))
+      val items     = parseItems(ss(1))
+      val (op,rhs)  = parseOperation(ss(2))
+      val divisible = parseTest(ss(3))
+      val tit        = parseToIfTrue(ss(4))
+      val tif        = parseToIfFalse(ss(5))
 
-      Monkey(nr, is, o, Try(r.toLong).toOption, test, tt, tf)
+      Monkey(nr, items, op, Try(rhs.toLong).toOption, divisible, tit, tif)
 
 
-  case class Monkey(nr: Int, items: List[Long], op: String, rhs: Option[Long], div: Long, throwToTrue: Int, throwToFalse: Int, count: Long = 0, part2: Boolean = false):
+  case class Monkey( nr: Int
+                   , items: List[Long]
+                   , op: String
+                   , rhs: Option[Long]
+                   , divisible: Long
+                   , toIfTrue: Int
+                   , toIfFalse: Int
+                   , lowerWorry: Long => Long = identity
+                   , count: Long              = 0
+  ):
     def operation(i: Long): Long =
       op match
         case "+" => i + rhs.getOrElse(i)
         case "*" => i * rhs.getOrElse(i)
 
-    private def inspect(i: Long): (Long,Int) =
-      val w1 = operation(i)
-      val w2 = if !part2 then w1 / 3 else w1 % leastCommonMultiple
-      val nr = if w2 % div == 0 then throwToTrue else throwToFalse
-      (w2,nr)
+    private def inspect(worry0: Long): (Long,Int) =
+      val worry1 = operation(worry0)
+      val worry2 = lowerWorry(worry1)
+      val nr = if worry2 % divisible == 0 then toIfTrue else toIfFalse
+      (worry2, nr)
 
     def inspect: List[(Long,Int)] =
       items.map(inspect)
@@ -77,32 +83,29 @@ object Day11 extends App:
           loop(t, nms)
     loop(ms, ms)
 
-  val start1: Long =
-    System.currentTimeMillis
-
-  val answer1: Long =
-    (1 to 20)
-      .foldLeft(monkeys)((s,_) => round(s))
+  def solve(rounds: Int, ms: List[Monkey]): Long =
+    (1 to rounds)
+      .foldLeft(ms)((s,_) => round(s))
       .map(_.count)
       .sorted
       .takeRight(2)
       .product
 
-  println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  val start1: Long =
+    System.currentTimeMillis
 
-  val play2 =
-    (1 to 10000)
-      .foldLeft(monkeys.map(_.copy(part2 = true)))((s,_) => round(s))
+  val answer1: Long =
+    val ms = monkeys.map(_.copy(lowerWorry = _ / 3))
+    solve(20, ms)
+
+  println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long =
     System.currentTimeMillis
 
   val answer2: Long =
-    (1 to 10000)
-      .foldLeft(monkeys.map(_.copy(part2 = true)))((s,_) => round(s))
-      .map(_.count)
-      .sorted
-      .takeRight(2)
-      .product
+    val productOfDivisibles = monkeys.map(_.divisible).product
+    val ms = monkeys.map(_.copy(lowerWorry = _ % productOfDivisibles))
+    solve(10000, ms)
 
   println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start1}ms]")
