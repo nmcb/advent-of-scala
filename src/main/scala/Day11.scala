@@ -40,8 +40,8 @@ object Day11 extends App:
       val items     = parseItems(ss(1))
       val (op,rhs)  = parseOperation(ss(2))
       val divisible = parseTest(ss(3))
-      val tit        = parseToIfTrue(ss(4))
-      val tif        = parseToIfFalse(ss(5))
+      val tit       = parseToIfTrue(ss(4))
+      val tif       = parseToIfFalse(ss(5))
 
       Monkey(nr, items, op, Try(rhs.toLong).toOption, divisible, tit, tif)
 
