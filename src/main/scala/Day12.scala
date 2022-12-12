@@ -18,11 +18,6 @@ object Day12 extends App:
 
   lazy val (graph, from, to): (Graph, Vertex, Vertex) =
 
-    def height(c: Char): Int =
-      if      c == 'S' then 0
-      else if c == 'E' then 25
-      else c.toInt - 97
-
     val maxX: Int = input.maxBy(_._1)._1
     val maxY: Int = input.maxBy(_._2)._2
 
@@ -35,25 +30,35 @@ object Day12 extends App:
       val e = Edge(t, f, w)
       m.updatedWith(t)(_.map(_ :+ e).orElse(Some(List(e))))
 
+    def char(v: Vertex): Char =
+      input.find((sx,sy,_) => sx == v.x && sy == v.y).map((_,_,c) => c).getOrElse(sys.error("boom!"))
 
+    def height(c: Char): Int =
+      if      c == 'S' then 0
+      else if c == 'E' then 25
+      else c.toInt - 97
+
+    def weight(f: Vertex, t: Vertex): Option[Int] =
+      val fh = height(char(f))
+      val th = height(char(t))
+      th.compare(fh) match
+        case  1 => // th > fh
+          if th - fh == 1 then Some(2) else None
+        case  0 => // th = fh
+          Some(1)
+        case -1 => // th < fh
+          Some(th - fh + 2)
 
     val g: Graph =
-      Graph(
-        input.foldLeft(Map.empty[Vertex,Seq[Edge]]){ case (a,(x,y,c)) => {
+      val adjacent: Map[Vertex,Seq[Edge]] =
+        input.foldLeft(Map.empty[Vertex,Seq[Edge]]){ case (a,(x,y,_)) =>
           val f = Vertex(x, y)
-          val fh = height(c)
-          neighbours(x, y).foldLeft(a) { case (aa, (nx, ny)) => {
+          neighbours(x, y).foldLeft(a) { case (aa, (nx, ny)) =>
             val t = Vertex(nx, ny)
-            val th = height(input.find((sx,sy,_) => sx == nx && sy == ny).getOrElse(sys.error("boom!"))._3)
-            th.compare(fh) match
-              case  1 => // th > fh
-                if th - fh == 1 then addOrInit(f, t, 2)(aa) else aa
-              case  0 => // th = fh
-                addOrInit(f, t, 1)(aa)
-              case -1 => // th < fh
-                addOrInit(f, t, th - fh + 2)(aa)
-          }}
-        }})
+            weight(f, t).map(w => addOrInit(f, t, w)(aa)).getOrElse(aa)
+          }
+        }
+      Graph(adjacent)
 
     val f: Vertex =
       val (x, y, _) = input.filter(_._3 == 'S').head
@@ -116,7 +121,7 @@ object Day12 extends App:
                 if !queue.exists(_._1 == e.to) then
                   queue.enqueue((e.to, distToTo))
             case None =>
-              () // nop
+              () // nop - can happen when the weight is 'doctored'
         }
       }
       Calc(edgeTo.toMap, distTo.toMap)
