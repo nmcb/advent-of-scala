@@ -36,7 +36,7 @@ object Day08 extends App:
       val vb = visible(pathB(p))
       vl || vr || vt || vb
 
-    val maxVisibleTrees: Int =
+    def maxVisibleTrees: Int =
       heightOf.keys.foldLeft(List.empty[Pos])((s,p) =>
         if      isBorder(p) then p :: s
         else if visible(p)  then p :: s
@@ -57,7 +57,7 @@ object Day08 extends App:
       val vb = visible(pathB(p))
       vl * vr * vt * vb
 
-    val maxScenicScore: Int =
+    def maxScenicScore: Int =
       heightOf.keys.map(scenicScore).max
 
   val grid: Mat =

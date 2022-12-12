@@ -53,4 +53,3 @@ Monkey 7:
   Test: divisible by 17
     If true: throw to monkey 1
     If false: throw to monkey 5
-
