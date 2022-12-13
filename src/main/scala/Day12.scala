@@ -74,21 +74,21 @@ object Day12 extends App:
 
   case class Edge(from: Vertex, to: Vertex, weight: Int)
 
-  case class Calc(edgeTo: Map[Vertex, Edge], distTo: Map[Vertex, Int]):
+  case class Calc(edgeTo: Map[Vertex, Edge], weightTo: Map[Vertex, Int]):
     def pathTo(to: Vertex): Seq[Edge] =
       @scala.annotation.tailrec
-      def go(edges: Seq[Edge], cur: Vertex): Seq[Edge] =
-        edgeTo.get(cur) match {
-          case Some(e) => go(e +: edges, e.from)
+      def loop(v: Vertex, edges: Seq[Edge] = Seq.empty): Seq[Edge] =
+        edgeTo.get(v) match {
+          case Some(e) => loop(e.from, e +: edges)
           case None => edges
         }
-      if (!hasPath(to)) Seq.empty else go(Seq.empty, to)
+      if (!hasPath(to)) Seq.empty else loop(to)
 
     def hasPath(to: Vertex): Boolean =
-      distTo.contains(to)
+      weightTo.contains(to)
 
-    def distToV(Vertex: Vertex): Int =
-      distTo(Vertex)
+    def weightToV(to: Vertex): Int =
+      weightTo(to)
 
   case class Graph(adjacent: Map[Vertex, Seq[Edge]] = Map.empty):
 
