@@ -3,7 +3,7 @@ import org.scalatest.funsuite.AnyFunSuite
 class TestSolutions extends AnyFunSuite:
 
   test("Day01 [32ms]") {
-    assertResult( 69501)(actual = Day01.answer1)
+    assertResult(69501)(actual = Day01.answer1)
     assertResult(202346)(actual = Day01.answer2)
   }
   test("Day02 [11ms]") {
@@ -31,7 +31,7 @@ class TestSolutions extends AnyFunSuite:
     assertResult(5025657)(actual = Day07.answer2)
   }
   test("Day08 [745ms]") {
-    assertResult(  1818)(actual = Day08.answer1)
+    assertResult(1818)(actual = Day08.answer1)
     assertResult(368368)(actual = Day08.answer2)
   }
   test("Day09 [311ms]") {
@@ -57,7 +57,15 @@ class TestSolutions extends AnyFunSuite:
     assertResult(383)(actual = Day12.answer1)
     assertResult(377)(actual = Day12.answer2)
   }
-  test("Day13 [6ms]") {
-    assertResult( 5760)(actual = Day13.answer1)
+  test("Day13 [7ms]") {
+    assertResult(5760)(actual = Day13.answer1)
     assertResult(26670)(actual = Day13.answer2)
+  }
+  test("Day14 [73s]") {
+    assertResult(793)(actual = Day14.answer1)
+    assertResult(24166)(actual = Day14.answer2)
+  }
+  test("Day15 [6ms]") {
+    assertResult(5870801)(actual = Day15.answer1)
+    assertResult(10908230916597L)(actual = Day15.answer2)
   }

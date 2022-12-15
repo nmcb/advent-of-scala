@@ -37,24 +37,24 @@ object Day08 extends App:
       vl || vr || vt || vb
 
     def maxVisibleTrees: Int =
-      heightOf.keys.foldLeft(List.empty[Pos])((s,p) =>
-        if      isBorder(p) then p :: s
-        else if visible(p)  then p :: s
-        else                          s
-      ).size
+      heightOf.keys.foldLeft(0)((c,p) =>
+        if      isBorder(p) then c + 1
+        else if visible(p)  then c + 1
+        else                     c
+      )
 
     def scenicScore(p: Pos): Int =
       def pathL(p: Pos): List[Int] = (0 to p.x).map(x    => heightOf(Pos.of(x, p.y))).toList.reverse
       def pathR(p: Pos): List[Int] = (p.x to maxX).map(x => heightOf(Pos.of(x, p.y))).toList
       def pathT(p: Pos): List[Int] = (0 to p.y).map(y    => heightOf(Pos.of(p.x, y))).toList.reverse
       def pathB(p: Pos): List[Int] = (p.y to maxY).map(y => heightOf(Pos.of(p.x, y))).toList
-      def visible(todo: List[Int]): Int =
+      def score(todo: List[Int]): Int =
         val index  = todo.tail.indexWhere(_ >= todo.head)
         if index != -1 then index + 1 else todo.tail.length
-      val vl = visible(pathL(p))
-      val vr = visible(pathR(p))
-      val vt = visible(pathT(p))
-      val vb = visible(pathB(p))
+      val vl = score(pathL(p))
+      val vr = score(pathR(p))
+      val vt = score(pathT(p))
+      val vb = score(pathB(p))
       vl * vr * vt * vb
 
     def maxScenicScore: Int =

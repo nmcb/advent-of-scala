@@ -19,3 +19,6 @@ scalacOptions ++= Seq(
   "-deprecation",
 //  "-explain",
 )
+
+Compile / run / fork := true
+Compile / run / javaOptions += "-Xmx4G"
