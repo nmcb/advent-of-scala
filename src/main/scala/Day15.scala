@@ -23,7 +23,7 @@ object Day15 extends App:
 
   val locks: List[Lock] =
     Source
-      .fromResource("input15.txt")
+      .fromResource(s"input$day.txt")
       .getLines()
       .toList
       .map {
