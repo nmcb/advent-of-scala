@@ -39,8 +39,6 @@ object Day18 extends App:
     val min = input.reduce(_ min _) - Box(1,1,1)
     val max = input.reduce(_ max _) + Box(1,1,1)
 
-    import scala.collection.immutable.Queue
-
     def flood(todo: List[Box], visited: Set[Box]): Set[Box] =
       todo match
         case Nil =>
@@ -53,7 +51,7 @@ object Day18 extends App:
               .diff(visited + cur)
               .filter(n => n >= min && n <= max)
 
-          flood(rest.concat(reached), visited ++ reached + cur)
+          flood(rest ++ reached, visited ++ reached + cur)
 
     val outer = flood(List(min), Set.empty)
     input.toSeq.map(_.neighbours.count(outer.contains)).sum
