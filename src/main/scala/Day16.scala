@@ -25,7 +25,7 @@ object Day16 extends App:
   val pressures: Map[Vertex,Int] =
     valves.map(v => v.name -> v.rate).toMap
 
-  val tunnels: List[Vertex] =
+  val nonzero: List[Vertex] =
     valves.filter(_.rate != 0).map(_.name)
 
   val distances: Map[(Vertex,Vertex),Int] =
@@ -55,17 +55,17 @@ object Day16 extends App:
     )
 
   val start1: Long = System.currentTimeMillis
-  val answer1: Int = solve1(0, 0, 0, "AA", tunnels, 30)
+  val answer1: Int = solve1(0, 0, 0, "AA", nonzero, 30)
   println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
 
   def solve2(): Int =
-    (1 to tunnels.length / 2).foldLeft(0)((max,i) =>
-      tunnels.combinations(i).foldLeft(max)((max,left) =>
-          val max2a = solve1(0, 0, 0, "AA", left, 26)
-          val right = tunnels.filterNot(v => left.contains(v))
-          val max2b = solve1(0, 0, 0, "AA", right, 26)
-          if max2a + max2b > max then max2a + max2b else max
+    (1 to nonzero.length / 2).foldLeft(0)((max,i) =>
+      nonzero.combinations(i).foldLeft(max)((max,left) =>
+        val max2a = solve1(0, 0, 0, "AA", left, 26)
+        val right = nonzero.filterNot(v => left.contains(v))
+        val max2b = solve1(0, 0, 0, "AA", right, 26)
+        if max2a + max2b > max then max2a + max2b else max
       )
     )
 
