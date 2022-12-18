@@ -54,9 +54,6 @@ object Day17 extends App:
     def isEmpty: Boolean = stopped.isEmpty
 
     def next(rock: Rock): Chamber =
-//      rockCount = rockCount + 1
-//      if rockCount % 1000 == 0 then
-//        println(s"rockCount=${rockCount/1000}k [${System.currentTimeMillis - start1}ms]")
 
       def appear: Pos = Pos.origin.translate(dx = 2, dy = height + 3)
 
