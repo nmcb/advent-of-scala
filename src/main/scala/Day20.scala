@@ -23,11 +23,13 @@ object Day20 extends App:
       buffer.insert(if to < 0 then to.toInt + buffer.size else to.toInt, element)
       buffer
 
-    val state: Buffer[(Long, Int)] =
-      input.map(_ * key).zipWithIndex.toBuffer
+    val mapped: List[(Long, Int)] =
+      input.map(_ * key).zipWithIndex
 
     val decrypted: List[(Long, Int)] =
-      (0 until runs).foldLeft(state)((acc,_) => state.foldLeft(acc)(_ mix _)).toList
+      (0 until runs)
+        .foldLeft(mapped.toBuffer)((acc,_) => mapped.foldLeft(acc)(_ mix _))
+        .toList
 
     decrypted.map((v,_) => v)
 
