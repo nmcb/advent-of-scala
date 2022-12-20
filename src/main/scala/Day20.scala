@@ -23,21 +23,21 @@ object Day20 extends App:
       buffer.insert(if to < 0 then to.toInt + buffer.size else to.toInt, element)
       buffer
 
-    val mapped: List[(Long, Int)] =
+    val indexed: List[(Long, Int)] =
       input.map(_ * key).zipWithIndex
 
     val decrypted: List[(Long, Int)] =
       (0 until runs)
-        .foldLeft(mapped.toBuffer)((acc,_) => mapped.foldLeft(acc)(_ mix _))
+        .foldLeft(indexed.toBuffer)((acc,_) => indexed.foldLeft(acc)(_ mix _))
         .toList
 
     decrypted.map((v,_) => v)
 
-  def grove(is: List[Int])(coords: List[Long]): List[Long] =
+  def grove(indices: List[Int])(coords: List[Long]): List[Long] =
     def get(i: Int): Long =
       val idx = (i + coords.indexOf(0)) % coords.length
       coords(idx)
-    is.map(get)
+    indices.map(get)
 
   val start1: Long  = System.currentTimeMillis
   val answer1: Long = grove(List(1000,2000,3000))(solve(input)).sum
