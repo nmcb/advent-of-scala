@@ -20,7 +20,7 @@ case object DoNothing extends Action
 case object BuildOreRobot extends Action
 case object BuildClayRobot extends Action
 case object BuildObsidianRobot extends Action
-case object BuildRobotGeode extends Action
+case object BuildGeodeRobot extends Action
 
 def parseBlueprint(s: String): Blueprint =
   s match {
@@ -53,7 +53,7 @@ def checkBuildRobot(blueprint: Blueprint, material: MaterialStash, robots: List[
       None
   val geodeRobot: Option[Action] =
     if curOre >= blueprint.geodeRobotCostOre && curObsidian >= blueprint.geodeRobotCostObsidian then
-      Some(BuildRobotGeode)
+      Some(BuildGeodeRobot)
     else
       None
 
@@ -72,7 +72,7 @@ def buildRobot(action: Action): Robot =
     case BuildOreRobot      => Robot(Ore)
     case BuildClayRobot     => Robot(Clay)
     case BuildObsidianRobot => Robot(Obsidian)
-    case BuildRobotGeode    => Robot(Geode)
+    case BuildGeodeRobot    => Robot(Geode)
     case _ => sys.error("boom robot!")
   }
 
@@ -93,7 +93,7 @@ def consumeMaterial(action: Action, blueprint: Blueprint, stash: MaterialStash):
     case BuildOreRobot      => stash.copy(ore = stash.ore - blueprint.oreRobotCost)
     case BuildClayRobot     => stash.copy(ore = stash.ore - blueprint.clayRobotCost)
     case BuildObsidianRobot => stash.copy(ore = stash.ore - blueprint.obsidianRobotCostOre, clay = stash.clay - blueprint.obsidianRobotCostClay)
-    case BuildRobotGeode    => stash.copy(ore = stash.ore - blueprint.geodeRobotCostOre, obsidian = stash.obsidian - blueprint.geodeRobotCostObsidian)
+    case BuildGeodeRobot    => stash.copy(ore = stash.ore - blueprint.geodeRobotCostOre, obsidian = stash.obsidian - blueprint.geodeRobotCostObsidian)
     case _ => sys.error("boom robot!")
   }
 }
