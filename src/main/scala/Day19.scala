@@ -127,7 +127,6 @@ object Day19 extends App:
   val day: String =
     this.getClass.getName.drop(3).init
 
-
   val input =
     Source.fromResource(s"input$day.txt").getLines.map(parseBlueprint).toList
 

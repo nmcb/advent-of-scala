@@ -33,7 +33,7 @@ object Day21 extends App:
         (lhs, rhs) match
           case (lo: Lazy, ro: Lazy) => lo.andThen(ro)
           case (ll: Long, ro: Lazy) => ro.compose(rl => ll - rl)
-          case (ro: Lazy, ll: Long) => ro.compose(rl => ll + rl)
+          case (lo: Lazy, rl: Long) => lo.compose(ll => rl + ll)
           case (ll: Long, rl: Long) => ll - rl
 
       @targetName("div")
@@ -52,15 +52,16 @@ object Day21 extends App:
           case (ll: Long, rl: Long) if rl == ll => rl
           case _ => sys.error("boom!")
 
-  sealed abstract class Expr(val name: Name)
-    extends ((Name => Res) => Res)
+  sealed abstract class Expr(val name: Name, line: String)
+    extends ((Name => Res) => Res):
+      override def toString: String = line + "\n"
 
-  case class Val(override val name: Name, num: Long)
-    extends Expr(name):
-      def apply(f: Name => Res): Res = num
+  case class Val(override val name: Name, num: Long, line: String)
+    extends Expr(name, line):
+      def apply(defer: Name => Res): Res = num
 
-  case class Bin(override val name: Name, lhs: Name, rhs: Name, op: String)
-    extends Expr(name):
+  case class Bin(override val name: Name, lhs: Name, rhs: Name, op: String, line: String)
+    extends Expr(name, line):
       import Res.*
       def apply(defer: Name => Res): Res =
         op match
@@ -73,17 +74,21 @@ object Day21 extends App:
   object Expr:
     def parseLine(line: String): Expr =
       line match
-        case s"$n: $l $o $r" => Bin(n, l, r, o)
-        case s"$n: $v"       => Val(n, v.toInt)
+        case s"$n: $l $o $r" => Bin(n, l, r, o, s"$n: $l $o $r")
+        case s"$n: $v"       => Val(n, v.toInt, s"$n: $v")
 
   case class SAT(input: List[Expr]):
-    private def loop(name: Name): Res =
-      input.find(_.name == name).map(e => e(loop)).getOrElse(identity)
+    private val search: Name => Res =
+      name =>
+        input
+          .find(_.name == name)
+          .map(e => e.apply(search))
+          .getOrElse(identity)
 
-    def solve: Long =
-      loop("root") match
-        case l: Long => l
-        case _: Lazy => sys.error("unsolvable")
+    val solve: Option[Long] =
+      search("root") match
+        case l: Long => Some(l)
+        case _: Lazy => None
 
   val program: List[Expr] =
     Source
@@ -93,16 +98,16 @@ object Day21 extends App:
       .toList
 
   val start1: Long  = System.currentTimeMillis
-  val answer1 = SAT(program).solve
+  val answer1 = SAT(program).solve.getOrElse(sys.error(s"unsolved ${program.foldLeft("\n")(_ + _)}"))
   println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val patch = program.flatMap {
-    case Bin("root", lhs, rhs, _) => Some(Bin("root", lhs, rhs, "="))
+    case Bin("root", lhs, rhs, op, line) => Some(Bin("root", lhs, rhs, "=", line.replace(op.head, '=')))
     case m if m.name == "humn"    => None
     case m                        => Some(m)
   }
 
   val start2: Long  = System.currentTimeMillis
-  val answer2 = SAT(patch).solve
+  val answer2 = SAT(patch).solve.getOrElse(sys.error(s"unsolved ${program.foldLeft("\n")(_ + _)}"))
   println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
 

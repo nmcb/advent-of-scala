@@ -53,7 +53,16 @@ object Day17 extends App:
     def isOccupied(p: Pos): Boolean = isWall(p) || isFloor(p) || tower.contains(p)
     def isEmpty: Boolean = stopped.isEmpty
 
+    def floors =
+      stopped
+        .flatMap((p,r) => r.withOrigin(p))
+        .groupMap(_.y)(_.x)
+        .filter(_._2.size == 7)
+        .map(_._1)
+        .toList
+
     def next(rock: Rock): Chamber =
+      println(height)
 
       def appear: Pos = Pos.origin.translate(dx = 2, dy = height + 3)
 
@@ -85,6 +94,9 @@ object Day17 extends App:
   val start1: Long = System.currentTimeMillis
   val answer1: Int = Rocks.take(2022).foldLeft(Chamber.empty)(_ next _).height
   println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+
+  println(Rocks.take(100000).foldLeft(Chamber.empty)(_ next _).floors)
+
 
   val start2: Long = System.currentTimeMillis
   val answer2 = 666 // im dead in the water - swimming cycles
