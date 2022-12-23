@@ -38,9 +38,7 @@ object Day17 extends App:
   case object Box   extends Rock(List(Pos(0,0),Pos(1,0),Pos(0,1),Pos(1,1)))
 
   object Rocks:
-    var rocks: List[Rock] = List(Min, Plus, El, Stack, Box)
-    def next: Rock = { val r = rocks.head ; rocks = rocks.tail :+ r ; r }
-    def take(n: Int): List[Rock] = List.fill(n)(next)
+    val rocks: LazyList[Rock] = LazyList(Min, Plus, El, Stack, Box) #::: rocks
 
   var rockCount: Int = 0
 
@@ -52,34 +50,6 @@ object Day17 extends App:
     def isFloor(p: Pos): Boolean    = p.y < Pos.origin.y
     def isOccupied(p: Pos): Boolean = isWall(p) || isFloor(p) || tower.contains(p)
     def isEmpty: Boolean = stopped.isEmpty
-
-    lazy val floors: List[Int] =
-      stopped
-        .flatMap((p,r) => r.withOrigin(p))
-        .groupMap(_.y)(_.x)
-        .filter(_._2.size == 7)
-        .map(_._1)
-        .toList
-
-    lazy val posToRockNrs: List[(Int,Seq[Int])] =
-      stopped
-        .reverse
-        .zipWithIndex
-        .flatMap{ case ((o,r),i) => r.withOrigin(o).sortBy(_.x).map(p => p -> i) }
-        .groupMap(_._1.y)(x => x._2)
-        .toList
-        .sortBy(_._1)
-        .reverse
-//        .sorted
-//        .grouped(2)
-//        .map(d => d(1) - d(0))
-//        .toList
-
-
-
-    lazy val cycle: Int = 9
-    lazy val floor1: Int = floors.head
-    lazy val floorD: Int = floors.tail.take(cycle).sum
 
     def next(rock: Rock): Chamber =
 
@@ -93,17 +63,21 @@ object Day17 extends App:
 
         if rock.withOrigin(n).forall(p => !isOccupied(p)) then
           if m == L || m == R then
-            loop(n, D #:: moves.tail, (m,Some(n)) :: a)
+            loop(n, D #:: moves.tail, (m, Some(n)) :: a)
           else
-            loop(n, moves.tail, (m,Some(n)) :: a)
+            loop(n, moves.tail, (m, Some(n)) :: a)
         else
           if m == L || m == R then
-            loop(p, D #:: moves.tail, (m,None) :: a)
+            loop(p, D #:: moves.tail, (m, None) :: a)
           else
             a
 
       val ms = loop(appear, pattern)
-      val ns = ms.dropWhile((_,op) => op.isEmpty).headOption.flatMap((_,op) => op.map(p => (p,rock) :: stopped)).getOrElse(stopped)
+      val ns =
+        ms.dropWhile((_,op) => op.isEmpty)
+          .headOption
+          .flatMap((_,op) => op.map(p => (p,rock) :: stopped))
+          .getOrElse(stopped)
       val np = pattern.drop(ms.filterNot((m,_) => m == D).size)
       if ms.nonEmpty then Chamber(pattern = np, stopped = ns) else this
 
@@ -111,31 +85,90 @@ object Day17 extends App:
     def empty: Chamber = Chamber(pattern = pattern, stopped = List.empty)
 
   val start1: Long = System.currentTimeMillis
-  val answer1: Int = Rocks.take(2022).foldLeft(Chamber.empty)(_ next _).height
+  val answer1: Int = Rocks.rocks.take(2022).foldLeft(Chamber.empty)(_ next _).height
   println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
-  val rocks = 100000
-  val c = Rocks.take(rocks).foldLeft(Chamber.empty)(_ next _)
-  println(s"height=${c.height}")
-  println(s"floor1=${c.floor1}")
-  println(s"floorD=${c.floorD}")
+  type Nr = Int
+
+  val nr: Nr = 10000
+  val stack: List[(Pos,Rock)] = Rocks.rocks.take(nr).foldLeft(Chamber.empty)(_ next _).stopped.reverse
+
+  println(stack.take(10).mkString("\n"))
+
+  def row(y: Int): List[Option[(Rock,Nr)]] =
+    val xWithRockNrForY: Map[Int,(Rock,Nr)] =
+      stack
+        .zipWithIndex
+        .map{ case (or,i) => or -> i }
+        .flatMap{ case ((o,r),nr) => r.withOrigin(o).map(p => p -> (r, nr)) }
+        .filter{ case (p,_) => p.y == y }
+        .map((p,rnr) => p.x -> rnr)
+        .toMap
+    (0 until 7).foldLeft(List.empty)((a,x) => {
+      a :+ xWithRockNrForY.get(x).orElse(None)
+    })
+
+  def floors: List[Int] =
+    stack
+      .flatMap((p,r) => r.withOrigin(p))
+      .groupMap(_.y)(_.x)
+      .filter(_._2.size == 7)
+      .map(_._1)
+      .toList
+      .sorted
+
+  println(s"floors=${floors.take(100).mkString("\n","\n", "\n")}")
+
+  def diff: List[Int] =
+    floors.zip(floors.tail).map((f1,f2) => f2 - f1)
+
+  println(s"diff=${diff.take(100).mkString("\n","+","\n")}")
+
+  def startY: Int = 655
+  println(s"startY=$startY")
+  def cycleY: Int = 101+237+32+280+56+197+226+126+6+30+18+127+113+483+20+407+129+97
+  println(s"cycleY=$cycleY")
+
+  for (y <- startY to startY) println(s"y=$y - ${row(y)}")
+  for (y <- startY + cycleY to startY + cycleY) println(s"y=$y - ${row(y)}")
+  for (y <- startY + cycleY * 2 to startY + cycleY * 2) println(s"y=$y - ${row(y)}")
+
+  def startNr: Int = row(startY).flatMap(_.map(_._2)).max
+  println(s"startNr=$startNr")
+  def cycleNr: Int = row(startY + cycleY).flatMap(_.map(_._2)).max - startNr
+  println(s"cycleNr=$cycleNr")
+
+  def totalNr: Long = 1000_000_000_000
+  println(s"totalNr=$totalNr")
+  def restNr: Long = (totalNr - startNr) % cycleNr
+  println(s"restNr=$restNr")
+  def cycleSize: Long = (totalNr - startNr - restNr) / cycleNr
+  println(s"cycleSize=$cycleSize")
+  def endY: Long = startY + cycleY * cycleSize
+  println(s"endY=$endY")
+  def deltaY: Long = Rocks.rocks.take((startNr + restNr).toInt).foldLeft(Chamber.empty)(_ next _).height - startY
+  println(s"deltaY=$deltaY")
+  def totalY: Long = endY + deltaY
+  println(s"totalY=$totalY")
+
+  assert(totalY == 1556521739139L)
+//
+//  val goedeAntwoord: Long =
+//    1584927536247L
+//    1584927536247L
+//    1590459569509L
 
 
-  def pr(count: Int = 0, l: List[(Int,Seq[Int])] = c.posToRockNrs): Unit =
-    val h = l.head
-    val t = h._2.size == 7
-    println(s"${h._1} - ${h._2.mkString(",")} ($t)")
-    if count == 1000 then () else pr(count - 1, l.tail)
-
-  pr()
 
 
-  val start2: Long = System.currentTimeMillis
-  val answer2 = 666 // im dead in the water - swimming cycles
-  println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
 
-  /** Utilities */
 
+//  val start2: Long = System.currentTimeMillis
+//  val answer2 = 666 // im dead in the water - swimming cycles
+//  println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+//
+//  /** Utilities */
+//
 //  def brent[A](f: A => A, z: A): (A, A) = {
 //    val lambda = findLambda(f, z)
 //    val mu = findMu(f, z, lambda)
