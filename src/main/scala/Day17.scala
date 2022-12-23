@@ -88,12 +88,12 @@ object Day17 extends App:
   val answer1: Int = Rocks.rocks.take(2022).foldLeft(Chamber.empty)(_ next _).height
   println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
-  type Nr = Int
 
+  type Nr = Int
   val nr: Nr = 10000
   val stack: List[(Pos,Rock)] = Rocks.rocks.take(nr).foldLeft(Chamber.empty)(_ next _).stopped.reverse
 
-  println(stack.take(10).mkString("\n"))
+//  println(stack.take(10).mkString("\n"))
 
   def row(y: Int): List[Option[(Rock,Nr)]] =
     val xWithRockNrForY: Map[Int,(Rock,Nr)] =
@@ -116,59 +116,45 @@ object Day17 extends App:
       .map(_._1)
       .toList
       .sorted
+//  println(s"floors=${floors.take(100).mkString("\n","\n", "\n")}")
+  def diff: List[Int] = floors.zip(floors.tail).map((f1,f2) => f2 - f1)
+//  println(s"diff=${diff.take(100).mkString("\n","+","\n")}")
 
-  println(s"floors=${floors.take(100).mkString("\n","\n", "\n")}")
-
-  def diff: List[Int] =
-    floors.zip(floors.tail).map((f1,f2) => f2 - f1)
-
-  println(s"diff=${diff.take(100).mkString("\n","+","\n")}")
+  /** Cycle Detected - Manually - By Human Bot */
 
   def startY: Int = 655
-  println(s"startY=$startY")
+//  println(s"startY=$startY")
   def cycleY: Int = 101+237+32+280+56+197+226+126+6+30+18+127+113+483+20+407+129+97
-  println(s"cycleY=$cycleY")
+//  println(s"cycleY=$cycleY")
 
-  for (y <- startY to startY) println(s"y=$y - ${row(y)}")
-  for (y <- startY + cycleY to startY + cycleY) println(s"y=$y - ${row(y)}")
-  for (y <- startY + cycleY * 2 to startY + cycleY * 2) println(s"y=$y - ${row(y)}")
+//  for (y <- startY to startY) println(s"y=$y - ${row(y)}")
+//  for (y <- startY + cycleY to startY + cycleY) println(s"y=$y - ${row(y)}")
+//  for (y <- startY + cycleY * 2 to startY + cycleY * 2) println(s"y=$y - ${row(y)}")
 
   def startNr: Int = row(startY).flatMap(_.map(_._2)).max
-  println(s"startNr=$startNr")
+//  println(s"startNr=$startNr")
   def cycleNr: Int = row(startY + cycleY).flatMap(_.map(_._2)).max - startNr
-  println(s"cycleNr=$cycleNr")
+//  println(s"cycleNr=$cycleNr")
 
   def totalNr: Long = 1000_000_000_000
-  println(s"totalNr=$totalNr")
+//  println(s"totalNr=$totalNr")
   def restNr: Long = (totalNr - startNr) % cycleNr
-  println(s"restNr=$restNr")
+//  println(s"restNr=$restNr")
   def cycleSize: Long = (totalNr - startNr - restNr) / cycleNr
-  println(s"cycleSize=$cycleSize")
+//  println(s"cycleSize=$cycleSize")
   def endY: Long = startY + cycleY * cycleSize
-  println(s"endY=$endY")
+//  println(s"endY=$endY")
   def deltaY: Long = Rocks.rocks.take((startNr + restNr).toInt).foldLeft(Chamber.empty)(_ next _).height - startY
-  println(s"deltaY=$deltaY")
+//  println(s"deltaY=$deltaY")
   def totalY: Long = endY + deltaY
-  println(s"totalY=$totalY")
+//  println(s"totalY=$totalY")
 
-  assert(totalY == 1556521739139L)
-//
-//  val goedeAntwoord: Long =
-//    1584927536247L
-//    1584927536247L
-//    1590459569509L
+  val start2: Long = System.currentTimeMillis
+  val answer2 = totalY
+  println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
 
+  /** Utilities */
 
-
-
-
-
-//  val start2: Long = System.currentTimeMillis
-//  val answer2 = 666 // im dead in the water - swimming cycles
-//  println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
-//
-//  /** Utilities */
-//
 //  def brent[A](f: A => A, z: A): (A, A) = {
 //    val lambda = findLambda(f, z)
 //    val mu = findMu(f, z, lambda)
