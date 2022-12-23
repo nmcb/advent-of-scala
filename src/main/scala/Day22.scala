@@ -18,8 +18,6 @@ object Day22 extends App:
   val path: String =
     input.drop(map.size + 1).head
 
-
-
   val tiles: Array[Array[Char]] =
     Array.fill(map.length + 2, map.head.length + 2)(' ')
 
@@ -52,6 +50,7 @@ object Day22 extends App:
     private def has(y: Int, x: Int, t: Char): Boolean = tiles(y)(x) == t
     def tile(y: Int, x: Int): Boolean = has(y, x, '.')
     def wall(y: Int, x: Int): Boolean = has(y, x, '#')
+    def mapped(c: Char): Boolean = c == '.' || c == '#'
 
     def step1(dy: Int, dx: Int, steps: Int)(wrap: => Pos): Pos =
       if      tile(y + dy, x + dx) then copy(x = x + dx, y = y + dy).move1(steps - 1)
@@ -65,22 +64,22 @@ object Day22 extends App:
         dir match
           case N =>
             step1(-1,0, steps) {
-              val ny = tiles.transpose.apply(x).lastIndexWhere(c => c == '.' || c == '#')
+              val ny = tiles.transpose.apply(x).lastIndexWhere(mapped)
               if wall(ny, x) then this else copy(y = ny).move1(steps - 1)
             }
           case S =>
             step1(1,0, steps) {
-              val ny = tiles.transpose.apply(x).indexWhere(c => c == '.' || c == '#')
+              val ny = tiles.transpose.apply(x).indexWhere(mapped)
               if wall(ny, x) then this else copy(y = ny).move1(steps - 1)
             }
           case E =>
             step1(0,1, steps) {
-              val nx = tiles(y).indexWhere(c => c == '.' || c == '#')
+              val nx = tiles(y).indexWhere(mapped)
               if wall(y, nx) then this else copy(x = nx).move1(steps - 1)
               }
           case W =>
             step1(0, -1, steps) {
-              val nx = tiles(y).lastIndexWhere(c => c == '.' || c == '#')
+              val nx = tiles(y).lastIndexWhere(mapped)
               if wall(y, nx) then this else copy(x = nx).move1(steps - 1)
             }
 
@@ -186,6 +185,7 @@ object Day22 extends App:
   object Pos:
     def start: Pos = Pos(tiles(1).indexOf('.'), 1, E, path)
 
+  
   val start1: Long =
     System.currentTimeMillis
 

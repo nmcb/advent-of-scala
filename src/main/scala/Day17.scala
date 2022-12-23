@@ -6,7 +6,7 @@ object Day17 extends App:
 
   val day: String = this.getClass.getName.drop(3).init
 
-  val input: List[Char] =
+  val input: List[Move] =
     Source
       .fromResource(s"input$day.txt")
       .mkString
@@ -53,7 +53,7 @@ object Day17 extends App:
     def isOccupied(p: Pos): Boolean = isWall(p) || isFloor(p) || tower.contains(p)
     def isEmpty: Boolean = stopped.isEmpty
 
-    def floors =
+    lazy val floors: List[Int] =
       stopped
         .flatMap((p,r) => r.withOrigin(p))
         .groupMap(_.y)(_.x)
@@ -61,8 +61,27 @@ object Day17 extends App:
         .map(_._1)
         .toList
 
+    lazy val posToRockNrs: List[(Int,Seq[Int])] =
+      stopped
+        .reverse
+        .zipWithIndex
+        .flatMap{ case ((o,r),i) => r.withOrigin(o).sortBy(_.x).map(p => p -> i) }
+        .groupMap(_._1.y)(x => x._2)
+        .toList
+        .sortBy(_._1)
+        .reverse
+//        .sorted
+//        .grouped(2)
+//        .map(d => d(1) - d(0))
+//        .toList
+
+
+
+    lazy val cycle: Int = 9
+    lazy val floor1: Int = floors.head
+    lazy val floorD: Int = floors.tail.take(cycle).sum
+
     def next(rock: Rock): Chamber =
-      println(height)
 
       def appear: Pos = Pos.origin.translate(dx = 2, dy = height + 3)
 
@@ -95,7 +114,20 @@ object Day17 extends App:
   val answer1: Int = Rocks.take(2022).foldLeft(Chamber.empty)(_ next _).height
   println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
-  println(Rocks.take(100000).foldLeft(Chamber.empty)(_ next _).floors)
+  val rocks = 100000
+  val c = Rocks.take(rocks).foldLeft(Chamber.empty)(_ next _)
+  println(s"height=${c.height}")
+  println(s"floor1=${c.floor1}")
+  println(s"floorD=${c.floorD}")
+
+
+  def pr(count: Int = 0, l: List[(Int,Seq[Int])] = c.posToRockNrs): Unit =
+    val h = l.head
+    val t = h._2.size == 7
+    println(s"${h._1} - ${h._2.mkString(",")} ($t)")
+    if count == 1000 then () else pr(count - 1, l.tail)
+
+  pr()
 
 
   val start2: Long = System.currentTimeMillis
