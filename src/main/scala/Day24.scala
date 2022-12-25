@@ -101,13 +101,10 @@ object Day24 extends App:
 
     val futureField: Field[Char] =
       val buffer: Array[Array[Char]] = Array.fill(sizeY, sizeX)(Field.OpenChar)
-      for (y <- 0 until sizeY ; x <- 0 until sizeX) yield
+      for (y <- 0 until sizeY ; x <- 0 until sizeX) {
         buffer(y)(x) = nextBlizzardChar(futureStreamField)(x, y)
+      }
       buffer.map(_.toVector).toVector
-
-
-
-
 
   type Paths = Set[Pos]
 
@@ -203,41 +200,38 @@ object Day24 extends App:
       solve1(n)
 
   val start1: Long = System.currentTimeMillis
-  def answer1: Int = solve1(World.init) + 1
+  val answer1: Int = solve1(World.init) + 1
   println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   def solve2(world: World): Int =
 
     def loop(w: World): (World, Int) =
-      if w.reachedGoal then (w, w.fewestMinutes) else
-        // if w.minutes > 100 then sys.error("stop!")
-        // println(w)
-        loop(w.next)
+      if w.reachedGoal then (w, w.fewestMinutes) else loop(w.next)
 
-//    println(s"world=$world")
     val (w1, m1) = loop(world)
-    println(s"m1=$m1, w1=$w1")
-    val ww = w1.copy(
-      target = Pos(0,0),
+
+    val w2 = w1.copy(
+      target       = Pos(0,0),
       currentField = w1.nextField,
-      nextField = w1.streams.futureField,
-      streams = w1.streams.next,
-      minutes = m1 + 1,
-      found = Set(Pos.end(w1.bounds) + Pos(0,1))
+      nextField    = w1.streams.futureField,
+      streams      = w1.streams.next,
+      minutes      = m1 + 1,
+      found        = Set(Pos.end(w1.bounds) + Pos(0,1))
     )
-    val (w2, m2) = loop(ww)
-    println(s"m2=$m2, w2=$w2")
-    val www = w2.copy(
-      target = Pos.end(w2.bounds),
-      currentField = w2.nextField,
-      nextField = w2.streams.futureField,
-      streams = w2.streams.next,
-      minutes = m2 + 1,
-      found = Set(Pos(0,-1))
+    val (w3, m3) = loop(w2)
+
+    val w4 = w3.copy(
+      target       = Pos.end(w3.bounds),
+      currentField = w3.nextField,
+      nextField    = w3.streams.futureField,
+      streams      = w3.streams.next,
+      minutes      = m3 + 1,
+      found        = Set(Pos(0,-1))
     )
-    val (w3, m3) = loop(www)
-    println(s"m3=$m3, w3=$w3")
-    m3 + 1
+
+    val (w5, m5) = loop(w4)
+
+    m5 + 1
 
 
   val start2: Long = System.currentTimeMillis

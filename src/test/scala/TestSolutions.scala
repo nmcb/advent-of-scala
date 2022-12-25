@@ -61,7 +61,7 @@ class TestSolutions extends AnyFunSuite:
     assertResult(5760)(actual = Day13.answer1)
     assertResult(26670)(actual = Day13.answer2)
   }
-  ignore("Day14 [73s]") {
+  test("Day14 [73s]") {
     assertResult(793)(actual = Day14.answer1)
     assertResult(24166)(actual = Day14.answer2)
   }
@@ -97,7 +97,16 @@ class TestSolutions extends AnyFunSuite:
     assertResult(56372)(actual = Day22.answer1)
     assertResult(197047)(actual = Day22.answer2)
   }
-  ignore("Day23 [385s]") {
+  test("Day23 [385s]") {
     assertResult(4109)(actual = Day23.answer1)
     assertResult(197047)(actual = Day23.answer2)
   }
+  test("Day24 [5542ms]") {
+    assertResult(292)(actual = Day24.answer1)
+    assertResult(816)(actual = Day24.answer2)
+  }
+  test("Day25 [1ms]") {
+    assertResult("2=112--220-=-00=-=20")(actual = Day25.answer1)
+  }
+
+
