@@ -99,7 +99,7 @@ class TestSolutions extends AnyFunSuite:
   }
   test("Day23 [385s]") {
     assertResult(4109)(actual = Day23.answer1)
-    assertResult(197047)(actual = Day23.answer2)
+    assertResult(1055)(actual = Day23.answer2)
   }
   test("Day24 [5542ms]") {
     assertResult(292)(actual = Day24.answer1)
