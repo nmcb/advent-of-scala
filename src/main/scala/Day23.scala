@@ -101,9 +101,7 @@ object Day23 extends App:
     def stopped: Boolean =
       elves == next.elves
 
-  val mat = Mat(input)
-
-  val start1: Long =
+  val start1: Long = 
     System.currentTimeMillis
 
   val answer1: Int =
