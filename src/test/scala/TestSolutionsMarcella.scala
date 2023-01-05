@@ -1,3 +1,4 @@
+import marcella.{Day03Marcella, Day04Marcella}
 import org.scalatest.funsuite.AnyFunSuite
 
 class TestSolutionsMarcella extends AnyFunSuite:

@@ -42,10 +42,10 @@ object Day17 extends App:
 
   var rockCount: Int = 0
 
-  case class Chamber(pattern: LazyList[Move], stopped: List[(Pos,Rock)]):
+  case class Chamber(pattern: LazyList[Move], stopped: Vector[(Pos,Rock)]):
     def width: Int = 7
     def height: Int = if isEmpty then Pos.origin.y else tower.map(_.y).max + 1
-    def tower: List[Pos] = stopped.take(100).flatMap((p,r) => r.withOrigin(p))
+    def tower: Vector[Pos] = stopped.take(100).flatMap((p,r) => r.withOrigin(p))
     def isWall(p: Pos): Boolean     = p.x < Pos.origin.x || p.x >= Pos.origin.x + width
     def isFloor(p: Pos): Boolean    = p.y < Pos.origin.y
     def isOccupied(p: Pos): Boolean = isWall(p) || isFloor(p) || tower.contains(p)
@@ -76,13 +76,14 @@ object Day17 extends App:
       val ns =
         ms.dropWhile((_,op) => op.isEmpty)
           .headOption
-          .flatMap((_,op) => op.map(p => (p,rock) :: stopped))
+          .flatMap((_,op) => op.map(p => (p,rock) +: stopped))
           .getOrElse(stopped)
       val np = pattern.drop(ms.filterNot((m,_) => m == D).size)
       if ms.nonEmpty then Chamber(pattern = np, stopped = ns) else this
 
   object Chamber:
-    def empty: Chamber = Chamber(pattern = pattern, stopped = List.empty)
+    def empty: Chamber =
+      Chamber(pattern = pattern, stopped = Vector.empty)
 
   val start1: Long = System.currentTimeMillis
   val answer1: Int = Rocks.rocks.take(2022).foldLeft(Chamber.empty)(_ next _).height
@@ -91,22 +92,27 @@ object Day17 extends App:
 
   type Nr = Int
   val nr: Nr = 10000
-  val stack: List[(Pos,Rock)] = Rocks.rocks.take(nr).foldLeft(Chamber.empty)(_ next _).stopped.reverse
+  val stack: IndexedSeq[(Pos,Rock)] =
+    Rocks
+      .rocks
+      .take(nr)
+      .foldLeft(Chamber.empty)(_ next _)
+      .stopped
+      .reverse
 
-//  println(stack.take(10).mkString("\n"))
-
-  def row(y: Int): List[Option[(Rock,Nr)]] =
-    val xWithRockNrForY: Map[Int,(Rock,Nr)] =
-      stack
-        .zipWithIndex
-        .map{ case (or,i) => or -> i }
-        .flatMap{ case ((o,r),nr) => r.withOrigin(o).map(p => p -> (r, nr)) }
-        .filter{ case (p,_) => p.y == y }
-        .map((p,rnr) => p.x -> rnr)
-        .toMap
-    (0 until 7).foldLeft(List.empty)((a,x) => {
-      a :+ xWithRockNrForY.get(x).orElse(None)
-    })
+  case class RocksBy(underlying: IndexedSeq[(Pos,Rock)]):
+    def row(y: Int): IndexedSeq[Option[(Rock,Nr)]] =
+      val xToRockNrOnY: Map[Int,(Rock,Nr)] =
+        underlying
+          .zipWithIndex
+          .map{ case (or,i) => or -> i }
+          .flatMap{ case ((o,r),nr) => r.withOrigin(o).map(p => p -> (r, nr)) }
+          .filter{ case (p,_) => p.y == y }
+          .map((p,rnr) => p.x -> rnr)
+          .toMap
+      (0 until 7).foldLeft(Vector.empty)((a,x) => {
+        a :+ xToRockNrOnY.get(x).orElse(None)
+      })
 
   def floors: List[Int] =
     stack
@@ -116,38 +122,41 @@ object Day17 extends App:
       .map(_._1)
       .toList
       .sorted
-//  println(s"floors=${floors.take(100).mkString("\n","\n", "\n")}")
-  def diff: List[Int] = floors.zip(floors.tail).map((f1,f2) => f2 - f1)
-//  println(s"diff=${diff.take(100).mkString("\n","+","\n")}")
+
+  def diff: List[Int] =
+    floors.zip(floors.tail).map((f1,f2) => f2 - f1)
 
   /** Cycle Detected - Manually - By Human Bot */
 
-  def startY: Int = 655
-//  println(s"startY=$startY")
-  def cycleY: Int = 101+237+32+280+56+197+226+126+6+30+18+127+113+483+20+407+129+97
-//  println(s"cycleY=$cycleY")
+  def startY: Int =
+    655
 
-//  for (y <- startY to startY) println(s"y=$y - ${row(y)}")
-//  for (y <- startY + cycleY to startY + cycleY) println(s"y=$y - ${row(y)}")
-//  for (y <- startY + cycleY * 2 to startY + cycleY * 2) println(s"y=$y - ${row(y)}")
+  def cycleY: Int =
+    101+237+32+280+56+197+226+126+6+30+18+127+113+483+20+407+129+97
 
-  def startNr: Int = row(startY).flatMap(_.map(_._2)).max
-//  println(s"startNr=$startNr")
-  def cycleNr: Int = row(startY + cycleY).flatMap(_.map(_._2)).max - startNr
-//  println(s"cycleNr=$cycleNr")
+  def startNr: Int =
+    RocksBy(stack).row(startY).flatMap(_.map(_._2)).max
 
-  def totalNr: Long = 1000_000_000_000
-//  println(s"totalNr=$totalNr")
-  def restNr: Long = (totalNr - startNr) % cycleNr
-//  println(s"restNr=$restNr")
-  def cycleSize: Long = (totalNr - startNr - restNr) / cycleNr
-//  println(s"cycleSize=$cycleSize")
-  def endY: Long = startY + cycleY * cycleSize
-//  println(s"endY=$endY")
-  def deltaY: Long = Rocks.rocks.take((startNr + restNr).toInt).foldLeft(Chamber.empty)(_ next _).height - startY
-//  println(s"deltaY=$deltaY")
-  def totalY: Long = endY + deltaY
-//  println(s"totalY=$totalY")
+  def cycleNr: Int =
+    RocksBy(stack).row(startY + cycleY).flatMap(_.map(_._2)).max - startNr
+
+  def totalNr: Long =
+    1000_000_000_000
+
+  def restNr: Long =
+    (totalNr - startNr) % cycleNr
+
+  def cycleSize: Long =
+    (totalNr - startNr - restNr) / cycleNr
+
+  def endY: Long =
+    startY + cycleY * cycleSize
+
+  def deltaY: Long =
+    Rocks.rocks.take((startNr + restNr).toInt).foldLeft(Chamber.empty)(_ next _).height - startY
+
+  def totalY: Long =
+    endY + deltaY
 
   val start2: Long = System.currentTimeMillis
   val answer2 = totalY

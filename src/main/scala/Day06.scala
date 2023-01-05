@@ -34,7 +34,7 @@ object Day06 extends App:
   def solve2(s: String): Int =
     solve(s, 14)
 
-  assert(solve1("mjqjpqmgbljsphdztnvjfqwrcgsmlb")    == 7)
+  assert(solve1("mjqjpqmgbljsphdztnvjfqwrcgsmlb")    ==  7)
   assert(solve1("bvwbjplbgvbhsrlpgdmjqwftvncz")      ==  5)
   assert(solve1("nppdvjthqldpwncqszvftbrmjlhg")      ==  6)
   assert(solve1("nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg") == 10)

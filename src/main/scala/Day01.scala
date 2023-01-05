@@ -8,21 +8,15 @@ object Day01 extends App:
   val start1: Long =
     System.currentTimeMillis
 
-  val input: List[String] =
+  val calories: Array[Array[Int]] =
     Source
       .fromResource(s"input$day.txt")
-      .getLines
-      .map(_.trim)
-      .toList
-
-  var cals: List[List[Int]] = List(List.empty[Int])
-  for (line <- input) {
-    if   line == "" then cals = cals :+ List.empty[Int]
-    else cals = cals.init :+ (cals.last :+ line.toInt)
-  }
+      .mkString
+      .split("\n\n")
+      .map(_.split("\n").map(_.toInt))
 
   val answer1: Int =
-    cals.map(_.sum).sorted.last
+    calories.map(_.sum).max
 
   println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
@@ -30,6 +24,6 @@ object Day01 extends App:
     System.currentTimeMillis
 
   val answer2: Int =
-    cals.map(_.sum).sorted.takeRight(3).sum
+    calories.map(_.sum).sorted.takeRight(3).sum
 
   println(s"Answer day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")

@@ -229,7 +229,7 @@ object Day24 extends App:
       found        = Set(Pos(0,-1))
     )
 
-    val (w5, m5) = loop(w4)
+    val (_, m5) = loop(w4)
 
     m5 + 1
 
