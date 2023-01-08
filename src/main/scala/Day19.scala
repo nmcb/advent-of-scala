@@ -17,7 +17,7 @@ object Day19 extends App:
     geodeRobotCostOre:      Int,
     geodeRobotCostObsidian: Int
   ):
-    val highestOreCost: Int =
+    val maxRobotCostOre: Int =
       List(oreRobotCost, clayRobotCost, obsidianRobotCostOre, geodeRobotCostOre).max
 
   object Blueprint:
@@ -51,20 +51,20 @@ object Day19 extends App:
     import print.*
     import material.*
 
-    def cost(material: Material): Int =
+    def robotCount(material: Material): Int =
       robots.count(_ == Robot(material))
 
     import Option.*
 
-    val buildOre      = when(ore >= oreRobotCost         && cost(Ore)  <= highestOreCost)(OreRobot)
-    val buildClay     = when(ore >= clayRobotCost        && cost(Clay) <= obsidianRobotCostClay)(ClayRobot)
-    val buildObsidian = when(ore >= obsidianRobotCostOre && clay       >= obsidianRobotCostClay)(ObsidianRobot)
-    val buildGeode    = when(ore >= geodeRobotCostOre    && obsidian   >= geodeRobotCostObsidian)(GeodeRobot)
+    val buildOre      = when(ore >= oreRobotCost         && robotCount(Ore)  <= maxRobotCostOre)(OreRobot)
+    val buildClay     = when(ore >= clayRobotCost        && robotCount(Clay) <= obsidianRobotCostClay)(ClayRobot)
+    val buildObsidian = when(ore >= obsidianRobotCostOre && clay             >= obsidianRobotCostClay)(ObsidianRobot)
+    val buildGeode    = when(ore >= geodeRobotCostOre    && obsidian         >= geodeRobotCostObsidian)(GeodeRobot)
 
     val actions: List[Option[Build]] =
       if      obsidian >= geodeRobotCostObsidian then List(buildGeode, Some(Nothing))
       else if clay     >= obsidianRobotCostClay  then List(buildGeode, buildObsidian, Some(Nothing))
-      else if ore      >= highestOreCost         then List(buildOre, buildClay, buildObsidian, buildGeode)
+      else if ore      >= maxRobotCostOre        then List(buildOre, buildClay, buildObsidian, buildGeode)
       else                                            List(buildOre, buildClay, buildObsidian, buildGeode, Some(Nothing))
 
     actions.flatten
