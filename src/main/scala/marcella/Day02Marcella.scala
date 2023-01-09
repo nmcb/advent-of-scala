@@ -38,10 +38,8 @@ object Day02Marcella extends App :
       case (Scissors, Scissors) => 3 + 3
       case (Scissors, Paper) => 0 + 2
 
-  val round1: Int =
-    input.map(game).sum
-
-  println(s"Answer to Game 1 is: ${round1}")
+  val answer1: Int = input.map(game).sum
+  println(s"Answer to Game 1 is: ${answer1}")
 
   def game2(me: Hand, them: Hand): Int =
     (me, them) match
@@ -55,7 +53,5 @@ object Day02Marcella extends App :
       case (Scissors, Scissors) => 1 + 6
       case (Scissors, Paper) => 3 + 3
 
-  val round2: Int =
-    input.map(game2).sum
-
-  println(s"Answer to Game 2 is: ${round2}")
+  val answer2: Int = input.map(game2).sum
+  println(s"Answer to Game 2 is: ${answer2}")

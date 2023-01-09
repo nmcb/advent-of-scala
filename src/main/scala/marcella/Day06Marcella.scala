@@ -15,5 +15,8 @@ object Day06Marcella extends App :
         .min)
       .sum
 
-  println("Answer to part 1: " + findStart(input, 4))
-  println("Answer to part 2: " + findStart(input, 14))
+  val answer1 = findStart(input, 4)
+  val answer2 = findStart(input, 14)
+
+  println(s"Answer to part 1: $answer1")
+  println(s"Answer to part 2: $answer2")
