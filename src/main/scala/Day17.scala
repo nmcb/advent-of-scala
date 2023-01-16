@@ -47,56 +47,51 @@ object Day17 extends App:
     val sequence: LazyList[Rock] = LazyList(Min, Plus, El, Stack, Box) #::: sequence
 
 
-  case class Chamber(rocks: LazyList[Rock], pattern: LazyList[Move], dropped: Set[Pos], height: Int):
+  case class Chamber(rocks: LazyList[Rock], pattern: LazyList[Move], stopped: Set[Pos], height: Int):
     import Chamber.*
 
     def isWall(p: Pos): Boolean     = p.x < Pos.origin.x | p.x >= Pos.origin.x + width
     def isFloor(p: Pos): Boolean    = p.y < Pos.origin.y
-    def isOccupied(p: Pos): Boolean = isWall(p) | isFloor(p) | dropped.contains(p)
+    def isOccupied(p: Pos): Boolean = isWall(p) | isFloor(p) | stopped.contains(p)
 
     def next: Chamber =
 
       def appear: Pos =
         Pos.origin.translate(dx = 2, dy = height + 3)
 
-      type Trace = List[(Move,Option[Pos])]
+      def drop(pos: Pos, moves: LazyList[Move], trace: List[Move] = List.empty): (List[Move], Pos) =
 
-      val trace: Trace =
-        def drop(p: Pos, moves: LazyList[Move], trace: Trace = List.empty): Trace =
-          val (m,n) = moves.head match
-            case L => (L, p.translate(dx = -1, dy =  0))
-            case R => (R, p.translate(dx =  1, dy =  0))
-            case D => (D, p.translate(dx =  0, dy = -1))
+        val moved = moves.head match
+          case L => pos.translate(dx = -1, dy =  0)
+          case R => pos.translate(dx =  1, dy =  0)
+          case D => pos.translate(dx =  0, dy = -1)
 
-          if rocks.head.withOrigin(n).forall(p => !isOccupied(p)) then
-            if m == L || m == R then
-              drop(n, D #:: moves.tail, (m, Some(n)) :: trace)
-            else
-              drop(n, moves.tail, (m, Some(n)) :: trace)
+        if rocks.head.withOrigin(moved).forall(p => !isOccupied(p)) then
+          if moves.head == L || moves.head == R then
+            drop(moved, D #:: moves.tail, moves.head :: trace)
           else
-            if m == L || m == R then
-              drop(p, D #:: moves.tail, (m, None) :: trace)
-            else
-              trace
+            drop(moved, moves.tail, moves.head :: trace)
+        else
+          if moves.head == L || moves.head == R then
+            drop(pos, D #:: moves.tail, moves.head :: trace)
+          else
+            (trace, pos)
 
-        drop(appear, pattern)
+      val (moves, pos) = drop(appear, pattern)
 
-      val halted: Set[Pos] =
-        trace.dropWhile((_,op) => op.isEmpty)
-          .headOption
-          .flatMap((_,op) => op.map(p => dropped ++ rocks.head.withOrigin(p)))
-          .getOrElse(dropped)
+      val dropped: Set[Pos] =
+        stopped ++ rocks.head.withOrigin(pos)
 
       val maxY: Int =
-        halted.map(_.y).max + 1
+        dropped.map(_.y).max + 1
 
       val consumed: LazyList[Move] =
-        pattern.drop(trace.filterNot((m,_) => m == D).size)
+        pattern.drop(moves.filterNot(_ == D).size)
 
-      Chamber(rocks = rocks.tail, pattern = consumed, dropped = halted.filter(_.y >= maxY - slidingWindow), height = maxY)
+      Chamber(rocks = rocks.tail, pattern = consumed, stopped = dropped.filter(_.y >= maxY - slidingWindow), height = maxY)
 
     def cycleInvariant: Set[Pos] =
-      dropped.map(_ - Pos(0, height - slidingWindow))
+      stopped.map(_ - Pos(0, height - slidingWindow))
 
 
   object Chamber:
