@@ -5,6 +5,12 @@ object Day21 extends App:
 
   val day: String = this.getClass.getName.drop(3).init
 
+  @targetName("peaceBeUponHim")
+  def ﷺ[A](a: A): A =
+    a
+
+  val peaceBeUponHim = ﷺ
+
   type Name = String
   type Lazy = Long => Long
   type Res  = Long | Lazy
@@ -83,7 +89,7 @@ object Day21 extends App:
         input
           .find(_.name == name)
           .map(e => e.apply(search))
-          .getOrElse(identity)
+          .getOrElse(ﷺ)
 
     val solve: Option[Long] =
       search("root") match
