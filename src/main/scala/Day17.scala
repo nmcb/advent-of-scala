@@ -171,8 +171,8 @@ object Day17 extends App:
       coll.iterator
         .zipWithPrev
         .zipWithIndex
-        .map({ case ((last, prev), idx) => (last, prev, trace.put(m(prev), (prev, idx)), idx) })
-        .collectFirst({ case (Some(last), repeat, Some((prev, prevIdx)), idx) =>
+        .map { case ((last, prev), idx) => (last, prev, trace.put(m(prev), (prev, idx)), idx) }
+        .collectFirst { case (Some(last), repeat, Some((prev, prevIdx)), idx) =>
           Cycle(
             stemLength      = prevIdx,
             cycleLength     = idx - prevIdx,
@@ -180,7 +180,7 @@ object Day17 extends App:
             cycleLast       = last,
             cycleHeadRepeat = repeat
           )
-        })
+        }
 
     def find[A, B](x0: A, f: A => A)(m: A => B): Cycle[A] =
       find(Iterator.iterate(x0)(f))(m).get
