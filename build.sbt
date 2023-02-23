@@ -16,8 +16,7 @@ scalacOptions ++= Seq(
   "-language:existentials",
   "-unchecked",
   "-Werror",
-  "-deprecation",
-//  "-explain",
+  "-deprecation"
 )
 
 Compile / run / fork := true
