@@ -17,7 +17,8 @@ object Day26 extends App:
 
 
   var start1: Long = System.currentTimeMillis
-  Iterator.iterate(Vector('1'))(successor).foreach(s => {
-    println(s"Answer day $day part 1: ${s.length} [${System.currentTimeMillis - start1}ms]")
+  Iterator.iterate(Vector('1'))(successor).take(10).foreach(s => {
+    println(s"s=${s.mkString("")} in [${System.currentTimeMillis - start1}ms]")
+    println(s"s.length=${s.length}")
     start1 = System.currentTimeMillis
   })
