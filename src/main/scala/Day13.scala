@@ -42,12 +42,14 @@ object Day13 extends App:
   import E.*
   import E.given
 
+  import math.Ordered.orderingToOrdered
+
   val input: List[E] =
     Source
       .fromResource(s"input$day.txt")
       .getLines
       .filterNot(_.isBlank)
-      .map(parse _)
+      .map(parse)
       .toList
 
   val start1: Long =
@@ -57,7 +59,7 @@ object Day13 extends App:
     input
       .grouped(2)
       .zipWithIndex
-      .map((es,idx) => if ordering.compare(es(0),es(1)) < 1 then idx + 1 else 0)
+      .map((es,idx) => if es(0) <= es(1) then idx + 1 else 0)
       .sum
 
   println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
