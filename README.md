@@ -2,4 +2,4 @@
 
 ![progress](https://github.com/nmcb/aoc2022/blob/main/docs/images/progress.png?raw=true)
 
-... ᘛ⁐̤ᕐᐷ
+ᓚᘏᗢ ... ᘛ⁐̤ᕐᐷ
