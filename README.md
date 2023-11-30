@@ -1,4 +1,4 @@
-## [AdventOfCode 2022](https://adventofcode.com/2023/)
+## [AdventOfCode 2023](https://adventofcode.com/2023/)
 
 Starts tomorrow..
 
