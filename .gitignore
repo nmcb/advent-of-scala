@@ -1,0 +1,28 @@
+# This is free and unencumbered software released into the public domain.
+
+# scala specifics
+**/target
+*.class
+*.log
+project/project
+
+# intellij idea specifics
+.idea/
+*.iml
+
+# code idea specifics
+.dotty-ide.json
+.dotty-ide-artifact
+
+# vs code specifics
+.vscode
+
+# bloop specifics
+metals.sbt
+.bloop/
+.metals/
+.bsp/
+
+
+# mac os x specifics
+.DS_store
