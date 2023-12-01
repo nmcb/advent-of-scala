@@ -25,24 +25,26 @@ object Day01 extends App:
       "0" -> '0'
     )
 
-  def recover(replacements: Map[String, Char])(s: String): Int =
+  def recover(replacements: Map[String, Char])(side: String): Int =
 
-    def left(todo: String): Char =
-      replacements.find((p, d) => todo.startsWith(p)).map(_._2).getOrElse(left(todo.tail))
+    def left(side: String): (String, Char) =
+      replacements.find((p,_) => side.startsWith(p)).getOrElse(left(side.tail))
 
-    def right(todo: String): Char =
-      replacements.find((p, d) => todo.endsWith(p)).map(_._2).getOrElse(right(todo.init))
 
-    s"${left(s)}${right(s)}".toInt
+    def right(side: String): (String, Char) =
+      replacements.find((p,_) => side.endsWith(p)).getOrElse(right(side.init))
 
-  println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
-
+    val (_,l) = left(side)
+    val (_,r) = right(side)
+    s"$l$r".toInt
 
   val start1: Long =
     System.currentTimeMillis
 
   val answer1: Int =
     values.map(recover(digits)).sum
+
+  println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
 
   val start2: Long =
