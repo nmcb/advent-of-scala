@@ -1,3 +1,4 @@
+import scala.annotation.*
 import scala.io.*
 
 object Day03 extends App:
@@ -14,78 +15,80 @@ object Day03 extends App:
     def size: Pos =
       Pos(chars.map(_.size).max, chars.size)
 
-    val positions: Map[Pos,Char] =
-      chars.zipWithIndex.flatMap((l,y) => l.zipWithIndex.map((c,x) => Pos(x, y) -> c)).toMap
+    def charAt(p: Pos): Char =
+      chars(p.y)(p.x)
 
-    val digits: Map[Pos,Char] =
-      positions.filter((_,c) => c.isDigit)
+    def isDigit(p: Pos): Boolean =
+      charAt(p).isDigit
 
-    val symbols: Map[Pos,Char] =
-      positions.filterNot((_,c) => c == '.' || c.isDigit)
+    def isSymbol(p: Pos): Boolean =
+      charAt(p) != '.' && !isDigit(p)
 
-    val gears: Map[Pos, Char] =
-      symbols.filter((_, c) => c == '*')
+    def isGear(c: Char): Boolean =
+      c == '*'
+
+    def isGear(p: Pos): Boolean =
+      isGear(charAt(p))
 
     def adjacents(pos: Pos): Set[Pos] =
       Set(Pos(1,-1), Pos(1,0), Pos(1,1), Pos(0,-1), Pos(0,0), Pos(0,1), Pos(-1,-1), Pos(-1,0), Pos(-1,1))
         .map(d => pos + d)
         .filter(p => p.x >= 0 && p.x < size.x && p.y >= 0 && p.y < size.y)
 
-    def hasAdjacentSymbol(pos: Pos): Boolean =
-      adjacents(pos).exists(symbols.contains)
+    case class Num(loc: Vector[Pos], value: Int, symbols: Map[Pos,Char])
 
-    def isDigit(pos: Pos): Boolean =
-      digits.contains(pos)
+    object Num:
+      def apply(loc: Vector[Pos]): Num =
+        val number  = loc.map(charAt).mkString("").toInt
+        val symbols = loc.flatMap(adjacents).filter(isSymbol).map(p => p -> charAt(p)).toMap
+        Num(loc, number, symbols)
 
-    def char(p: Pos): Char =
-      chars(p.y)(p.x)
-
-    @scala.annotation.tailrec
-    final def numbers(p: Pos = Pos(0,0), c: String = "", l: Set[Pos] = Set.empty, found: Vector[(Long,Set[Pos])] = Vector.empty): Vector[(Long,Set[Pos])] =
-      if p.y >= size.y then
-        found
+    @tailrec
+    private final def numbers(pos: Pos = Pos(0,0), cur: String = "", loc: Vector[Pos] = Vector.empty, acc: Vector[Num] = Vector.empty): Vector[Num] =
+      if pos.y >= size.y then
+        acc
       else
-        if p.x >= size.x then
-          numbers(Pos(0, p.y + 1), "", Set.empty, if c.nonEmpty then found :+ (c.toLong -> l) else found)
+        if pos.x >= size.x then
+          numbers(Pos(0, pos.y + 1), "", Vector.empty, if cur.nonEmpty then acc :+ Num(loc) else acc)
         else
-          if isDigit(p) then
-            numbers(Pos(p.x + 1, p.y), s"$c${char(p)}", l + p, found)
+          if isDigit(pos) then
+            numbers(Pos(pos.x + 1, pos.y), s"$cur${charAt(pos)}", loc :+ pos, acc)
           else
-            numbers(Pos(p.x + 1, p.y), "", Set.empty, if c.nonEmpty then found :+ (c.toLong -> l) else found)
+            numbers(Pos(pos.x + 1, pos.y), "", Vector.empty, if cur.nonEmpty then acc :+ Num(loc) else acc)
 
-    case class Num(value: Long, loc: Set[Pos], adjacentSymbols: Set[(Char,Pos)])
+    lazy val numbersWithAdjacentSymbols: Vector[Num] =
+      numbers().filter(_.symbols.nonEmpty)
 
-    val numbersWithAdjacentSymbols: Vector[(Long,Set[Pos])] =
-      numbers().filter((_,l) => l.exists(hasAdjacentSymbol))
+    lazy val gearsWithAdjacentNumbers: Map[Pos,Set[Num]] =
+      chars
+        .zipWithIndex.flatMap((l, y) => l.zipWithIndex.map((c, x) => Pos(x, y)))
+        .filter(isGear)
+        .map(p => p -> numbersWithAdjacentSymbols.filter(_.symbols.exists((g,_) => g == p)).toSet)
+        .toMap
 
-    def gearRatio(p: Pos): Option[Long] =
-      assert(char(p) == '*')
-      val numbers = numbersWithAdjacentSymbols.filter((_,l) => l.flatMap(adjacents).contains(p))
-      Option.when(numbers.size == 2){
-        val (n0, _) = numbers(0)
-        val (n1, _) = numbers(1)
-        n0 * n1
-      }
+    lazy val gearRatios: Vector[Set[Num]] =
+      val ratios = for {
+        (g1, ns1) <- gearsWithAdjacentNumbers
+        (g2, ns2) <- gearsWithAdjacentNumbers
+        if g1 == g2 && ns1.size == 2 && ns2.size == 2 && ns1 == ns2
+      } yield ns1
+      ratios.toVector
 
-    def gearRatios: Vector[Long] =
-      gears.flatMap((p,_) => gearRatio(p)).toVector
+  val page: Page =
+    Page(Source.fromResource(s"input$day.txt").getLines.map(_.toVector).toVector)
 
   val start1: Long =
     System.currentTimeMillis
 
-  val input: Page =
-    Page(Source.fromResource(s"input$day.txt").getLines.map(_.toVector).toVector)
-
-  val answer1: Long =
-    input.numbersWithAdjacentSymbols.map(_._1).sum
+  val answer1: Int =
+    page.numbersWithAdjacentSymbols.map(_.value).sum
 
   println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
-
 
   val start2: Long =
     System.currentTimeMillis
 
-  val answer2: Long =
-    input.gearRatios.sum
+  val answer2: Int =
+    page.gearRatios.map(_.map(_.value).product).sum
 
   println(s"Answer day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
