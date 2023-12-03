@@ -20,4 +20,4 @@ scalacOptions ++= Seq(
 )
 
 Compile / run / fork := true
-Compile / run / javaOptions += "-Xmx4G"
+Compile / run / javaOptions ++= Seq("-Xmx8G", "-Xss1G")

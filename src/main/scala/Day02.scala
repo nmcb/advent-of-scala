@@ -19,7 +19,7 @@ object Day02 extends App:
 
   case class Game(id: Int, hands: Set[Hand]):
 
-    def possible(reds: Long, greens: Long, blues: Long): Boolean =
+    def possibleWith(reds: Long, greens: Long, blues: Long): Boolean =
       hands.forall(h => h.reds <= reds && h.greens <= greens && h.blues <= blues)
 
     def power: Long =
@@ -48,7 +48,7 @@ object Day02 extends App:
     System.currentTimeMillis
 
   val answer1: Long =
-    games.filter(_.possible(12, 13, 14)).map(_.id).sum
+    games.filter(_.possibleWith(12, 13, 14)).map(_.id).sum
 
   println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
