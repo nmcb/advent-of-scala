@@ -39,7 +39,7 @@ object Day03 extends App:
 
     object Num:
       def apply(loc: Vector[Pos]): Num =
-        val number  = loc.map(charAt).mkString("").toInt
+        val number  = loc.map(p => charAt(p)).mkString("").toInt
         val symbols = loc.flatMap(adjacents).filter(isSymbol).map(p => p -> charAt(p)).toMap
         Num(loc, number, symbols)
 
