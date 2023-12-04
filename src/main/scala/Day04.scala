@@ -8,22 +8,25 @@ object Day04 extends App:
 
   case class Card(id: Int, winning: Vector[Int], mine: Vector[Int]):
 
+    def scratch(score: Int => Int): Int =
+      mine.foldLeft(0)((s,n) => if winning.contains(n) then if s == 0 then 1 else score(s) else s)
+
     def points: Int =
-      mine.foldLeft(0)((s,n) => if winning.contains(n) then if s == 0 then 1 else s * 2 else s)
+      scratch(_ * 2)
+
     def matching: Int =
-      mine.foldLeft(0)((s,n) => if winning.contains(n) then if s == 0 then 1 else s + 1 else s)
+      scratch(_ + 1)
 
   object Card:
 
     def fromString(s: String): Card =
+
+      def ints(s: String): Vector[Int] =
+        s.trim.split("\\s+").map(_.toInt).toVector
+
       s match
-        case s"Card $i: $w | $m" =>
-          val id      = i.trim.toInt
-          val winning = w.trim.split("\\s+").map(_.toInt).toVector
-          val mine    = m.trim.split("\\s+").map(_.toInt).toVector
-          Card(id, winning, mine)
-        case _ =>
-          sys.error(s"unmatched: $s")
+        case s"Card $id: $winning | $mine" => Card(id.trim.toInt, ints(winning), ints(mine))
+        case _ => sys.error(s"unmatched: $s")
 
   val cards: Map[Int,Card] =
     Source
@@ -49,15 +52,18 @@ object Day04 extends App:
     val maxId: Int =
       cards.keys.max
 
-    extension (counts: Map[Int,Int]) def add(id: Int, delta: Int): Map[Int,Int] =
-      counts.updatedWith(id)(_.map(_ + delta))
+    def update(current: Int)(counts: Map[Int,Int], nr: Int): Map[Int,Int] =
+      counts.updatedWith(nr)(_.map(_ + counts(current)))
 
     @tailrec
-    def solve2(id: Int = 1, acc: Map[Int,Int] = cards.map((i,c) => i -> 1)): Int =
-      if id > maxId then acc.view.values.sum else solve2(id + 1, cards(id).matching match
-        case 0 => acc
-        case n => (id + 1 to id + n).foldLeft(acc)((a,n) => if n <= maxId then a.add(n, acc(id)) else a))
+    def scratch(id: Int = 1, counts: Map[Int,Int] = cards.map((i,c) => i -> 1)): Int =
+      if id > maxId then
+        counts.view.values.sum
+      else
+        val matches = cards(id).matching
+        val next  = (id + 1 to id + matches).foldLeft(counts)(update(id))
+        scratch(id + 1, next)
 
-    solve2()
+    scratch()
 
   println(s"Answer day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
