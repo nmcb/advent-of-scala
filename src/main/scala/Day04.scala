@@ -52,15 +52,16 @@ object Day04 extends App:
     val maxId: Int =
       cards.keys.max
 
-    def update(from: Int)(counts: Map[Int,Int], id: Int): Map[Int,Int] =
-      counts.updatedWith(id)(_.map(_ + counts(from)))
+    def update(current: Int)(counts: Map[Int,Int], nr: Int): Map[Int,Int] =
+      counts.updatedWith(nr)(_.map(_ + counts(current)))
 
     @tailrec
     def scratch(id: Int = 1, counts: Map[Int,Int] = cards.map((i,c) => i -> 1)): Int =
       if id > maxId then
         counts.view.values.sum
       else
-        val next = (id + 1 to id + cards(id).matching).foldLeft(counts)(update(id))
+        val matches = cards(id).matching
+        val next  = (id + 1 to id + matches).foldLeft(counts)(update(id))
         scratch(id + 1, next)
 
     scratch()
