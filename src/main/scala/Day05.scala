@@ -6,19 +6,19 @@ object Day05 extends App:
   val day: String =
     this.getClass.getName.drop(3).init
 
-  case class Range(from: Long, to: Long):
-    assert(from <= to)
+  case class Range(min: Long, max: Long):
+    assert(min <= max)
 
-    def merge(that: Range): Option[Range] =
-      val min = from max that.from
-      val max = to   min that.to
-      Option.when(min <= max)(Range(min, max))
+    def intersect(that: Range): Option[Range] =
+      val maxmin = min max that.min
+      val minmax = max min that.max
+      Option.when(maxmin <= minmax)(Range(maxmin, minmax))
 
     def split(that: Range): Ranges =
       def make(min: Long, max: Long): Option[Range] = Option.when(min <= max)(Range(min, max))
-      this merge that match
+      this intersect that match
         case None          => Set(this)
-        case Some(overlap) => Set(make(from, overlap.from - 1), make(overlap.to + 1, to)).flatten
+        case Some(overlap) => Set(make(min, overlap.min - 1), make(overlap.max + 1, max)).flatten
 
   object Range:
     def singleton(value: Long): Range =
@@ -30,44 +30,44 @@ object Day05 extends App:
 
   type Ranges = Set[Range]
 
-  case class RangeEntry(target: Long, source: Long, length: Long):
-    val range: Range = Range(source, source + length - 1)
-    def mapToRange(from: Range): Option[Range] =
-      (from merge range).map(r => Range(r.from - source + target, r.to - source + target))
+  case class Dependency(target: Long, source: Long, length: Long):
+    val sourceRange: Range = Range(source, source + length - 1)
+    def mapBy(that: Range): Option[Range] =
+      (that intersect sourceRange).map(r => Range(r.min - source + target, r.max - source + target))
 
-  case class RangeMap(entries: Seq[RangeEntry]):
-    def mapToRanges(from: Range): Ranges =
-      val mapped   = entries.flatMap(_.mapToRange(from)).toSet
-      val unmapped = entries.foldLeft(Set(from))((rs,re) => rs.flatMap(_.split(re.range)))
+  case class Dependencies(dependencies: Seq[Dependency]):
+    def mapBy(that: Range): Ranges =
+      val mapped   = dependencies.flatMap(_.mapBy(that)).toSet
+      val unmapped = dependencies.foldLeft(Set(that))((rs, re) => rs.flatMap(_.split(re.sourceRange)))
       mapped ++ unmapped
 
-  case class Input(seeds: Seq[Long], maps: Seq[RangeMap]):
-    def mapToRanges(from: Range): Ranges =
-      maps.foldLeft(Set(from))((rs, ms) => rs.flatMap(ms.mapToRanges))
+  case class Input(seeds: Seq[Long], dependencies: Seq[Dependencies]):
+    private def mapDependenciesBy(that: Range): Ranges =
+      dependencies.foldLeft(Set(that))((rs, ms) => rs.flatMap(ms.mapBy))
 
     def minSeedByLocation: Long =
       seeds
         .map(Range.singleton)
-        .flatMap(mapToRanges)
-        .map(_.from)
+        .flatMap(mapDependenciesBy)
+        .map(_.min)
         .min
 
     def minSeedRangeByLocation: Long =
       seeds
         .grouped(2)
         .map(Range.fromSeq)
-        .flatMap(mapToRanges)
-        .map(_.from)
+        .flatMap(mapDependenciesBy)
+        .map(_.min)
         .min
 
   lazy val input: Input =
 
-    def parseRangeEntry(s: String): RangeEntry =
+    def parseDependency(s: String): Dependency =
       s match
-        case s"$target $source $length" => RangeEntry(target.toLong, source.toLong, length.toLong)
+        case s"$target $source $length" => Dependency(target.toLong, source.toLong, length.toLong)
 
-    def parseRangeMap(s: String): RangeMap =
-      RangeMap(s.linesIterator.drop(1).map(parseRangeEntry).toSeq)
+    def parseDependencies(s: String): Dependencies =
+      Dependencies(s.linesIterator.drop(1).map(parseDependency).toSeq)
 
     val lines: List[String] =
       Source
@@ -81,10 +81,10 @@ object Day05 extends App:
       lines.head match
         case s"seeds: $seeds" => seeds.split(' ').map(_.toLong).toSeq
 
-    val rangeMaps: List[RangeMap] =
-      lines.tail.map(parseRangeMap)
+    val dependencies: List[Dependencies] =
+      lines.tail.map(parseDependencies)
 
-    Input(seeds, rangeMaps)
+    Input(seeds, dependencies)
 
   
   val start1: Long =
