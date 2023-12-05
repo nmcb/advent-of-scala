@@ -9,14 +9,14 @@ object Day05 extends App:
   case class Range(from: Long, to: Long):
     assert(from <= to)
 
-    def overlap(that: Range): Option[Range] =
+    def merge(that: Range): Option[Range] =
       val min = from max that.from
       val max = to   min that.to
       Option.when(min <= max)(Range(min, max))
 
     def split(that: Range): Ranges =
       def make(min: Long, max: Long): Option[Range] = Option.when(min <= max)(Range(min, max))
-      this overlap that match
+      this merge that match
         case None          => Set(this)
         case Some(overlap) => Set(make(from, overlap.from - 1), make(overlap.to + 1, to)).flatten
 
@@ -33,7 +33,7 @@ object Day05 extends App:
   case class RangeEntry(target: Long, source: Long, length: Long):
     val range: Range = Range(source, source + length - 1)
     def mapToRange(from: Range): Option[Range] =
-      (from overlap range).map(r => Range(r.from - source + target, r.to - source + target))
+      (from merge range).map(r => Range(r.from - source + target, r.to - source + target))
 
   case class RangeMap(entries: Seq[RangeEntry]):
     def mapToRanges(from: Range): Ranges =
@@ -86,6 +86,7 @@ object Day05 extends App:
 
     Input(seeds, rangeMaps)
 
+  
   val start1: Long =
     System.currentTimeMillis
 
