@@ -1,4 +1,4 @@
-import scala.annotation.*
+import scala.annotation.tailrec
 import scala.io.*
 
 object Day05 extends App:
@@ -6,109 +6,98 @@ object Day05 extends App:
   val day: String =
     this.getClass.getName.drop(3).init
 
-  case class Dep(sourceT: String, targetT: String, maps: Vector[(Long,Long,Long)]):
-    def sourceToTarget(source: Long): Long =
-      maps.find((from, _, length) => source >= from && source < from + length) match
-        case Some((from, to, _)) =>
-          val delta = source - from
-          to + delta
-        case None =>
-          source
+  case class Range(from: Long, to: Long):
+    assert(from <= to)
 
-    def targetToSource(target: Long): Long =
-      maps.find((_, to, length) => target >= to && target < to + length) match
-        case Some((from, to, _)) =>
-          val delta = target - to
-          from + delta
-        case None =>
-          target
+    def overlap(that: Range): Option[Range] =
+      val min = from max that.from
+      val max = to   min that.to
+      Option.when(min <= max)(Range(min, max))
 
-  val (seeds: Vector[Long], deps: Vector[Dep]) =
+    def split(that: Range): Ranges =
+      def make(min: Long, max: Long): Option[Range] = Option.when(min <= max)(Range(min, max))
+      this overlap that match
+        case None          => Set(this)
+        case Some(overlap) => Set(make(from, overlap.from - 1), make(overlap.to + 1, to)).flatten
+
+  object Range:
+    def singleton(value: Long): Range =
+      Range(value, value)
+
+    def fromSeq(seq: Seq[Long]): Range =
+      val Seq(start, length) = seq
+      Range(start, start + length - 1)
+
+  type Ranges = Set[Range]
+
+  case class RangeEntry(target: Long, source: Long, length: Long):
+    val range: Range = Range(source, source + length - 1)
+    def mapToRange(from: Range): Option[Range] =
+      (from overlap range).map(r => Range(r.from - source + target, r.to - source + target))
+
+  case class RangeMap(entries: Seq[RangeEntry]):
+    def mapToRanges(from: Range): Ranges =
+      val mapped   = entries.flatMap(_.mapToRange(from)).toSet
+      val unmapped = entries.foldLeft(Set(from))((rs,re) => rs.flatMap(_.split(re.range)))
+      mapped ++ unmapped
+
+  case class Input(seeds: Seq[Long], maps: Seq[RangeMap]):
+    def mapToRanges(from: Range): Ranges =
+      maps.foldLeft(Set(from))((rs, ms) => rs.flatMap(ms.mapToRanges))
+
+    def minSeedByLocation: Long =
+      seeds
+        .map(Range.singleton)
+        .flatMap(mapToRanges)
+        .map(_.from)
+        .min
+
+    def minSeedRangeByLocation: Long =
+      seeds
+        .grouped(2)
+        .map(Range.fromSeq)
+        .flatMap(mapToRanges)
+        .map(_.from)
+        .min
+
+  lazy val input: Input =
+
+    def parseRangeEntry(s: String): RangeEntry =
+      s match
+        case s"$target $source $length" => RangeEntry(target.toLong, source.toLong, length.toLong)
+
+    def parseRangeMap(s: String): RangeMap =
+      RangeMap(s.linesIterator.drop(1).map(parseRangeEntry).toSeq)
+
     val lines: List[String] =
       Source
-        .fromResource(s"input$day.txt")
-        .getLines
-        .filter(_.nonEmpty)
+        .fromInputStream(getClass.getResourceAsStream("input05.txt"))
+        .mkString
+        .trim
+        .split("\n\n")
         .toList
 
-    def parse(todo: List[String], seeds: List[Long] = List.empty, deps: List[Dep] = List.empty): (Vector[Long], Vector[Dep]) =
-      todo match
-        case Nil => (seeds.toVector, deps.toVector)
-        case s"seeds: $nums" :: rest =>
-          parse(rest, nums.split(' ').map(_.toLong).toList)
-        case s"$source-to-$target map:" :: rest =>
-          val dep: Dep =
-            Dep(source, target,
-              rest
-                .takeWhile(l => !l.endsWith("map:"))
-                .foldLeft(Vector.empty[(Long,Long,Long)])((m,d) =>
-                  val List(targetFrom, sourceFrom, length) = d.split(' ').map(_.toLong).toList
-                  m :+ (sourceFrom, targetFrom, length)
-                )
-            )
-          val next: List[String] = rest.dropWhile(l => !l.endsWith("map:"))
-          parse(next, seeds, deps :+ dep)
-        case _ =>
-          sys.error("unmatched")
+    val seeds: Seq[Long] =
+      lines.head match
+        case s"seeds: $seeds" => seeds.split(' ').map(_.toLong).toSeq
 
-    parse(lines)
+    val rangeMaps: List[RangeMap] =
+      lines.tail.map(parseRangeMap)
 
-  val seedToSoil: Dep = deps.filter(d => d.sourceT == "seed" && d.targetT == "soil").head
-  val soilToFertilizer: Dep = deps.filter(d => d.sourceT == "soil" && d.targetT == "fertilizer").head
-  val fertilizerToWater: Dep = deps.filter(d => d.sourceT == "fertilizer" && d.targetT == "water").head
-  val waterToLight: Dep = deps.filter(d => d.sourceT == "water" && d.targetT == "light").head
-  val lightToTemperature: Dep = deps.filter(d => d.sourceT == "light" && d.targetT == "temperature").head
-  val temperatureToHumidity: Dep = deps.filter(d => d.sourceT == "temperature" && d.targetT == "humidity").head
-  val humidityToLocation: Dep = deps.filter(d => d.sourceT == "humidity" && d.targetT == "location").head
-
-  def seedToLocation(s: Long): Long =
-    Vector(seedToSoil, soilToFertilizer, fertilizerToWater, waterToLight, lightToTemperature, temperatureToHumidity, humidityToLocation)
-      .foldLeft(s)((id,dep) => dep.sourceToTarget(id))
+    Input(seeds, rangeMaps)
 
   val start1: Long =
     System.currentTimeMillis
 
   val answer1: Long =
-    seeds.map(seedToLocation).min
-
-//  assert(answer1 == 51580674)
+    input.minSeedByLocation
 
   println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
-
-  def locationToSeed(s: Long): Long =
-    Vector(seedToSoil, soilToFertilizer, fertilizerToWater, waterToLight, lightToTemperature, temperatureToHumidity, humidityToLocation)
-      .foldRight(s)((dep,id) => dep.targetToSource(id))
 
   val start2: Long =
     System.currentTimeMillis
 
-  val seedRanges: List[(Long,Long)] =
-    seeds.grouped(2).map(l => (l(0), l(1))).toList
-
-  def hasSeed(seed: Long): Boolean =
-    seedRanges.exists((from, length) => seed >= from && seed < from + length)
-
-  lazy val answer2: Long =
-    def solve(todo: List[(Long,Long)], min: Long = Long.MaxValue): Long =
-      def loop(from: Long, to: Long, min: Long = Long.MaxValue): Long =
-        if from >= to then
-          min
-        else
-          val loc = seedToLocation(from)
-          if loc < min then
-            loop(from + 1, to, loc)
-          else
-            loop(from + 1, to, min)
-
-      todo match
-        case Nil =>
-          min
-        case (from,length) :: rest =>
-          println(s"from=$from [$length]")
-          val loc = loop(from, from + length)
-          if loc <= min then solve(rest, loc) else solve(rest, min)
-
-    solve(seedRanges)
-
+  val answer2: Long =
+    input.minSeedRangeByLocation
 
   println(s"Answer day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
