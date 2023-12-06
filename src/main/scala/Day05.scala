@@ -38,7 +38,7 @@ object Day05 extends App:
   case class Dependencies(dependencies: Seq[Dependency]):
     def mapBy(that: Range): Ranges =
       val mapped   = dependencies.flatMap(dep => dep.mapBy(that)).toSet
-      val unmapped = dependencies.foldLeft(Set(that))((acc,dep) => acc.flatMap(ranges => ranges.mapBy(d.sourceRange)))
+      val unmapped = dependencies.foldLeft(Set(that))((acc,dep) => acc.flatMap(ranges => ranges.mapBy(dep.sourceRange)))
       mapped ++ unmapped
 
   case class Input(seeds: Seq[Long], dependencies: Seq[Dependencies]):
