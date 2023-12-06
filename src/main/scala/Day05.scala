@@ -1,3 +1,5 @@
+import Day05.Range.optional
+
 import scala.annotation.tailrec
 import scala.io.*
 
@@ -12,13 +14,12 @@ object Day05 extends App:
     def intersect(that: Range): Option[Range] =
       val maxmin = min max that.min
       val minmax = max min that.max
-      Option.when(maxmin <= minmax)(Range(maxmin, minmax))
+      optional(min = maxmin, max = minmax)
 
     def diff(that: Range): Set[Range] =
-      def make(min: Long, max: Long): Option[Range] = Option.when(min <= max)(Range(min, max))
       this intersect that match
         case None          => Set(this)
-        case Some(overlap) => Set(make(min, overlap.min - 1), make(overlap.max + 1, max)).flatten
+        case Some(overlap) => Set(optional(min, overlap.min - 1), optional(overlap.max + 1, max)).flatten
 
   object Range:
     def singleton(value: Long): Range =
@@ -27,6 +28,9 @@ object Day05 extends App:
     def fromSeq(seq: Seq[Long]): Range =
       val Seq(start, length) = seq
       Range(start, start + length - 1)
+
+    def optional(min: Long, max: Long): Option[Range] =
+      Option.when(min <= max)(Range(min, max))
 
   case class Dependency(target: Long, source: Long, length: Long):
     val sourceRange: Range = Range(source, source + length - 1)
