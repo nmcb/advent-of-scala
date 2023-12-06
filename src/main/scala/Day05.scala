@@ -69,19 +69,19 @@ object Day05 extends App:
     def parseDependencies(s: String): Dependencies =
       Dependencies(s.linesIterator.drop(1).map(parseDependency).toSet)
 
-    val lines: List[String] =
+    val lines: Seq[String] =
       Source
         .fromInputStream(getClass.getResourceAsStream("input05.txt"))
         .mkString
         .trim
         .split("\n\n")
-        .toList
+        .toSeq
 
     val seeds: Seq[Long] =
       lines.head match
         case s"seeds: $seeds" => seeds.split(' ').map(_.toLong).toSeq
 
-    val dependencies: List[Dependencies] =
+    val dependencies: Seq[Dependencies] =
       lines.tail.map(parseDependencies)
 
     Input(seeds, dependencies)
