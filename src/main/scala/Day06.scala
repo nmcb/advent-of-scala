@@ -1,5 +1,4 @@
 import scala.annotation.tailrec
-import scala.io.*
 
 object Day06 extends App:
 
@@ -12,8 +11,8 @@ object Day06 extends App:
       dt * speed
 
     def wins =
-      def loop(c: Int, a: Int = 0): Int =
-        if race(c) > distance then loop(c + 1, a + 1) else if a == 0 then loop(c + 1, a) else a
+      @tailrec def loop(c: Int, a: Int = 0): Int =
+        if race(c) > distance then loop(c + 1, a + 1) else if a == 0 && c < time then loop(c + 1, a) else a
       loop(0)
 
   val start1: Long =

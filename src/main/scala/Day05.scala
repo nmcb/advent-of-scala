@@ -14,7 +14,7 @@ object Day05 extends App:
       val minmax = max min that.max
       Option.when(maxmin <= minmax)(Range(maxmin, minmax))
 
-    def mapBy(that: Range): Ranges =
+    def diff(that: Range): Ranges =
       def make(min: Long, max: Long): Option[Range] = Option.when(min <= max)(Range(min, max))
       this intersect that match
         case None          => Set(this)
@@ -35,15 +35,15 @@ object Day05 extends App:
     def mapBy(that: Range): Option[Range] =
       (that intersect sourceRange).map(r => Range(r.min - source + target, r.max - source + target))
 
-  case class Dependencies(dependencies: Seq[Dependency]):
+  case class Dependencies(dependencies: Set[Dependency]):
     def mapBy(that: Range): Ranges =
-      val mapped   = dependencies.flatMap(dep => dep.mapBy(that)).toSet
-      val unmapped = dependencies.foldLeft(Set(that))((acc,dep) => acc.flatMap(ranges => ranges.mapBy(dep.sourceRange)))
+      val mapped   = dependencies.flatMap(dep => dep.mapBy(that))
+      val unmapped = dependencies.foldLeft(Set(that))((acc,dep) => acc.flatMap(range => range.diff(dep.sourceRange)))
       mapped ++ unmapped
 
-  case class Input(seeds: Seq[Long], dependencies: Seq[Dependencies]):
+  case class Input(seeds: Seq[Long], chain: Seq[Dependencies]):
     private def mapDependenciesBy(that: Range): Ranges =
-      dependencies.foldLeft(Set(that))((rs, ms) => rs.flatMap(ms.mapBy))
+      chain.foldLeft(Set(that))((rs, ms) => rs.flatMap(ms.mapBy))
 
     def minSeedByLocation: Long =
       seeds
@@ -67,7 +67,7 @@ object Day05 extends App:
         case s"$target $source $length" => Dependency(target.toLong, source.toLong, length.toLong)
 
     def parseDependencies(s: String): Dependencies =
-      Dependencies(s.linesIterator.drop(1).map(parseDependency).toSeq)
+      Dependencies(s.linesIterator.drop(1).map(parseDependency).toSet)
 
     val lines: List[String] =
       Source
@@ -86,7 +86,7 @@ object Day05 extends App:
 
     Input(seeds, dependencies)
 
-  
+
   val start1: Long =
     System.currentTimeMillis
 
