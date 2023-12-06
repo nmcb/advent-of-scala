@@ -14,7 +14,7 @@ object Day05 extends App:
       val minmax = max min that.max
       Option.when(maxmin <= minmax)(Range(maxmin, minmax))
 
-    def split(that: Range): Ranges =
+    def mapBy(that: Range): Ranges =
       def make(min: Long, max: Long): Option[Range] = Option.when(min <= max)(Range(min, max))
       this intersect that match
         case None          => Set(this)
@@ -37,8 +37,8 @@ object Day05 extends App:
 
   case class Dependencies(dependencies: Seq[Dependency]):
     def mapBy(that: Range): Ranges =
-      val mapped   = dependencies.flatMap(_.mapBy(that)).toSet
-      val unmapped = dependencies.foldLeft(Set(that))((rs,d) => rs.flatMap(_.split(d.sourceRange)))
+      val mapped   = dependencies.flatMap(dep => dep.mapBy(that)).toSet
+      val unmapped = dependencies.foldLeft(Set(that))((acc,dep) => acc.flatMap(ranges => ranges.mapBy(dep.sourceRange)))
       mapped ++ unmapped
 
   case class Input(seeds: Seq[Long], dependencies: Seq[Dependencies]):
