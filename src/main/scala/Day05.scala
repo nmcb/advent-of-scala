@@ -14,7 +14,7 @@ object Day05 extends App:
       val minmax = max min that.max
       Option.when(maxmin <= minmax)(Range(maxmin, minmax))
 
-    def diff(that: Range): Ranges =
+    def diff(that: Range): Set[Range] =
       def make(min: Long, max: Long): Option[Range] = Option.when(min <= max)(Range(min, max))
       this intersect that match
         case None          => Set(this)
@@ -28,22 +28,20 @@ object Day05 extends App:
       val Seq(start, length) = seq
       Range(start, start + length - 1)
 
-  type Ranges = Set[Range]
-
   case class Dependency(target: Long, source: Long, length: Long):
     val sourceRange: Range = Range(source, source + length - 1)
     def mapBy(that: Range): Option[Range] =
       (that intersect sourceRange).map(r => Range(r.min - source + target, r.max - source + target))
 
   case class Dependencies(dependencies: Set[Dependency]):
-    def mapBy(that: Range): Ranges =
-      val mapped   = dependencies.flatMap(dep => dep.mapBy(that))
-      val unmapped = dependencies.foldLeft(Set(that))((acc,dep) => acc.flatMap(range => range.diff(dep.sourceRange)))
+    def mapBy(that: Range): Set[Range] =
+      val mapped   = dependencies.flatMap(_ mapBy that)
+      val unmapped = dependencies.foldLeft(Set(that))((acc,dep) => acc.flatMap(_ diff dep.sourceRange))
       mapped ++ unmapped
 
   case class Input(seeds: Seq[Long], chain: Seq[Dependencies]):
-    private def mapDependenciesBy(that: Range): Ranges =
-      chain.foldLeft(Set(that))((rs, ms) => rs.flatMap(ms.mapBy))
+    private def mapDependenciesBy(that: Range): Set[Range] =
+      chain.foldLeft(Set(that))((rs,ms) => rs.flatMap(ms.mapBy))
 
     def minSeedByLocation: Long =
       seeds
