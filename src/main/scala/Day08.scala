@@ -37,14 +37,11 @@ object Day08 extends App:
     def lcm(a: Long, b: Long): Long =
       (a * b).abs / gcd(a, b)
 
-    def lcm(ls: Set[Long]): Long =
-      ls.foldLeft(1L)(lcm)
-
     def step2: Long =
       // note: each start node has a repeating path, ending with a node that ends with a 'Z'
       val starts = nodes.keys.filter(_.endsWith("A")).toSet
       val paths  = starts.map(from => pathTo(_.endsWith("Z"), from, directions))
-      lcm(paths.map(_.length.toLong))
+      paths.map(_.length.toLong).foldLeft(1L)(lcm)
 
 
   lazy val network: Network =
