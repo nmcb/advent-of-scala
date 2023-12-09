@@ -17,7 +17,7 @@ object Day08 extends App:
     def step(from: String, direction: Char): String =
       direction match
         case 'L' => nodes.getOrElse(from, sys.error(s"no step left from: $from"))._1
-        case 'R' => nodes.getOrElse(from, sys.error(s"no step left from: $from"))._2
+        case 'R' => nodes.getOrElse(from, sys.error(s"no step right from: $from"))._2
         case _   => sys.error(s"invalid direction: $direction")
 
     def pathTo(exit: String => Boolean, from: String, directions: Directions, path: String = ""): String =
@@ -54,4 +54,4 @@ object Day08 extends App:
 
   val start2: Long  = System.currentTimeMillis
   val answer2: Long = network.step2
-  println(s"Answer day $day part 1: ${answer2} [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
