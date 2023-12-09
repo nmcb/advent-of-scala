@@ -7,20 +7,22 @@ object Day09 extends App:
   val day: String =
     this.getClass.getName.drop(3).init
 
-  lazy val input: List[List[Int]] =
+  type Input = Vector[Vector[Int]]
+
+  lazy val input: Input =
     Source
       .fromResource(s"input$day.txt")
       .getLines
-      .map(_.split(' ').map(_.toInt).toList)
-      .toList
+      .map(_.split(' ').map(_.toInt).toVector)
+      .toVector
 
-  type Triangle = List[List[Int]]
+  type Triangle = Vector[Vector[Int]]
 
-  def triangle(todo: List[Int], acc: List[List[Int]] = List.empty): Triangle =
-    if todo.forall(_ == 0) then acc :+ todo else triangle(todo.tail.zip(todo).map(_-_), acc :+ todo)
+  def triangle(numbers: Vector[Int], acc: Triangle = Vector.empty): Triangle =
+    if numbers.forall(_ == 0) then acc :+ numbers else triangle(numbers.tail.zip(numbers).map(_-_), acc :+ numbers)
 
-  def solve(ds: List[List[Int]])(extrapolation: Triangle => Int): Int =
-    ds.map(line => triangle(line)).map(extrapolation).sum
+  def solve(input: Input)(extrapolation: Triangle => Int): Int =
+    input.map(numbers => triangle(numbers)).map(extrapolation).sum
 
   val start1: Long = System.currentTimeMillis
   val answer1: Int = solve(input)(_.map(_.last).foldRight(0)(_+_))
