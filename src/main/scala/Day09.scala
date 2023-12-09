@@ -22,10 +22,10 @@ object Day09 extends App:
   def solve(ds: List[List[Int]])(extrapolation: Triangle => Int): Int =
     ds.map(line => triangle(line)).map(extrapolation).sum
 
-  val start1: Long  = System.currentTimeMillis
+  val start1: Long = System.currentTimeMillis
   val answer1: Int = solve(input)(_.map(_.last).foldRight(0)(_+_))
   println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
-  val start2: Long  = System.currentTimeMillis
+  val start2: Long = System.currentTimeMillis
   val answer2: Int = solve(input)(_.map(_.head).foldRight(0)(_-_))
   println(s"Answer day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
