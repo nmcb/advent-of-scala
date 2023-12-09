@@ -157,4 +157,4 @@ object Day07 extends App:
       .map((h,i) => h.bid * (i + 1))
       .sum
 
-  println(s"Answer day $day part 1: ${answer2} [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")

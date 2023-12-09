@@ -54,4 +54,4 @@ object Day08 extends App:
 
   val start2: Long  = System.currentTimeMillis
   val answer2: Long = network.step2
-  println(s"Answer day $day part 1: ${answer2} [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
