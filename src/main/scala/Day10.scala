@@ -103,8 +103,8 @@ object Day10 extends App:
   lazy val start: Pos =
     tiles.find((_,t) => t == Start).map((p,_) => p).getOrElse(sys.error("no start tile"))
 
-  /** trial and error on direction - seems we need to go west.. */
-  val path: Vector[(Pos,Dir)] =
+  /** trial and error on direction - seems we need to go west */
+  lazy val path: Vector[(Pos,Dir)] =
     pathsFrom(start, W)
 
   val answer1: Int =
@@ -112,30 +112,33 @@ object Day10 extends App:
 
   println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
-  lazy val cache: Set[Pos] =
-    path.toMap.keys.toSet
 
-  // right handed enclosure
-  def scan(pos: Pos, dir: Dir): Set[Pos] =
-    dir match
-      case N if pos.y > 0 =>
-        val r = cache.filter(p => p.x == pos.x && p.y < pos.y)
-        if r.nonEmpty then (r.map(_.y).max + 1 until pos.y).map(y => Pos(pos.x, y)).toSet else Set.empty
-      case E if pos.x < maxX =>
-        val r = cache.filter(p => p.y == pos.y && p.x > pos.x)
-        if r.nonEmpty then (pos.x + 1 until r.map(_.x).min).map(x => Pos(x, pos.y)).toSet else Set.empty
-      case S if pos.y < maxY =>
-        val r = cache.filter(p => p.x == pos.x && p.y > pos.y)
-        if r.nonEmpty then (pos.y + 1 until r.map(_.y).min).map(y => Pos(pos.x, y)).toSet else Set.empty
-      case W if pos.x > 0 =>
-        val r = cache.filter(p => p.y == pos.y && p.x < pos.x)
-        if r.nonEmpty then (r.map(_.x).max + 1 until pos.x).map(x => Pos(x, pos.y)).toSet else Set.empty
-      case _ => Set.empty
+  def area(path: Vector[(Pos,Dir)]): Set[Pos] =
 
-  def area(path: List[(Pos,Dir)]): Set[Pos] =
-    def loop(todo: List[(Pos,Dir)], prev: Dir, acc: Set[Pos]): Set[Pos] =
+    val cacheX: Vector[Pos] = path.sortBy((p,_) => p.x).map((p,_) => p)
+    val cacheY: Vector[Pos] = path.sortBy((p,_) => p.y).map((p,_) => p)
+
+    /** right handed enclosure */
+    def scan(pos: Pos, dir: Dir): Set[Pos] =
+
+      dir match
+        case N if pos.y > 0 =>
+          val r = cacheY.filter(p => p.x == pos.x && p.y < pos.y)
+          if r.nonEmpty then (r.last.y + 1 until pos.y).map(y => Pos(pos.x, y)).toSet else Set.empty
+        case E if pos.x < maxX =>
+          val r = cacheX.filter(p => p.y == pos.y && p.x > pos.x)
+          if r.nonEmpty then (pos.x + 1 until r.head.x).map(x => Pos(x, pos.y)).toSet else Set.empty
+        case S if pos.y < maxY =>
+          val r = cacheY.filter(p => p.x == pos.x && p.y > pos.y)
+          if r.nonEmpty then (pos.y + 1 until r.head.y).map(y => Pos(pos.x, y)).toSet else Set.empty
+        case W if pos.x > 0 =>
+          val r = cacheX.filter(p => p.y == pos.y && p.x < pos.x)
+          if r.nonEmpty then (r.last.x + 1 until pos.x).map(x => Pos(x, pos.y)).toSet else Set.empty
+        case _ => Set.empty
+
+    def loop(todo: Vector[(Pos,Dir)], prev: Dir, acc: Set[Pos]): Set[Pos] =
       todo match
-        case (p, n) :: rest =>
+        case (p, n) +: rest =>
           tiles(p) match
             case Vertical   if prev == N.opposite => loop(rest, n, acc ++ scan(p, W))
             case Vertical   if prev == S.opposite => loop(rest, n, acc ++ scan(p, E))
@@ -146,7 +149,7 @@ object Day10 extends App:
             case BendSE     if prev == E.opposite => loop(rest, n, acc ++ scan(p, N))
             case BendSW     if prev == S.opposite => loop(rest, n, acc ++ scan(p, N))
             case _                                => loop(rest, n, acc)
-        case Nil => acc
+        case _ => acc
 
     val (p, d) = path.head
     loop(path.tail, d, scan(p, d.innerR))
@@ -155,6 +158,6 @@ object Day10 extends App:
     System.currentTimeMillis
 
   val answer2: Int =
-    area(path.toList).size
+    area(path).size
 
   println(s"Answer day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
