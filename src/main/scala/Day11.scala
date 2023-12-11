@@ -15,29 +15,8 @@ object Day11 extends App:
       .toVector)
 
   case class Pos(x: Int, y: Int):
-
-    def +(that: Pos): Pos =
-      Pos(x + that.x, y + that.y)
-
-    def *(k: Int): Pos =
-      Pos(k * x, k * y)
-
     def manhattan(that: Pos): Int =
       (x - that.x).abs + (y - that.y).abs
-
-    def <=(that: Pos): Boolean =
-      x <= that.x && y <= that.y
-
-    def min(that: Pos): Pos =
-      Pos(x min that.x, y min that.y)
-
-    def max(that: Pos): Pos =
-      Pos(x max that.x, y max that.y)
-
-    def cross(that: Pos): Int =
-      x * that.y - that.x * y
-
-
 
   case class Image(galaxies: Vector[Vector[Char]]):
     def expanded: Image =
