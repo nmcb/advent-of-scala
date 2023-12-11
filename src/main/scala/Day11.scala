@@ -32,8 +32,8 @@ object Day11 extends App:
     lazy val emptyX: Set[Int] =
       empty(galaxies.transpose)
 
-    def expand(a: Int, b: Int, indices: Set[Int], multiplier: Long = 1): Long =
-      val range = if (a <= b) a until b else b until a
+    def expand(a: Int, b: Int, indices: Set[Int], multiplier: Long = 1L): Long =
+      val range = if a <= b then a until b else b until a
       range.map(n => if indices.contains(n) then multiplier else 1L).sum
 
     def distances(multiplier: Long): Vector[Long] =
