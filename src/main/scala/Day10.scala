@@ -120,7 +120,6 @@ object Day10 extends App:
 
     /** right handed enclosure */
     def scan(pos: Pos, dir: Dir): Set[Pos] =
-
       dir match
         case N if pos.y > 0 =>
           val r = cacheY.filter(p => p.x == pos.x && p.y < pos.y)
@@ -140,14 +139,14 @@ object Day10 extends App:
       todo match
         case (p, n) +: rest =>
           tiles(p) match
-            case Vertical   if prev == N.opposite => loop(rest, n, acc ++ scan(p, W))
-            case Vertical   if prev == S.opposite => loop(rest, n, acc ++ scan(p, E))
-            case Horizontal if prev == E.opposite => loop(rest, n, acc ++ scan(p, N))
-            case Horizontal if prev == W.opposite => loop(rest, n, acc ++ scan(p, S))
-            case BendNE     if prev == N.opposite => loop(rest, n, acc ++ scan(p, S))
-            case BendNW     if prev == W.opposite => loop(rest, n, acc ++ scan(p, S))
-            case BendSE     if prev == E.opposite => loop(rest, n, acc ++ scan(p, N))
-            case BendSW     if prev == S.opposite => loop(rest, n, acc ++ scan(p, N))
+            case Vertical   if prev.opposite == N => loop(rest, n, acc ++ scan(p, W))
+            case Vertical   if prev.opposite == S => loop(rest, n, acc ++ scan(p, E))
+            case Horizontal if prev.opposite == E => loop(rest, n, acc ++ scan(p, N))
+            case Horizontal if prev.opposite == W => loop(rest, n, acc ++ scan(p, S))
+            case BendNE     if prev.opposite == N => loop(rest, n, acc ++ scan(p, S))
+            case BendNW     if prev.opposite == W => loop(rest, n, acc ++ scan(p, S))
+            case BendSE     if prev.opposite == E => loop(rest, n, acc ++ scan(p, N))
+            case BendSW     if prev.opposite == S => loop(rest, n, acc ++ scan(p, N))
             case _                                => loop(rest, n, acc)
         case _ => acc
 

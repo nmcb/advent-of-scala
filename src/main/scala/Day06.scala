@@ -1,4 +1,5 @@
 import scala.annotation.tailrec
+import scala.math.*
 
 object Day06 extends App:
 
@@ -6,13 +7,14 @@ object Day06 extends App:
     this.getClass.getName.drop(3).init
 
   case class Race(time: Int, distance: Long):
-    def race(speed: Long): Long =
+    inline def race(speed: Long): Long =
       val dt = time - speed
       dt * speed
 
-    def wins =
-      @tailrec def loop(c: Int, a: Int = 0): Int =
-        if race(c) > distance then loop(c + 1, a + 1) else if a == 0 && c < time then loop(c + 1, a) else a
+    lazy val wins: Int =
+      @tailrec
+      def loop(s: Int, a: Int = 0): Int =
+        if race(s) > distance then loop(s + 1, a + 1) else if a == 0 && s < time then loop(s + 1, a) else a
       loop(0)
 
   val start1: Long =
