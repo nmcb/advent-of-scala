@@ -15,24 +15,23 @@ object Day13 extends App:
 
     def mirrorLinesAt(x: Int)(line: Vector[Char]): (Vector[Char], Vector[Char]) =
       val (left, right) = line.splitAt(x)
-      val length = left.length min right.length
-      val l = left.reverse.take(length)
-      val r = right.take(length)
-      (l, r)
+      val length        = left.length min right.length
+      val toTheLeft     = left.reverse.take(length)
+      val toTheRight    = right.take(length)
+      (toTheLeft, toTheRight)
 
-
-    def mirrorLine(x: Int): Boolean =
+    def hasMirrorLineAt(x: Int): Boolean =
       image.map(mirrorLinesAt(x)).count(_ != _) == defects
 
-    lazy val mirrorsX: Vector[Int] =
-      (1 until sizeX).filter(mirrorLine).toVector
+    lazy val xMirrorLines: Vector[Int] =
+      (1 until sizeX).filter(hasMirrorLineAt).toVector
 
-    lazy val mirrorsY: Vector[Int] =
-      Grid(image.transpose, defects).mirrorsX
+    lazy val yMirrorLines: Vector[Int] =
+      copy(image = image.transpose).xMirrorLines
 
     lazy val summarize: Int =
-      val col = mirrorsX.headOption.getOrElse(0)
-      val row = mirrorsY.headOption.getOrElse(0)
+      val col = xMirrorLines.headOption.getOrElse(0)
+      val row = yMirrorLines.headOption.getOrElse(0)
       col + (100 * row)
 
   object Grid:
