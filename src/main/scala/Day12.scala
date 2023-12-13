@@ -22,23 +22,23 @@ object Day12 extends App:
     private def solve(mask: String, lengths: List[Int]): Long =
       cache.getOrElseUpdate((mask, lengths),
         (mask, lengths) match
-          case (m, Nil) if m.contains('#') => 0
-          case (_, Nil)                    => 1
-          case ("", _ :: _)                => 0
-          case (s".$mt", ls)               => solve(mt, ls)
-          case (s"#$mt", lh :: lt) if mask.length >= lh =>
-            val (operational, rest) = mt.splitAt(lh - 1)
+          case (_, Nil) if mask.contains('#') => 0
+          case (_, Nil)                       => 1
+          case ("", _ :: _)                   => 0
+          case (s".$tail", _)                 => solve(tail, lengths)
+          case (s"#$tail", length :: todo) if mask.length >= length =>
+            val (operational, rest) = tail.splitAt(length - 1)
             if operational.contains('.') then
               0
             else
               rest match
-                case ""      => solve("", lt)
-                case s".$mt" => solve(mt, lt)
-                case s"?$mt" => solve(mt, lt)
-                case _ => 0
-          case (s"#$mt", _ :: _)  => 0
-          case (s"?$mt", lengths) => solve(s".$mt", lengths) + solve(s"#$mt", lengths)
-          case (mask, lengths)    => sys.error(s"illegal state: mask=$mask, lengths=$lengths")
+                case ""      => solve("", todo)
+                case s".$mt" => solve(mt, todo)
+                case s"?$mt" => solve(mt, todo)
+                case _       => 0
+          case (s"#$tail", _ :: _) => 0
+          case (s"?$tail", _)      => solve(s".$tail", lengths) + solve(s"#$tail", lengths)
+          case _                   => sys.error(s"illegal state: mask=$mask, lengths=$lengths")
       )
 
     lazy val arrangements: Long =
