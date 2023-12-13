@@ -10,11 +10,14 @@ object Day13 extends App:
     lazy val sizeX: Int = image.map(_.size).max
     lazy val sizeY: Int = image.size
 
+    def withDefects(nr: Int): Grid =
+      copy(defects = nr)
+
     override def toString: String =
       image.map(_.mkString).mkString("\n")
 
-    def mirrorLinesAt(x: Int)(line: Vector[Char]): (Vector[Char], Vector[Char]) =
-      val (left, right) = line.splitAt(x)
+    def mirrorLinesAt(n: Int)(line: Vector[Char]): (Vector[Char], Vector[Char]) =
+      val (left, right) = line.splitAt(n)
       val length        = left.length min right.length
       val toTheLeft     = left.reverse.take(length)
       val toTheRight    = right.take(length)
@@ -23,20 +26,18 @@ object Day13 extends App:
     def hasMirrorLineAt(x: Int): Boolean =
       image.map(mirrorLinesAt(x)).count(_ != _) == defects
 
-    lazy val xMirrorLines: Vector[Int] =
-      (1 until sizeX).filter(hasMirrorLineAt).toVector
+    lazy val mirrorX: Int =
+      (1 until sizeX).filter(hasMirrorLineAt).headOption.getOrElse(0)
 
-    lazy val yMirrorLines: Vector[Int] =
-      copy(image = image.transpose).xMirrorLines
+    lazy val mirrorY: Int =
+      copy(image = image.transpose).mirrorX
 
     lazy val summarize: Int =
-      val col = xMirrorLines.headOption.getOrElse(0)
-      val row = yMirrorLines.headOption.getOrElse(0)
-      col + (100 * row)
+      mirrorX + (100 * mirrorY)
 
   object Grid:
     def fromString(ss: Array[String]): Grid =
-      Grid(ss.map(_.toVector).toVector, 0)
+      Grid(ss.map(_.toVector).toVector)
 
   lazy val grids: Vector[Grid] =
     Source
@@ -52,5 +53,5 @@ object Day13 extends App:
   println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long  = System.currentTimeMillis
-  val answer2: Long = grids.map(_.copy(defects = 1)).map(_.summarize).sum
+  val answer2: Long = grids.map(_.withDefects(1).summarize).sum
   println(s"Answer day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
