@@ -6,7 +6,7 @@ object Day13 extends App:
 
   val day: String = this.getClass.getName.drop(3).init
 
-  case class Grid(image: Vector[Vector[Char]], defects: Int = 0):
+  case class Grid(image: Vector[String], defects: Int = 0):
     lazy val sizeX: Int = image.map(_.size).max
     lazy val sizeY: Int = image.size
 
@@ -16,7 +16,7 @@ object Day13 extends App:
     override def toString: String =
       image.map(_.mkString).mkString("\n")
 
-    def mirrorLinesAt(n: Int)(line: Vector[Char]): (Vector[Char], Vector[Char]) =
+    def mirrorLinesAt(n: Int)(line: String): (String, String) =
       val (left, right) = line.splitAt(n)
       val length        = left.length min right.length
       val toTheLeft     = left.reverse.take(length)
@@ -30,14 +30,14 @@ object Day13 extends App:
       (1 until sizeX).find(hasMirrorLineAt).getOrElse(0)
 
     lazy val mirrorY: Int =
-      copy(image = image.transpose).mirrorX
+      copy(image = image.map(_.toVector).transpose.map(_.mkString)).mirrorX
 
     lazy val summarize: Int =
       mirrorX + (100 * mirrorY)
 
   object Grid:
     def fromString(ss: Array[String]): Grid =
-      Grid(ss.map(_.toVector).toVector)
+      Grid(ss.toVector)
 
   lazy val grids: Vector[Grid] =
     Source
