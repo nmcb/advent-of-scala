@@ -23,11 +23,11 @@ object Day13 extends App:
       val toTheRight    = right.take(length)
       (toTheLeft, toTheRight)
 
-    def hasMirrorLineAt(x: Int): Boolean =
-      image.map(mirrorLinesAt(x)).count(_ != _) == defects
+    def hasMirrorLineAt(n: Int): Boolean =
+      image.map(mirrorLinesAt(n)).count(_ != _) == defects
 
     lazy val mirrorX: Int =
-      (1 until sizeX).filter(hasMirrorLineAt).headOption.getOrElse(0)
+      (1 until sizeX).find(hasMirrorLineAt).getOrElse(0)
 
     lazy val mirrorY: Int =
       copy(image = image.transpose).mirrorX
