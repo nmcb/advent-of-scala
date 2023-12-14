@@ -6,16 +6,13 @@ object Day13 extends App:
 
   val day: String = this.getClass.getName.drop(3).init
 
-  case class Grid(image: Vector[Vector[Char]], defects: Int = 0):
+  case class Image(image: Vector[Vector[Char]], defects: Int = 0):
 
-    def withDefects(nr: Int): Grid =
-      copy(defects = nr)
+    def smudgeCorrection(on: Boolean): Image =
+      copy(defects = if on then 1 else 0)
 
-    lazy val columns: Int =
-      image.map(_.size).max
-
-    lazy val mirrorX: Int =
-      (1 until columns).find: n =>
+    private lazy val column: Int =
+      (1 until image.last.size).find: n =>
         image.count: line =>
           val (l, r) = line splitAt n
           val length = l.length min r.length
@@ -23,29 +20,29 @@ object Day13 extends App:
         == defects
       .getOrElse(0)
 
-    lazy val mirrorY: Int =
-      copy(image = image.transpose).mirrorX
+    private lazy val row: Int =
+      copy(image.transpose).column
 
     lazy val summarize: Int =
-      mirrorX + (100 * mirrorY)
+      column + (100 * row)
 
-  object Grid:
-    def fromString(ss: Array[String]): Grid =
-      Grid(ss.map(_.toVector).toVector)
+  object Image:
+    def fromString(ss: Array[String]): Image =
+      Image(ss.map(_.toVector).toVector)
 
-  lazy val grids: Vector[Grid] =
+  lazy val images: Vector[Image] =
     Source
       .fromResource(s"input$day.txt")
       .mkString
       .split("\n\n")
       .map(_.split("\n"))
-      .map(Grid.fromString)
+      .map(Image.fromString)
       .toVector
 
   val start1: Long  = System.currentTimeMillis
-  val answer1: Long = grids.map(_.summarize).sum
+  val answer1: Long = images.map(_.summarize).sum
   println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long  = System.currentTimeMillis
-  val answer2: Long = grids.map(_.withDefects(1).summarize).sum
+  val answer2: Long = images.map(_.smudgeCorrection(true).summarize).sum
   println(s"Answer day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
