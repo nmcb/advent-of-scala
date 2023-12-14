@@ -61,7 +61,7 @@ object Day14 extends App:
   val answer1: Long = grid.tiltN.load
   println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
-  lazy val cycle    = CycleFinder.find(grid, _.cycle)(_.cycleInvariant)
+  lazy val cycle    = Cycle.find(grid, _.cycle)(_.cycleInvariant)
   lazy val tail     = (1_000_000_000L - cycle.stemLength) % cycle.cycleLength
   lazy val simulate = cycle.stemLength + cycle.cycleLength + tail.toInt
   lazy val end      = (0 until simulate).foldLeft(grid)((g,i) => g.cycle)
@@ -74,42 +74,44 @@ object Day14 extends App:
 
   case class Cycle[A](stemLength: Int, cycleLength: Int, cycleHead: A, cycleLast: A, cycleHeadRepeat: A)
 
-  object CycleFinder:
+  object Cycle:
 
     import scala.collection._
 
-    extension[A] (it: Iterator[A]) def zipWithPrev: Iterator[(Option[A], A)] =
+    extension[A] (i: Iterator[A]) def zipWithPrev: Iterator[(Option[A], A)] =
       new AbstractIterator[(Option[A], A)]:
 
-        private var prevOption: Option[A] =
+        private var prev: Option[A] =
           None
 
         override def hasNext: Boolean =
-          it.hasNext
+          i.hasNext
 
         override def next: (Option[A], A) =
-          val cur = it.next
-          val ret = (prevOption, cur)
-          prevOption = Some(cur)
-          ret
+          val cur  = i.next
+          val last = prev
+          prev     = Some(cur)
+          (last, cur)
 
-    def find[A, B](coll: IterableOnce[A])(m: A => B): Option[Cycle[A]] =
+    def find[A, B](sequence: IterableOnce[A])(invariant: A => B): Option[Cycle[A]] =
 
       val trace: mutable.Map[B, (A, Int)] =
         mutable.Map[B, (A, Int)]()
 
-      coll.iterator
+      sequence
+        .iterator
         .zipWithPrev
         .zipWithIndex
         .map:
-          case ((last, prev), idx) => (last, prev, trace.put(m(prev), (prev, idx)), idx)
+          case ((last, previous), index) =>
+            (last, previous, trace.put(invariant(previous), (previous, index)), index)
         .collectFirst:
-          case (Some(last), repeat, Some((prev, prevIdx)), idx) =>
+          case (Some(last), repeat, Some((previous, previousIndex)), index) =>
             Cycle(
-              stemLength = prevIdx,
-              cycleLength = idx - prevIdx,
-              cycleHead = prev,
-              cycleLast = last,
+              stemLength      = previousIndex,
+              cycleLength     = index - previousIndex,
+              cycleHead       = previous,
+              cycleLast       = last,
               cycleHeadRepeat = repeat
             )
 
