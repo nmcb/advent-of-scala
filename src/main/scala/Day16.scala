@@ -10,7 +10,7 @@ object Day16 extends App:
       .fromResource(s"input$day.txt")
       .getLines
       .toVector
-  
+
   val start1: Long  = System.currentTimeMillis
   val answer1: Long = 666
   println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
