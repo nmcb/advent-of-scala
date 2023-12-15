@@ -11,7 +11,7 @@ object Day14 extends App:
     override def toString: String =
       image.map(_.mkString).mkString("\n", "\n", "\n")
 
-    private def roll(s: Vector[Char]): Vector[Char] =
+    private def tiltL(row: Vector[Char]): Vector[Char] =
       @tailrec def loop(todo: Vector[Char], acc: Vector[Char] = Vector.empty): Vector[Char] =
         if todo.isEmpty then
           acc
@@ -24,19 +24,19 @@ object Day14 extends App:
           val aligned = section.foldLeft(Seq.empty[Char])((a,p) => Seq.fill(rounds)('O') ++ Seq.fill(empties)('.'))
           loop(todo.drop(section.length), acc ++ aligned)
 
-      loop(s)
+      loop(row)
 
     lazy val tiltN: Grid =
-      Grid(image.transpose.map(roll).transpose)
+      Grid(image.transpose.map(tiltL).transpose)
 
     lazy val tiltE: Grid =
-      Grid(image.map(_.reverse).map(roll).map(_.reverse))
+      Grid(image.map(l => tiltL(l.reverse).reverse))
 
     lazy val tiltS: Grid =
-      Grid(image.transpose.map(_.reverse).map(roll).map(_.reverse).transpose)
+      Grid(image.transpose.map(l => tiltL(l.reverse).reverse).transpose)
 
     lazy val tiltW: Grid =
-      Grid(image.map(roll))
+      Grid(image.map(tiltL))
 
     lazy val cycle: Grid =
       tiltN.tiltW.tiltS.tiltE
@@ -61,10 +61,10 @@ object Day14 extends App:
   val answer1: Long = grid.tiltN.load
   println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
-  lazy val cycle    = Cycle.find(grid, _.cycle)(_.cycleInvariant)
-  lazy val tail     = (1_000_000_000L - cycle.stemLength) % cycle.cycleLength
-  lazy val simulate = cycle.stemLength + cycle.cycleLength + tail.toInt
-  lazy val end      = (0 until simulate).foldLeft(grid)((g,i) => g.cycle)
+  lazy val cycle = Cycle.find(grid, _.cycle)(_.cycleInvariant)
+  lazy val tail  = (1_000_000_000L - cycle.stemSize) % cycle.cycleSize
+  lazy val count = cycle.stemSize + tail.toInt
+  lazy val end   = (0 until count).foldLeft(grid)((g, _) => g.cycle)
 
   val start2: Long  = System.currentTimeMillis
   val answer2: Long = end.load
@@ -72,7 +72,7 @@ object Day14 extends App:
 
   /** Utilities */
 
-  case class Cycle[A](stemLength: Int, cycleLength: Int, cycleHead: A, cycleLast: A, cycleHeadRepeat: A)
+  case class Cycle[A](stemSize: Int, cycleSize: Int, cycleHead: A, cycleLast: A, cycleHeadRepeat: A)
 
   object Cycle:
 
@@ -108,8 +108,8 @@ object Day14 extends App:
         .collectFirst:
           case (Some(last), repeat, Some((previous, previousIndex)), index) =>
             Cycle(
-              stemLength      = previousIndex,
-              cycleLength     = index - previousIndex,
+              stemSize        = previousIndex,
+              cycleSize       = index - previousIndex,
               cycleHead       = previous,
               cycleLast       = last,
               cycleHeadRepeat = repeat
