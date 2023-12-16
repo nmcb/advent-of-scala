@@ -28,7 +28,7 @@ object Day15 extends App:
       Option.when(line.contains('-'))(label)
 
     lazy val update: Option[(String,Int)] =
-      Option.when(line.contains('='))(label, line.reverse.takeWhile(_ != '=').reverse.toInt)
+      Option.when(line.contains('='))(label, line.split('=')(1).toInt)
 
   case class Boxes(boxes: Map[Int,Vector[(String,Int)]]):
 
