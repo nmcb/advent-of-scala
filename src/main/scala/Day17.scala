@@ -10,6 +10,7 @@ object Day17 extends App:
   case class Pos(x: Int, y: Int):
     def unary_- =
       Pos(-1 * x, -1 * y)
+
     def +(that: Pos): Pos =
       Pos(x + that.x, y + that.y)
 
@@ -37,52 +38,51 @@ object Day17 extends App:
 
   import Grid.*
 
-  case class Line(from: Pos, dir: Pos, steps: Int):
-    def canMove1(direction: Pos): Boolean =
-      steps < 3 || direction != dir
+  case class Crucible(current: Pos, direction: Pos, steps: Int):
+    def canMove1(dir: Pos): Boolean =
+      steps < 3 || dir != direction
 
     def canStop1: Boolean =
       true
 
-    def canMove2(direction: Pos): Boolean =
-      dir == Pos.zero || (direction == dir && steps < 10) || (direction != dir && steps >= 4)
+    def canMove2(dir: Pos): Boolean =
+      (dir == direction && steps < 10) || (dir != direction && steps >= 4) || direction == Pos.zero
 
     def canStop2: Boolean =
       steps >= 4
 
 
   case class City(grid: Grid[Int]):
+    def leastHeatLoss(canMove: Crucible => Pos => Boolean, canStop: Crucible => Boolean): Option[Int] =
 
-    def leastHeatLoss(canMove: Line => Pos => Boolean, canStop: Line => Boolean): Option[Int] =
-
-      def reachable(line: Line): List[(Line, Int)] =
+      def reachable(crucible: Crucible): List[(Crucible, Int)] =
         for
-          direction <- Pos.directions
-          if direction != -line.dir && canMove(line)(direction)
-          next = line.from + direction
+          direction <- Pos.directions.filterNot(_ == -crucible.direction)
+          if canMove(crucible)(direction)
+          next = crucible.current + direction
           if grid.peek(next).isDefined
-          steps = if direction == line.dir then line.steps + 1 else 1
+          steps = if direction == crucible.direction then crucible.steps + 1 else 1
         yield
-          Line(next, direction, steps) -> grid(next)
+          Crucible(next, direction, steps) -> grid(next)
 
-      val start = Line(Pos.zero, Pos.zero, 0)
-      val target = (n: Line) => n.from == Pos(grid.sizeX - 1, grid.sizeY - 1) && canStop(n)
+      val start = Crucible(Pos.zero, Pos.zero, 0)
+      val target = (n: Crucible) => n.current == Pos(grid.sizeX - 1, grid.sizeY - 1) && canStop(n)
 
-      Dijkstra.traverse[Line](start, target, reachable).map((_, loss) => loss)
+      Dijkstra.traverse[Crucible](start, target, reachable).map((_, loss) => loss)
 
   object Dijkstra:
 
     /**
      * Specialised version of Dijkstra's algorithm that provides for callbacks deciding whether a target has been
-     * reached, and that allows for node weight deltas to be added when reachable nodes are computed.
+     * reached, and that allows for node weight deltas to be added when reachable edge weights are (re-)computed.
      * @param start A node to start searching from.
-     * @param target A node callback returning whether given node was the target node.
-     * @param reachable A callback returning reachable nodes with weight deltas from given node.
+     * @param target A node callback returning whether given node was a target node.
+     * @param reachable A callback returning reachable nodes and their weight deltas from given node.
      * @tparam A The type of node.
      * @return The target node and associated traversal weight if reachable.
      */
     def traverse[A](start: A, target: A => Boolean, reachable: A => List[(A, Int)]): Option[(A, Int)] =
-      val todo    = mutable.PriorityQueue.empty[(Int, A)](Ordering.by((d,_) => -d))
+      val todo    = mutable.PriorityQueue.empty(Ordering.Int.on[(Int, A)](_._1).reverse)
       val weights = mutable.Map.empty[A, Int]
 
       def enqueue(node: A, weight: Int): Unit =
