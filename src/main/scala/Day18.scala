@@ -7,7 +7,7 @@ object Day18 extends App:
   val day: String =
     this.getClass.getName.drop(3).init
 
-  lazy val input: List[String] =
+  lazy val input: Vector[String] =
     Source
       .fromResource(s"input$day.txt")
       .getLines
