@@ -17,7 +17,7 @@ object Day17 extends App:
     val zero: Pos =
       Pos(0, 0)
 
-    val offsets: List[Pos] =
+    val directions: List[Pos] =
       List(Pos(0, 1), Pos(0, -1), Pos(1, 0), Pos(-1, 0))
 
   type Grid[A] = Vector[Vector[A]]
@@ -37,15 +37,15 @@ object Day17 extends App:
 
   import Grid.*
 
-  case class Node(pos: Pos, dir: Pos, steps: Int):
-    def canMove1(offset: Pos): Boolean =
-      steps < 3 || offset != dir
+  case class Line(from: Pos, dir: Pos, steps: Int):
+    def canMove1(direction: Pos): Boolean =
+      steps < 3 || direction != dir
 
     def canStop1: Boolean =
       true
 
-    def canMove2(offset: Pos): Boolean =
-      dir == Pos.zero || (offset == dir && steps < 10) || (offset != dir && steps >= 4)
+    def canMove2(direction: Pos): Boolean =
+      dir == Pos.zero || (direction == dir && steps < 10) || (direction != dir && steps >= 4)
 
     def canStop2: Boolean =
       steps >= 4
@@ -53,22 +53,22 @@ object Day17 extends App:
 
   case class City(grid: Grid[Int]):
 
-    def leastHeatLoss(canMove: Node => Pos => Boolean, canStop: Node => Boolean): Option[Int] =
+    def leastHeatLoss(canMove: Line => Pos => Boolean, canStop: Line => Boolean): Option[Int] =
 
-      def reachable(n: Node): List[(Node, Int)] =
+      def reachable(line: Line): List[(Line, Int)] =
         for
-          offset <- Pos.offsets
-          if offset != -n.dir && canMove(n)(offset)
-          next = n.pos + offset
+          direction <- Pos.directions
+          if direction != -line.dir && canMove(line)(direction)
+          next = line.from + direction
           if grid.peek(next).isDefined
-          steps = if offset == n.dir then n.steps + 1 else 1
+          steps = if direction == line.dir then line.steps + 1 else 1
         yield
-          Node(next, offset, steps) -> grid(next)
+          Line(next, direction, steps) -> grid(next)
 
-      val start = Node(Pos.zero, Pos.zero, 0)
-      val target = (n: Node) => n.pos == Pos(grid.sizeX - 1, grid.sizeY - 1) && canStop(n)
+      val start = Line(Pos.zero, Pos.zero, 0)
+      val target = (n: Line) => n.from == Pos(grid.sizeX - 1, grid.sizeY - 1) && canStop(n)
 
-      Dijkstra.traverse(start, target, reachable).map((_, loss) => loss)
+      Dijkstra.traverse[Line](start, target, reachable).map((_, loss) => loss)
 
   object Dijkstra:
 
