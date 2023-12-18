@@ -7,120 +7,137 @@ object Day18 extends App:
   val day: String =
     this.getClass.getName.drop(3).init
 
-  case class Op(direction: Char, length: Int, color: String)
+  case class Op(direction: Char, length: Int)
 
   object Op:
-    def fromString(s: String): Op =
+    def fromStringPart(s: String): Op =
       s match
-        case s"$direction $length ($color)" => Op(direction.head, length.toInt, color)
+        case s"$direction $length (#$hex)" =>
+          Op(direction.head, length.toInt)
 
-  case class Box(x: Int, y: Int, z: Int):
-    def -(b: Box): Box = Box(x - b.x, y - b.y, z - b.z)
+    def fromHexPart(s: String): Op =
+      s match
+        case s"$direction $length (#$hex)" =>
+          val direction =
+            hex.last match
+              case '0' => 'R'
+              case '1' => 'D'
+              case '2' => 'L'
+              case '3' => 'U'
+          Op(direction, Integer.parseInt(hex.init, 16))
 
-    def +(b: Box): Box = Box(x + b.x, y + b.y, z + b.z)
+  case class Pos(x: Int, y: Int):
+    def -(b: Pos): Pos = Pos(x - b.x, y - b.y)
 
-    def min(b: Box): Box = Box(math.min(x, b.x), math.min(y, b.y), math.min(z, b.z))
+    def +(b: Pos): Pos = Pos(x + b.x, y + b.y)
 
-    def max(b: Box): Box = Box(math.max(x, b.x), math.max(y, b.y), math.max(z, b.z))
+    def min(b: Pos): Pos = Pos(math.min(x, b.x), math.min(y, b.y))
 
-    def >=(b: Box): Boolean = x >= b.x && y >= b.y && z >= b.z
+    def max(b: Pos): Pos = Pos(math.max(x, b.x), math.max(y, b.y))
 
-    def <=(b: Box): Boolean = x <= b.x && y <= b.y && z <= b.z
+    def >=(b: Pos): Boolean = x >= b.x && y >= b.y
 
-    def move(op: Op): Vector[Box] =
+    def <=(b: Pos): Boolean = x <= b.x && y <= b.y
+
+    def cross(that: Pos): Long =
+      x.toLong * that.y.toLong - that.x.toLong * y.toLong
+
+    def move1(op: Op): Vector[Pos] =
       op match
-        case Op('U', length, color) => Vector.tabulate(length)(dy => Box(x, y - dy - 1, 0))
-        case Op('D', length, color) => Vector.tabulate(length)(dy => Box(x, y + dy + 1, 0))
-        case Op('L', length, color) => Vector.tabulate(length)(dx => Box(x - dx - 1, y, 0))
-        case Op('R', length, color) => Vector.tabulate(length)(dx => Box(x + dx + 1, y, 0))
+        case Op('U', length) => Vector.tabulate(length)(dy => Pos(x, y - dy - 1))
+        case Op('D', length) => Vector.tabulate(length)(dy => Pos(x, y + dy + 1))
+        case Op('L', length) => Vector.tabulate(length)(dx => Pos(x - dx - 1, y))
+        case Op('R', length) => Vector.tabulate(length)(dx => Pos(x + dx + 1, y))
 
-    def neighbours: Set[Box] =
-      val xs = Set(Box(-1, 0, 0), Box(1, 0, 0))
-      val ys = Set(Box(0, -1, 0), Box(0, 1, 0))
-      val zs = Set(Box(0, 0, -1), Box(0, 0, 1))
-      (xs ++ ys ++ zs).map(this + _)
+    def move2(op: Op): Pos =
+      op match
+        case Op('U', length) => Pos(x, y - length)
+        case Op('D', length) => Pos(x, y + length)
+        case Op('L', length) => Pos(x - length, y)
+        case Op('R', length) => Pos(x + length, y)
 
-  object Box:
-    def zero: Box = Box(0, 0, 0)
 
-    def boxes(min: Box, max: Box): Set[Box] =
+    def neighbours: Set[Pos] =
+      val xs = Set(Pos(-1, 0), Pos(1, 0))
+      val ys = Set(Pos(0, -1), Pos(0, 1))
+      (xs ++ ys).map(this + _)
+
+  object Pos:
+    def zero: Pos = Pos(0, 0)
+
+    def grid(min: Pos, max: Pos): Set[Pos] =
       val result =
         for
           x <- min.x to max.x
           y <- min.y to max.y
-          z <- min.z to max.z
         yield
-          Box(x, y, z)
+          Pos(x, y)
       result.toSet
 
-  case class Ground(holes: Set[Box]):
+  /** cubic meter = one unit - data driven flood algorithm with some set arithmetic */
+  def dig1(operations: Vector[Op]) =
+    val holes: Set[Pos] = operations.foldLeft(Vector(Pos.zero))((a,o) => a ++ a.last.move1(o)).toSet
+    val min = holes.reduce(_ min _) - Pos(1, 1)
+    val max = holes.reduce(_ max _) + Pos(1, 1)
 
-    def mkString(z: Int): String =
-      val layer = holes.filter(_.z == z)
-      val rangeX = layer.map(_.x).min to layer.map(_.x).max
-      val rangeY = layer.map(_.y).min to layer.map(_.y).max
-      val chars =
-        for
-          y <- rangeY
-          x <- rangeX
-        yield
-          if holes.contains(Box(x, y, z)) then '#' else '.'
-      chars.grouped(rangeX.size).map(_.mkString("")).mkString("\n")
+    def flood(todo: List[Pos], visited: Set[Pos] = Set.empty): Set[Pos] =
+      todo match
+        case Nil =>
+          visited
+        case cur :: rest =>
+          val reached =
+            cur
+              .neighbours
+              .diff(holes)
+              .diff(visited)
+              .filter(box => box >= min && box <= max)
 
+          flood(rest ++ reached, visited ++ reached + cur)
 
-    def dug: Ground =
-      val min = holes.reduce(_ min _) - Box(1, 1, 1)
-      val max = holes.reduce(_ max _) + Box(1, 1, 1)
+    val outer = flood(List(min))
+    val dug   = Pos.grid(min, max) diff outer
+    dug.size.toLong
 
-      def flood(todo: List[Box], visited: Set[Box] = Set.empty): Set[Box] =
-        todo match
-          case Nil =>
-            visited
-          case cur :: rest =>
-            val reached =
-              cur
-                .neighbours
-                .filter(_.z == 0)
-                .diff(holes)
-                .diff(visited)
-                .filter(box => box >= min && box <= max)
-
-            flood(rest ++ reached, visited ++ reached + cur)
-
-      val outer = flood(List(min))
-      println(s"outer=${outer.size}")
-      val dug   = Box.boxes(min, max).filter(_.z == 0) diff outer
-      println(s"dug=${dug.size}")
-      Ground(dug)
-
-
-  object Ground:
-    def empty: Ground =
-      Ground(Set.empty)
-
-    def from(ops: Vector[Op]): Ground =
-      val (_, holes) =
-        ops.foldLeft((Box.zero, Vector(Box.zero))):
-          case ((cur,acc), op) =>
-            val dug = cur.move(op)
-            (dug.last, acc ++ dug)
-      Ground(holes.toSet)
-
-  lazy val operations: Vector[Op] =
+  lazy val operationsPart1: Vector[Op] =
     Source
       .fromResource(s"input$day.txt")
       .getLines
-      .map(Op.fromString)
+      .map(Op.fromStringPart)
       .toVector
 
-  println(Ground.from(operations).dug.mkString(0))
-
-  val start1: Long = System.currentTimeMillis
-  val answer1: Int = Ground.from(operations).dug.holes.size
+  val start1: Long  = System.currentTimeMillis
+  val answer1: Long = dig1(operationsPart1)
   println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
 
-//  val start2: Long = System.currentTimeMillis
-//  val answer2: Int = ???
-//  println(s"Answer day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
+  /** one operation = one polygon - geometric driven shoelace formula made discrete with pick's theorem */
+  def dig2(operations: Vector[Op]): Long =
+    def shoeLace(poss: Vector[Pos]): Long =
+      val result =
+        (poss.last +: poss)
+          .sliding(2)
+          .map:
+            case Seq(a, b) => (a, b)
+            case _ => sys.error(s"boom!")
+          .map(_ cross _)
+          .sum / 2
+      result.abs
 
+    val vertices = operations.scanLeft(Pos.zero)(_ move2 _)
+    val area = shoeLace(vertices)
+    val edge = operations.map(_.length.toLong).sum
+    val interior = area - edge / 2 + 1 // pick's theorem
+    edge + interior
+
+  assert(answer1 == dig2(operationsPart1)) // 1000x faster
+
+  lazy val operationsPart2: Vector[Op] =
+    Source
+      .fromResource(s"input$day.txt")
+      .getLines
+      .map(Op.fromHexPart)
+      .toVector
+
+  val start2: Long  = System.currentTimeMillis
+  val answer2: Long = dig2(operationsPart2)
+  println(s"Answer day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
