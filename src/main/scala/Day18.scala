@@ -33,7 +33,7 @@ object Day18 extends App:
     def max(b: Pos): Pos = Pos(math.max(x, b.x), math.max(y, b.y))
     def >=(b: Pos): Boolean = x >= b.x && y >= b.y
     def <=(b: Pos): Boolean = x <= b.x && y <= b.y
-    def cross(that: Pos): Long = x.toLong * that.y.toLong - that.x.toLong * y.toLong
+    def ×(that: Pos): Long = x.toLong * that.y.toLong - that.x.toLong * y.toLong
 
     def move1(op: Op): Vector[Pos] =
       op match
@@ -111,7 +111,7 @@ object Day18 extends App:
       val result =
         (vertices :+ vertices.head)
           .sliding(2)
-          .map(m => m(0) cross m(1))
+          .map(m => m(0) × m(1))
           .sum / 2
       result.abs
 
