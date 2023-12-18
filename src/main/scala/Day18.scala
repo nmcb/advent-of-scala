@@ -58,17 +58,15 @@ object Day18 extends App:
   object Pos:
     def zero: Pos = Pos(0, 0)
 
-    def grid(min: Pos, max: Pos): Set[Pos] =
-      val result =
-        for
-          x <- min.x to max.x
-          y <- min.y to max.y
-        yield
-          Pos(x, y)
-      result.toSet
+    def grid(min: Pos, max: Pos): IndexedSeq[Pos] =
+      for
+        x <- min.x to max.x
+        y <- min.y to max.y
+      yield
+        Pos(x, y)
 
   /** cubic meter = one point - data driven flood algorithm with some set arithmetic */
-  def dig1(operations: Vector[Op]) =
+  def dig1(operations: Vector[Op]): Long =
     val holes: Set[Pos] = operations.foldLeft(Vector(Pos.zero))((a,o) => a ++ a.last.move1(o)).toSet
     val min = holes.reduce(_ min _) - Pos(1, 1)
     val max = holes.reduce(_ max _) + Pos(1, 1)
@@ -88,7 +86,7 @@ object Day18 extends App:
           flood(rest ++ reached, visited ++ reached + cur)
 
     val outer = flood(List(min))
-    val dug   = Pos.grid(min, max) diff outer
+    val dug   = Pos.grid(min, max).toSet diff outer
     dug.size.toLong
 
   lazy val operationsPart1: Vector[Op] =
