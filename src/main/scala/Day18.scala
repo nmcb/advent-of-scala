@@ -28,19 +28,12 @@ object Day18 extends App:
 
   case class Pos(x: Int, y: Int):
     def -(b: Pos): Pos = Pos(x - b.x, y - b.y)
-
     def +(b: Pos): Pos = Pos(x + b.x, y + b.y)
-
     def min(b: Pos): Pos = Pos(math.min(x, b.x), math.min(y, b.y))
-
     def max(b: Pos): Pos = Pos(math.max(x, b.x), math.max(y, b.y))
-
     def >=(b: Pos): Boolean = x >= b.x && y >= b.y
-
     def <=(b: Pos): Boolean = x <= b.x && y <= b.y
-
-    def cross(that: Pos): Long =
-      x.toLong * that.y.toLong - that.x.toLong * y.toLong
+    def cross(that: Pos): Long = x.toLong * that.y.toLong - that.x.toLong * y.toLong
 
     def move1(op: Op): Vector[Pos] =
       op match
@@ -74,7 +67,7 @@ object Day18 extends App:
           Pos(x, y)
       result.toSet
 
-  /** cubic meter = one unit - data driven flood algorithm with some set arithmetic */
+  /** cubic meter = one point - data driven flood algorithm with some set arithmetic */
   def dig1(operations: Vector[Op]) =
     val holes: Set[Pos] = operations.foldLeft(Vector(Pos.zero))((a,o) => a ++ a.last.move1(o)).toSet
     val min = holes.reduce(_ min _) - Pos(1, 1)
@@ -112,22 +105,25 @@ object Day18 extends App:
 
   /** one operation = one polygon - geometric driven shoelace formula made discrete with pick's theorem */
   def dig2(operations: Vector[Op]): Long =
-    def shoeLace(poss: Vector[Pos]): Long =
+
+    // shoelace formula
+    def shoeLace(vertices: Vector[Pos]): Long =
       val result =
-        (poss.last +: poss)
+        (vertices :+ vertices.head)
           .sliding(2)
-          .map:
-            case Seq(a, b) => (a, b)
-            case _ => sys.error(s"boom!")
-          .map(_ cross _)
+          .map(m => m(0) cross m(1))
           .sum / 2
       result.abs
 
     val vertices = operations.scanLeft(Pos.zero)(_ move2 _)
-    val area = shoeLace(vertices)
+    val geometricArea = shoeLace(vertices)
+
+    // pick's theorem
     val edge = operations.map(_.length.toLong).sum
-    val interior = area - edge / 2 + 1 // pick's theorem
-    edge + interior
+    val interior = geometricArea - edge / 2 + 1
+    val discreteArea = edge + interior
+
+    discreteArea
 
   assert(answer1 == dig2(operationsPart1)) // 1000x faster
 
