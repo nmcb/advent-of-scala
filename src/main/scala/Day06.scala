@@ -1,5 +1,7 @@
 import scala.annotation.tailrec
 import scala.math.*
+import scala.collection.parallel.*
+import scala.collection.parallel.immutable.ParRange
 
 object Day06 extends App:
 
@@ -7,15 +9,21 @@ object Day06 extends App:
     this.getClass.getName.drop(3).init
 
   case class Race(time: Int, distance: Long):
-    inline def race(speed: Long): Long =
-      val dt = time - speed
-      dt * speed
+
+    inline def race(speed: Long): Long = (time - speed) * speed
 
     lazy val wins: Int =
       @tailrec
-      def loop(s: Int, a: Int = 0): Int =
-        if race(s) > distance then loop(s + 1, a + 1) else if a == 0 && s < time then loop(s + 1, a) else a
-      loop(0)
+      def loop(start: Int, end: Int, found: Int = 0): Int =
+        if start <= end then
+          if race(start) > distance then
+            loop(start + 1, end, found + 1)
+          else
+            loop(start + 1, end, found)
+        else
+          found
+
+      (0 to time).grouped(8).toParArray.map(r => loop(start = r.start, end = r.end)).sum
 
   val start1: Long =
     System.currentTimeMillis
