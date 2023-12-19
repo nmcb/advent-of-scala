@@ -98,7 +98,6 @@ object Day19 extends App:
   println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
   def solve2(): Long =
-
     def loop(searches: List[Search], workflows: Workflows, found: List[Search]): List[Search] =
       if searches.isEmpty then
         found
@@ -117,10 +116,10 @@ object Day19 extends App:
             case Accepted => true
             case Rejected => true
             case Deferred(workflow) => true
-            case Compared(_, select2, workflow, char) =>
+            case Compared(_, select, workflow, char) =>
               val min = selector(char)(search).from
               val max = selector(char)(search).to
-              (min to max).exists(select2)
+              (min to max).exists(select)
           .getOrElse(sys.error(s"no rule matched"))
 
         matched match
