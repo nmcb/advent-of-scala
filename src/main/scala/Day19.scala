@@ -7,26 +7,22 @@ object Day19 extends App:
   val day: String =
     this.getClass.getName.drop(3).init
 
-  type Category = Char
-
   case class Part(x: Int, m: Int, a: Int, s: Int):
-    def +(b: Part): Part = Part(x + b.x, m + b.m, a + b.a, s + b.s)
-    def -(b: Part): Part = Part(x - b.x, m - b.m, a - b.a, s - b.s)
-    def >=(b: Part): Boolean = x >= b.x && m >= b.m && a >= b.a && s >= b.s
-    def <=(b: Part): Boolean = x <= b.x && m <= b.m && a <= b.a && s <= b.s
-    def min(b: Part): Part = Part(math.min(x, b.x), math.min(m, b.m), math.min(a, b.a), math.min(s, b.s))
-    def max(b: Part): Part = Part(math.max(x, b.x), math.max(m, b.m), math.min(a, b.a), math.min(s, b.s))
+    def +(that: Part): Part = Part(x + that.x, m + that.m, a + that.a, s + that.s)
+    def -(that: Part): Part = Part(x - that.x, m - that.m, a - that.a, s - that.s)
+    def >=(that: Part): Boolean = x >= that.x && m >= that.m && a >= that.a && s >= that.s
+    def <=(that: Part): Boolean = x <= that.x && m <= that.m && a <= that.a && s <= that.s
+    def min(that: Part): Part = Part(x min that.x, m min that.m, a min that.a, s min that.s)
+    def max(that: Part): Part = Part(x max that.x, m max that.m, a max that.a, s max that.s)
 
     def sum: Int = x + m + a + s
 
-
-    def update(category: Category, rating: Int): Part =
-      category match
+    def update(char: Char, rating: Int): Part =
+      char match
         case 'x' => copy(x = rating)
         case 'm' => copy(m = rating)
         case 'a' => copy(a = rating)
         case 's' => copy(s = rating)
-
 
   object Part:
 
@@ -46,23 +42,23 @@ object Day19 extends App:
   case class PartRange(min: Part, max: Part):
 
     def intersect(that: PartRange): Option[PartRange] =
-      val intersectMin = min max that.min
-      val intersectMax = max min that.max
-      Option.when(intersectMin <= intersectMax)(PartRange(intersectMin, intersectMax))
+      val maxmin = min max that.min
+      val minmax = max min that.max
+      Option.when(maxmin <= minmax)(PartRange(maxmin, minmax))
 
     def size: Long =
-      val d = max - min + Part(1, 1, 1, 1)
-      d.x.toLong * d.m.toLong * d.a.toLong * d.s.toLong
+      val delta = max - min + Part(1, 1, 1, 1)
+      delta.x.toLong * delta.m.toLong * delta.a.toLong * delta.s.toLong
 
   object PartRange:
-    val all: PartRange =
+    val count: PartRange =
       PartRange(Part(1, 1, 1, 1), Part(4000, 4000, 4000, 4000))
 
-  enum Comparison:
-    case Lt
-    case Gt
+  enum Compare:
+    case LT
+    case GT
 
-  import Comparison.*
+  import Compare.*
 
   enum Ruling:
     case Accept
@@ -78,50 +74,46 @@ object Day19 extends App:
 
   import Ruling.*
 
+  case class Rule(char: Char, compare: Compare, rating: Int, ruling: Ruling):
+    def rule(part: Part): Option[Ruling] =
+      val r =
+        char match
+          case 'x' => part.x
+          case 'a' => part.a
+          case 'm' => part.m
+          case 's' => part.s
 
-  case class Rule(category: Category, comparison: Comparison, rating: Int, ruling: Ruling):
+      compare match
+        case LT if r < rating => Some(ruling)
+        case GT if r > rating => Some(ruling)
+        case _                => None
 
-    import PartRange.all
+    import PartRange.count
+    import Compare.*
 
-    def validate(pos: Part): Option[Ruling] =
-      val rating =
-        category match
-          case 'x' => pos.x
-          case 'a' => pos.a
-          case 'm' => pos.m
-          case 's' => pos.s
+    val (rangeT, rangeF) =
+      compare match
+        case LT => (count.copy(max = count.max.update(char, rating - 1)), count.copy(min = count.min.update(char, rating)))
+        case GT => (count.copy(min = count.min.update(char, rating + 1)), count.copy(max = count.max.update(char, rating)))
 
-      comparison match
-        case Lt if rating < this.rating => Some(ruling)
-        case Gt if rating > this.rating => Some(ruling)
-        case _                          => None
-
-    import PartRange.all
-    import Comparison.*
-
-    val (trueBox, falseBox) =
-      comparison match
-        case Lt => (all.copy(max = all.max.update(category, rating - 1)), all.copy(min = all.min.update(category, rating)))
-        case Gt => (all.copy(min = all.min.update(category, rating + 1)), all.copy(max = all.max.update(category, rating)))
-
-    def validate(partBox: PartRange): Map[PartRange, Option[Ruling]] =
-      val trueMap  = (partBox intersect trueBox).map(_ -> Option.apply(ruling)).toMap
-      val falseMap = (partBox intersect falseBox).map(_ -> Option.empty[Ruling]).toMap
-      trueMap ++ falseMap
+    def rule(range: PartRange): Map[PartRange, Option[Ruling]] =
+      val mapT = (range intersect rangeT).map(_ -> Option.apply(ruling)).toMap
+      val mapF = (range intersect rangeF).map(_ -> Option.empty[Ruling]).toMap
+      mapT ++ mapF
 
   object Rule:
     def fromString(s: String): Rule =
       s match
-        case s"$category<$rating:$ruling" => Rule(category.head, Comparison.Lt, rating.toInt, Ruling.fromString(ruling))
-        case s"$category>$rating:$ruling" => Rule(category.head, Comparison.Gt, rating.toInt, Ruling.fromString(ruling))
+        case s"$category<$rating:$ruling" => Rule(category.head, LT, rating.toInt, Ruling.fromString(ruling))
+        case s"$category>$rating:$ruling" => Rule(category.head, GT, rating.toInt, Ruling.fromString(ruling))
 
-  case class Workflow(rules: List[Rule], fallback: Ruling):
+  case class Workflow(rules: List[Rule], otherwise: Ruling):
     def rule(pos: Part): Ruling =
       def loop(rules: List[Rule]): Ruling =
         rules match
-          case Nil => fallback
+          case Nil => otherwise
           case rule :: rest =>
-            rule.validate(pos) match
+            rule.rule(pos) match
               case Some(ruling) => ruling
               case None         => loop(rest)
       loop(rules)
@@ -129,11 +121,11 @@ object Day19 extends App:
     def rule(range: PartRange): Map[PartRange, Ruling] =
       def loop(rules: List[Rule], range: PartRange): Map[PartRange, Ruling] =
         rules match
-          case Nil => Map(range -> fallback)
-          case rule :: newRules =>
-            rule.validate(range).flatMap:
-              case (partBox, Some(ruling)) => Map(partBox -> ruling)
-              case (partBox, None) => loop(newRules, partBox)
+          case Nil => Map(range -> otherwise)
+          case rule :: rest =>
+            rule.rule(range).flatMap:
+              case (range, Some(ruling)) => Map(range -> ruling)
+              case (range, None)         => loop(rest, range)
 
       loop(rules, range)
 
@@ -147,12 +139,11 @@ object Day19 extends App:
           name -> Workflow(rules, otherwise)
 
   case class Input(workflows: Map[String, Workflow], parts: List[Part]):
-
     def rule(pos: Part): Boolean =
       def loop(workflow: String): Boolean =
         workflows(workflow).rule(pos) match
-          case Accept => true
-          case Reject => false
+          case Accept            => true
+          case Reject            => false
           case Defered(workflow) => loop(workflow)
       loop("in")
 
@@ -161,9 +152,9 @@ object Day19 extends App:
         workflows(workflow)
           .rule(range)
           .flatMap:
-            case (partBox, Accept)            => Set(partBox)
-            case (_, Reject)                  => Set.empty
-            case (partBox, Defered(workflow)) => loop(workflow, partBox)
+            case (range, Accept)            => Set(range)
+            case (_, Reject)                => Set.empty
+            case (range, Defered(workflow)) => loop(workflow, range)
           .toSet
       loop("in", range)
 
@@ -171,7 +162,7 @@ object Day19 extends App:
       parts.filter(rule)
 
     lazy val allAcceptedSize: Long =
-      rule(PartRange.all).map(_.size).sum
+      rule(PartRange.count).map(_.size).sum
 
 
   object Input:
