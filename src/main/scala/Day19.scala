@@ -10,59 +10,55 @@ object Day19 extends App:
   enum Rule:
     case Accepted
     case Rejected
-    case ToOtherWorkflow(workflow: String)
-    case Comparison(select1: Part => Boolean, select2: Long => Boolean, workflow: String, selector: Char)
+    case Deferred(workflow: String)
+    case Compared(select1: Part => Boolean, select2: Long => Boolean, workflow: String, selector: Char)
 
   import Rule.*
 
   case class Range(from: Long, to: Long)
 
-  case class State(x: Range, m: Range, a: Range, s: Range, workflow: String)
+  case class Search(x: Range, m: Range, a: Range, s: Range, workflow: String)
 
   type Workflows = Map[String, List[Rule]]
 
   def parse(lines: List[String]): (List[Part], Workflows) =
-    def parseWorkflow(s: String): (String, List[Rule]) = s match {
-      case s"$workflowName{$rulesString}" =>
-        val rules = rulesString
-          .split(',')
-          .map { s =>
-            if (s.contains('<') || s.contains('>')) {
-              val selector: (Part => Long) =
-                if (s.startsWith("x")) _.x
-                else if (s.startsWith("m")) _.m
-                else if (s.startsWith("a")) _.a
-                else _.s
-              val valueStr = s.drop(2).takeWhile(_.isDigit)
-              val value    = valueStr.toLong
-              val workflow = s.drop(3 + valueStr.length)
-              s(1) match {
-                case '<' => Comparison(selector(_) < value, _ < value, workflow, s.head)
-                case '>' => Comparison(selector(_) > value, _ > value, workflow, s.head)
-              }
-            } else if (s == "R") {
-              Rejected
-            } else if (s == "A") {
-              Accepted
-            } else {
-              ToOtherWorkflow(s)
-            }
-          }
-          .toList
-
-        workflowName -> rules
-    }
+    def parseWorkflow(s: String): (String, List[Rule]) = s match
+      case s"$name{$specification}" =>
+        val rules =
+          specification
+            .split(',')
+            .map: s =>
+              if s.contains('<') || s.contains('>') then
+                val selector: Part => Long =
+                  if      s.startsWith("x") then _.x
+                  else if s.startsWith("m") then _.m
+                  else if s.startsWith("a") then _.a
+                  else                           _.s
+                val valueStr = s.drop(2).takeWhile(_.isDigit)
+                val value    = valueStr.toLong
+                val workflow = s.drop(3 + valueStr.length)
+                s(1) match
+                  case '<' => Compared(selector(_) < value, _ < value, workflow, s.head)
+                  case '>' => Compared(selector(_) > value, _ > value, workflow, s.head)
+              else if s == "R" then Rejected
+              else if s == "A" then Accepted
+              else                  Deferred(s)
+            .toList
+        name -> rules
 
     val workflows =
-      lines.takeWhile(_.nonEmpty).map(parseWorkflow).toMap + ("A" -> List(Accepted)) + ("R" -> List(
-        Rejected
-      ))
+      lines
+        .takeWhile(_.nonEmpty)
+        .map(parseWorkflow)
+        .toMap + ("A" -> List(Accepted)) + ("R" -> List(Rejected))
 
-    val parts = lines.drop(workflows.size + 1 - 2).map { case s"{x=$x,m=$m,a=$a,s=$s}" =>
-      Part(x.toLong, m.toLong, a.toLong, s.toLong)
-    }
+    val parts =
+      lines
+        .drop(workflows.size - 1)
+        .map:
+          case s"{x=$x,m=$m,a=$a,s=$s}" => Part(x.toLong, m.toLong, a.toLong, s.toLong)
 
-    (parts, workflows)
+    parts -> workflows
 
   val lines: List[String] =
     Source
@@ -76,20 +72,20 @@ object Day19 extends App:
   def solve1(): Long =
     def loop(part: Part, workflow: String, workflows: Workflows): Rule =
       val rules = workflows(workflow)
-      val matchedRule =
+      val matched =
         rules
           .find:
-            case Accepted                            => true
-            case Rejected                            => true
-            case ToOtherWorkflow(workflow)           => true
-            case Comparison(select1, _, workflow, _) => select1(part)
+            case Accepted                         => true
+            case Rejected                         => true
+            case Deferred(workflow)               => true
+            case Compared(select, _, workflow, _) => select(part)
           .getOrElse(sys.error(s"no rule matched: $workflow"))
 
-      matchedRule match
-        case Accepted => Accepted
-        case Rejected => Rejected
-        case ToOtherWorkflow(workflow) => loop(part, workflow, workflows)
-        case Comparison(_, _, workflow, _) => loop(part, workflow, workflows)
+      matched match
+        case Accepted                    => Accepted
+        case Rejected                    => Rejected
+        case Deferred(workflow)          => loop(part, workflow, workflows)
+        case Compared(_, _, workflow, _) => loop(part, workflow, workflows)
 
 
     parts
@@ -103,25 +99,25 @@ object Day19 extends App:
 
   def solve2(): Long =
 
-    def loop(searches: List[State], workflows: Workflows, found: List[State]): List[State] =
+    def loop(searches: List[Search], workflows: Workflows, found: List[Search]): List[Search] =
       if searches.isEmpty then
         found
       else
         val search = searches.head
         val rules = workflows(search.workflow)
 
-        def selector(selectorChar: Char): State => Range =
-          if selectorChar == 'x' then _.x
-          else if selectorChar == 'm' then _.m
-          else if selectorChar == 'a' then _.a
+        def selector(char: Char): Search => Range =
+          if      char == 'x' then _.x
+          else if char == 'm' then _.m
+          else if char == 'a' then _.a
           else _.s
 
         val matched =
           rules.find:
             case Accepted => true
             case Rejected => true
-            case ToOtherWorkflow(workflow) => true
-            case Comparison(_, select2, workflow, char) =>
+            case Deferred(workflow) => true
+            case Compared(_, select2, workflow, char) =>
               val min = selector(char)(search).from
               val max = selector(char)(search).to
               (min to max).exists(select2)
@@ -130,8 +126,8 @@ object Day19 extends App:
         matched match
           case Accepted => loop(searches.tail, workflows, search +: found)
           case Rejected => loop(searches.tail, workflows, found)
-          case ToOtherWorkflow(workflow) => loop(search.copy(workflow = workflow) +: searches.tail, workflows, found)
-          case Comparison(_, select, workflow, char) =>
+          case Deferred(workflow) => loop(search.copy(workflow = workflow) +: searches.tail, workflows, found)
+          case Compared(_, select, workflow, char) =>
             val min = selector(char)(search).from
             val max = selector(char)(search).to
             val included = (min to max).map(select)
@@ -152,7 +148,7 @@ object Day19 extends App:
 
                 loop(splits ++ searches.tail, workflows, found)
 
-    val start = State(Range(1, 4000), Range(1, 4000), Range(1, 4000), Range(1, 4000), "in")
+    val start = Search(Range(1, 4000), Range(1, 4000), Range(1, 4000), Range(1, 4000), "in")
     val ranges = loop(List(start), workflows, List.empty)
 
     ranges
