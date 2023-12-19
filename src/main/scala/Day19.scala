@@ -1,185 +1,169 @@
 import scala.annotation.tailrec
-import scala.collection.mutable
-import scala.io.*
+import scala.io.Source
 
 object Day19 extends App:
 
-  val day: String =
-    this.getClass.getName.drop(3).init
+  val day: String = this.getClass.getName.drop(3).init
 
-  case class Part(x: Int, m: Int, a: Int, s: Int):
-    def +(that: Part): Part = Part(x + that.x, m + that.m, a + that.a, s + that.s)
-    def -(that: Part): Part = Part(x - that.x, m - that.m, a - that.a, s - that.s)
-    def >=(that: Part): Boolean = x >= that.x && m >= that.m && a >= that.a && s >= that.s
-    def <=(that: Part): Boolean = x <= that.x && m <= that.m && a <= that.a && s <= that.s
-    def min(that: Part): Part = Part(x min that.x, m min that.m, a min that.a, s min that.s)
-    def max(that: Part): Part = Part(x max that.x, m max that.m, a max that.a, s max that.s)
+  case class Part(x: Long, m: Long, a: Long, s: Long)
 
-    def sum: Int = x + m + a + s
+  enum Rule:
+    case Accepted
+    case Rejected
+    case ToOtherWorkflow(workflow: String)
+    case Comparison(select1: Part => Boolean, select2: Long => Boolean, workflow: String, selector: Char)
 
-    def update(char: Char, rating: Int): Part =
-      char match
-        case 'x' => copy(x = rating)
-        case 'm' => copy(m = rating)
-        case 'a' => copy(a = rating)
-        case 's' => copy(s = rating)
+  import Rule.*
 
-  object Part:
+  case class Range(from: Long, to: Long)
 
-    def empty: Part =
-      Part(0, 0, 0, 0)
+  case class State(x: Range, m: Range, a: Range, s: Range, workflow: String)
 
-    def fromString(s: String): Part =
-      s match
-        case s"{$ratings}" =>
-          ratings.split(',').foldLeft(Part.empty):
-            case (p, s"x=$rating") => p.copy(x = rating.toInt)
-            case (p, s"m=$rating") => p.copy(m = rating.toInt)
-            case (p, s"a=$rating") => p.copy(a = rating.toInt)
-            case (p, s"s=$rating") => p.copy(s = rating.toInt)
+  type Workflows = Map[String, List[Rule]]
 
+  def parse(lines: List[String]): (List[Part], Workflows) =
+    def parseWorkflow(s: String): (String, List[Rule]) = s match {
+      case s"$workflowName{$rulesString}" =>
+        val rules = rulesString
+          .split(',')
+          .map { s =>
+            if (s.contains('<') || s.contains('>')) {
+              val selector: (Part => Long) =
+                if (s.startsWith("x")) _.x
+                else if (s.startsWith("m")) _.m
+                else if (s.startsWith("a")) _.a
+                else _.s
+              val valueStr = s.drop(2).takeWhile(_.isDigit)
+              val value    = valueStr.toLong
+              val workflow = s.drop(3 + valueStr.length)
+              s(1) match {
+                case '<' => Comparison(selector(_) < value, _ < value, workflow, s.head)
+                case '>' => Comparison(selector(_) > value, _ > value, workflow, s.head)
+              }
+            } else if (s == "R") {
+              Rejected
+            } else if (s == "A") {
+              Accepted
+            } else {
+              ToOtherWorkflow(s)
+            }
+          }
+          .toList
 
-  case class PartRange(min: Part, max: Part):
+        workflowName -> rules
+    }
 
-    def intersect(that: PartRange): Option[PartRange] =
-      val maxmin = min max that.min
-      val minmax = max min that.max
-      Option.when(maxmin <= minmax)(PartRange(maxmin, minmax))
+    val workflows =
+      lines.takeWhile(_.nonEmpty).map(parseWorkflow).toMap + ("A" -> List(Accepted)) + ("R" -> List(
+        Rejected
+      ))
 
-    def size: Long =
-      val delta = max - min + Part(1, 1, 1, 1)
-      delta.x.toLong * delta.m.toLong * delta.a.toLong * delta.s.toLong
+    val parts = lines.drop(workflows.size + 1 - 2).map { case s"{x=$x,m=$m,a=$a,s=$s}" =>
+      Part(x.toLong, m.toLong, a.toLong, s.toLong)
+    }
 
-  object PartRange:
-    val count: PartRange =
-      PartRange(Part(1, 1, 1, 1), Part(4000, 4000, 4000, 4000))
+    (parts, workflows)
 
-  enum Compare:
-    case LT
-    case GT
+  val lines: List[String] =
+    Source
+      .fromResource(s"input$day.txt")
+      .getLines()
+      .toList
 
-  import Compare.*
-
-  enum Ruling:
-    case Accept
-    case Reject
-    case Defered(workflow: String)
-
-  object Ruling:
-    def fromString(s: String): Ruling =
-      s match
-        case "A"  => Ruling.Accept
-        case "R"  => Ruling.Reject
-        case name => Ruling.Defered(name)
-
-  import Ruling.*
-
-  case class Rule(char: Char, compare: Compare, rating: Int, ruling: Ruling):
-    def rule(part: Part): Option[Ruling] =
-      val r =
-        char match
-          case 'x' => part.x
-          case 'a' => part.a
-          case 'm' => part.m
-          case 's' => part.s
-
-      compare match
-        case LT if r < rating => Some(ruling)
-        case GT if r > rating => Some(ruling)
-        case _                => None
-
-    import PartRange.count
-    import Compare.*
-
-    val (rangeT, rangeF) =
-      compare match
-        case LT => (count.copy(max = count.max.update(char, rating - 1)), count.copy(min = count.min.update(char, rating)))
-        case GT => (count.copy(min = count.min.update(char, rating + 1)), count.copy(max = count.max.update(char, rating)))
-
-    def rule(range: PartRange): Map[PartRange, Option[Ruling]] =
-      val mapT = (range intersect rangeT).map(_ -> Option.apply(ruling)).toMap
-      val mapF = (range intersect rangeF).map(_ -> Option.empty[Ruling]).toMap
-      mapT ++ mapF
-
-  object Rule:
-    def fromString(s: String): Rule =
-      s match
-        case s"$category<$rating:$ruling" => Rule(category.head, LT, rating.toInt, Ruling.fromString(ruling))
-        case s"$category>$rating:$ruling" => Rule(category.head, GT, rating.toInt, Ruling.fromString(ruling))
-
-  case class Workflow(rules: List[Rule], otherwise: Ruling):
-    def rule(pos: Part): Ruling =
-      def loop(rules: List[Rule]): Ruling =
-        rules match
-          case Nil => otherwise
-          case rule :: rest =>
-            rule.rule(pos) match
-              case Some(ruling) => ruling
-              case None         => loop(rest)
-      loop(rules)
-
-    def rule(range: PartRange): Map[PartRange, Ruling] =
-      def loop(rules: List[Rule], range: PartRange): Map[PartRange, Ruling] =
-        rules match
-          case Nil => Map(range -> otherwise)
-          case rule :: rest =>
-            rule.rule(range).flatMap:
-              case (range, Some(ruling)) => Map(range -> ruling)
-              case (range, None)         => loop(rest, range)
-
-      loop(rules, range)
-
-  object Workflow:
-    def fromString(s: String): (String, Workflow) =
-      s match
-        case s"$name{$specification}" =>
-          val components = specification.split(',')
-          val rules      = components.init.map(Rule.fromString).toList
-          val otherwise  = Ruling.fromString(components.last)
-          name -> Workflow(rules, otherwise)
-
-  case class Input(workflows: Map[String, Workflow], parts: List[Part]):
-    def rule(pos: Part): Boolean =
-      def loop(workflow: String): Boolean =
-        workflows(workflow).rule(pos) match
-          case Accept            => true
-          case Reject            => false
-          case Defered(workflow) => loop(workflow)
-      loop("in")
-
-    def rule(range: PartRange): Set[PartRange] =
-      def loop(workflow: String, range: PartRange): Set[PartRange] =
-        workflows(workflow)
-          .rule(range)
-          .flatMap:
-            case (range, Accept)            => Set(range)
-            case (_, Reject)                => Set.empty
-            case (range, Defered(workflow)) => loop(workflow, range)
-          .toSet
-      loop("in", range)
-
-    lazy val validParts: List[Part] =
-      parts.filter(rule)
-
-    lazy val allAcceptedSize: Long =
-      rule(PartRange.count).map(_.size).sum
+  val (parts, workflows) = parse(lines)
 
 
-  object Input:
-    def fromString(s: String): Input =
-      val Array(ws, ps) = s.split("\n\n")
-      val workflows = ws.split("\n").map(Workflow.fromString)
-      val parts     = ps.split("\n").map(Part.fromString)
-      Input(workflows.toMap, parts.toList)
+  def solve1(): Long =
+    def loop(part: Part, workflow: String, workflows: Workflows): Rule =
+      val rules = workflows(workflow)
+      val matchedRule =
+        rules
+          .find:
+            case Accepted                            => true
+            case Rejected                            => true
+            case ToOtherWorkflow(workflow)           => true
+            case Comparison(select1, _, workflow, _) => select1(part)
+          .getOrElse(sys.error(s"no rule matched: $workflow"))
+
+      matchedRule match
+        case Accepted => Accepted
+        case Rejected => Rejected
+        case ToOtherWorkflow(workflow) => loop(part, workflow, workflows)
+        case Comparison(_, _, workflow, _) => loop(part, workflow, workflows)
 
 
-  lazy val input: Input =
-    Input.fromString(Source.fromResource(s"input$day.txt").mkString.trim)
+    parts
+      .filter(part => loop(part, "in", workflows) == Accepted)
+      .map(p => p.x + p.m + p.a + p.s)
+      .sum
 
   val start1: Long  = System.currentTimeMillis
-  val answer1: Long = input.validParts.map(_.sum).sum
+  val answer1: Long = solve1()
   println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
+  def solve2(): Long =
+
+    def loop(searches: List[State], workflows: Workflows, found: List[State]): List[State] =
+      if searches.isEmpty then
+        found
+      else
+        val search = searches.head
+        val rules = workflows(search.workflow)
+
+        def selector(selectorChar: Char): State => Range =
+          if selectorChar == 'x' then _.x
+          else if selectorChar == 'm' then _.m
+          else if selectorChar == 'a' then _.a
+          else _.s
+
+        val matched =
+          rules.find:
+            case Accepted => true
+            case Rejected => true
+            case ToOtherWorkflow(workflow) => true
+            case Comparison(_, select2, workflow, char) =>
+              val min = selector(char)(search).from
+              val max = selector(char)(search).to
+              (min to max).exists(select2)
+          .getOrElse(sys.error(s"no rule matched"))
+
+        matched match
+          case Accepted => loop(searches.tail, workflows, search +: found)
+          case Rejected => loop(searches.tail, workflows, found)
+          case ToOtherWorkflow(workflow) => loop(search.copy(workflow = workflow) +: searches.tail, workflows, found)
+          case Comparison(_, select, workflow, char) =>
+            val min = selector(char)(search).from
+            val max = selector(char)(search).to
+            val included = (min to max).map(select)
+            val split = (1 until included.size).find(i => included(i - 1) != included(i))
+
+            split match
+              case None => loop(search.copy(workflow = workflow) +: searches.tail, workflows, found)
+              case Some(at) =>
+
+                def make(range: Range): List[Range] =
+                  List(Range(range.from, range.from + at - 1), Range(range.from + at, range.to))
+
+                val splits =
+                  if      char == 'x' then make(search.x).map(r => search.copy(x = r))
+                  else if char == 'm' then make(search.m).map(r => search.copy(m = r))
+                  else if char == 'a' then make(search.a).map(r => search.copy(a = r))
+                  else                     make(search.s).map(r => search.copy(s = r))
+
+                loop(splits ++ searches.tail, workflows, found)
+
+    val start = State(Range(1, 4000), Range(1, 4000), Range(1, 4000), Range(1, 4000), "in")
+    val ranges = loop(List(start), workflows, List.empty)
+
+    ranges
+      .map: r =>
+        val x = r.x.to - r.x.from + 1
+        val m = r.m.to - r.m.from + 1
+        val a = r.a.to - r.a.from + 1
+        val s = r.s.to - r.s.from + 1
+        x * m * a * s
+      .sum
+
   val start2: Long  = System.currentTimeMillis
-  val answer2: Long = input.allAcceptedSize
+  val answer2: Long = solve2()
   println(s"Answer day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
