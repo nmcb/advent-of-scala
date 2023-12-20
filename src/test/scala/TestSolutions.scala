@@ -78,3 +78,7 @@ class TestSolutions extends AnyFunSuite:
     assertResult(449531)(actual = Day19.answer1)
     assertResult(122756210763577L)(actual = Day19.answer2)
   }
+  test("Day20") {
+    assertResult(812609846)(actual = Day20.answer1)
+    assertResult(245114020323037L)(actual = Day20.answer2)
+  }
