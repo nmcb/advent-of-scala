@@ -1,6 +1,7 @@
 import scala.annotation.tailrec
 import scala.io.Source
 
+/** credits for part 2 go to https://github.com/merlinorg */
 object Day21 extends App:
 
   val day: String =
@@ -54,30 +55,31 @@ object Day21 extends App:
         if count == 0 then found else loop(count - 1, found.flatMap(_.neighbours.filter(plot)))
       loop(steps).size
 
-    /** part 2 - utilises the input grid being square */
+    /** part 2 - utilises the input grid being square and scaling quadratically in grid size */
 
     assert(sizeX == sizeY)
     val gridSize: Int = sizeY
 
-    final case class SearchState(index: Int = 0, search: Set[Pos] = Set(startPos)):
-      def next: SearchState =
+    final case class Search(index: Int = 0, positions: Set[Pos] = Set(startPos)):
+      def next: Search =
         copy(index + 1,
           for
-            p <- search
+            p <- positions
             n <- p.neighbours
             if wrap(n) != '#'
           yield n)
 
-    case class FoundState(steps: Long, found: Vector[Long] = Vector.empty):
+    case class Collect(steps: Long, found: Vector[Long] = Vector.empty):
       val div = steps / gridSize
       val mod = steps % gridSize
 
-      def add(searchState: SearchState): FoundState =
-        if searchState.index % gridSize == mod then
-          copy(found = found :+ searchState.search.size)
+      def add(search: Search): Collect =
+        if search.index % gridSize == mod then
+          copy(found = found :+ search.positions.size)
         else
           this
 
+      /** given three `y` points solve for `x` */
       def quadratic(y0: Long, y1: Long, y2: Long)(x: Long): Long =
         y0 + (y1 - y0) * x + (x * (x - 1) / 2) * (y2 - 2 * y1 + y0)
 
@@ -88,8 +90,8 @@ object Day21 extends App:
 
     def solve2(steps: Int): Long =
       Iterator
-        .iterate(SearchState())(_.next)
-        .scanLeft(FoundState(steps))(_ add _)
+        .iterate(Search())(_.next)
+        .scanLeft(Collect(steps))(_ add _)
         .flatMap(_.solution)
         .next
 
