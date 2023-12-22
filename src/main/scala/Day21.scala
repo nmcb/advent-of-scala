@@ -8,7 +8,6 @@ object Day21 extends App:
     this.getClass.getName.drop(3).init
 
   case class Pos(x: Int, y: Int):
-
     def +(b: Pos): Pos =
       Pos(x + b.x, y + b.y)
 
@@ -37,11 +36,6 @@ object Day21 extends App:
     def get(p: Pos): Option[Char] =
       grid.lift(p.y).flatMap(_.lift(p.x))
 
-    def wrap(p: Pos): Char =
-      val wrapX: Int = (p.x % sizeX + sizeX) % sizeX
-      val wrapY: Int = (p.y % sizeY + sizeY) % sizeY
-      grid(wrapY)(wrapX)
-
     def rock(p: Pos): Boolean =
       get(p).exists(_ == '#')
 
@@ -55,27 +49,35 @@ object Day21 extends App:
         if count == 0 then found else loop(count - 1, found.flatMap(_.neighbours.filter(plot)))
       loop(steps).size
 
-    /** part 2 - utilises the input grid being square and scaling quadratically in grid size */
+
+    /** part 2 - utilises the input grid being square and the solution scaling quadratically in grid size */
 
     assert(sizeX == sizeY)
     val gridSize: Int = sizeY
 
-    final case class Search(index: Int = 0, positions: Set[Pos] = Set(startPos)):
-      def next: Search =
-        copy(index + 1,
+    /** provides for an infinite garden using this grid as tiles */
+    def infinite(p: Pos): Char =
+      val wrapX: Int = (p.x % sizeX + sizeX) % sizeX
+      val wrapY: Int = (p.y % sizeY + sizeY) % sizeY
+      grid(wrapY)(wrapX)
+
+    final case class Grid(steps: Int = 0, plots: Set[Pos] = Set(startPos)):
+      def next: Grid =
+        copy(steps + 1,
           for
-            p <- positions
-            n <- p.neighbours
-            if wrap(n) != '#'
-          yield n)
+            plot <- plots
+            step <- plot.neighbours
+            if infinite(step) != '#'
+          yield step)
 
-    case class Collect(steps: Long, found: Vector[Long] = Vector.empty):
-      val div = steps / gridSize
-      val mod = steps % gridSize
+    case class Collect(steps: Long, gridStepScan: Vector[Long] = Vector.empty):
+      val gridsToPlots = steps / gridSize
+      val stepsToPlots = steps % gridSize
+      println(s"[stepsToPlots=$stepsToPlots, gridsToPlots=$gridsToPlots] - gridStepScan=${gridStepScan.mkString(", ")}")
 
-      def add(search: Search): Collect =
-        if search.index % gridSize == mod then
-          copy(found = found :+ search.positions.size)
+      def add(grid: Grid): Collect =
+        if grid.steps % gridSize == stepsToPlots then
+          copy(gridStepScan = gridStepScan :+ grid.plots.size)
         else
           this
 
@@ -84,13 +86,13 @@ object Day21 extends App:
         y0 + (y1 - y0) * x + (x * (x - 1) / 2) * (y2 - 2 * y1 + y0)
 
       def solution: Option[Long] =
-        found match
-          case Vector(y0, y1, y2) => Some(quadratic(y0, y1, y2)(div))
-          case _                  => None
+        gridStepScan match
+          case Vector(plots0, plots1, plots2) => Some(quadratic(plots0, plots1, plots2)(gridsToPlots))
+          case _                              => None
 
     def solve2(steps: Int): Long =
       Iterator
-        .iterate(Search())(_.next)
+        .iterate(Grid())(_.next)
         .scanLeft(Collect(steps))(_ add _)
         .flatMap(_.solution)
         .next
