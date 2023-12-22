@@ -85,8 +85,8 @@ object Day22 extends App:
   val answer1: Int = stack.disintegrable
   println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
-  val start2: Long  = System.currentTimeMillis
-  val answer2: Long = stack.disintegrated
+  val start2: Long = System.currentTimeMillis
+  val answer2: Int = stack.disintegrated
   println(s"Answer day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
 
   // Geometry

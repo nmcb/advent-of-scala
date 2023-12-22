@@ -73,7 +73,6 @@ object Day21 extends App:
     case class Collect(steps: Long, gridStepScan: Vector[Long] = Vector.empty):
       val gridsToPlots = steps / gridSize
       val stepsToPlots = steps % gridSize
-      println(s"[stepsToPlots=$stepsToPlots, gridsToPlots=$gridsToPlots] - gridStepScan=${gridStepScan.mkString(", ")}")
 
       def add(grid: Grid): Collect =
         if grid.steps % gridSize == stepsToPlots then
