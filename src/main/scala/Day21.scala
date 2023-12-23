@@ -70,24 +70,23 @@ object Day21 extends App:
             if infinite(step) != '#'
           yield step)
 
-    case class Collect(steps: Long, gridStepScan: Vector[Long] = Vector.empty):
-      val gridsToPlots = steps / gridSize
-      val stepsToPlots = steps % gridSize
-      println(s"[stepsToPlots=$stepsToPlots, gridsToPlots=$gridsToPlots] - gridStepScan=${gridStepScan.mkString(", ")}")
+    case class Collect(steps: Long, gridPlotsScan: Vector[Long] = Vector.empty):
+      val stepsToGrids = steps / gridSize
+      val gridsToSteps = steps % gridSize
 
       def add(grid: Grid): Collect =
-        if grid.steps % gridSize == stepsToPlots then
-          copy(gridStepScan = gridStepScan :+ grid.plots.size)
+        if grid.steps % gridSize == gridsToSteps then
+          copy(gridPlotsScan = gridPlotsScan :+ grid.plots.size)
         else
           this
 
-      /** given three `y` points solve for `x` */
+      /** given three distinct subsequent `y` points on a quadratic polynomial, solve `y`` for given `x` */
       def quadratic(y0: Long, y1: Long, y2: Long)(x: Long): Long =
         y0 + (y1 - y0) * x + (x * (x - 1) / 2) * (y2 - 2 * y1 + y0)
 
       def solution: Option[Long] =
-        gridStepScan match
-          case Vector(plots0, plots1, plots2) => Some(quadratic(plots0, plots1, plots2)(gridsToPlots))
+        gridPlotsScan match
+          case Vector(plots0, plots1, plots2) => Some(quadratic(plots0, plots1, plots2)(stepsToGrids))
           case _                              => None
 
     def solve2(steps: Int): Long =

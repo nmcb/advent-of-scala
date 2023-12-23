@@ -8,70 +8,60 @@ object Day22 extends App:
 
   case class Stack(stack: Vector[Box]):
 
-    def drop(box: Box, height: Int): Box =
-      val d = Pos(0, 0, height)
-      Box(box.min - d, box.max - d)
-
-    def settle: Vector[Box] =
+    lazy val settled: Vector[Box] =
       stack
         .sortBy(_.min.z)
         .foldLeft(Vector.empty[Box]): (dropped, box) =>
           val height =
-            (1 to Int.MaxValue)
+            Iterator
+              .from(1)
               .find: h =>
-                val dropping = drop(box, h)
-                dropping.min.z == 0 || dropped.exists(b => (dropping intersect b).isDefined)
+                val dropping = box.drop(h)
+                dropping.min.z == 0 || dropped.exists(_ intersects dropping)
               .getOrElse(sys.error("no dropping height found")) - 1
-          dropped :+ drop(box, height)
+          dropped :+ box.drop(height)
+
+    val supportedBy: Map[Box, Set[Box]] =
+      settled
+        .map: box =>
+          box -> settled
+            .filterNot(_ == box)
+            .filter(_ intersects box.drop1)
+            .toSet
+        .toMap
 
     def disintegrable: Int =
-
-      val settled: Vector[Box] =
-        settle
-
-      val support: Vector[Box] =
+      val framework: Set[Box] =
         settled
           .map: box =>
-            settled.filter(b => b != box && (b intersect drop(box, 1)).isDefined)
+            supportedBy(box).filter(_ intersects box.drop1)
           .filter(_.size == 1)
           .map(_.head)
-
-      stack.size - support.toSet.size
+          .toSet
+      stack.toSet.size - framework.size
 
     def disintegrated: Int =
+      val supports: Map[Box, Set[Box]] =
+        supportedBy
+          .toSet
+          .flatMap: (box, foundation) =>
+            foundation.map(_ -> box)
+          .groupMap(_._1)(_._2)
 
-      val settled: Vector[Box] =
-        settle
-
-      val supportedBy: Map[Box, Vector[Box]] =
-        settled
-          .map: box =>
-            box -> settled.filter(b => b != box && (b intersect drop(box, 1)).isDefined)
-          .toMap
-
-      val supports: Map[Box, Vector[Box]] =
-        val result =
-          for
-            (box0, support) <- supportedBy.toVector
-            box1 <- support
-          yield
-            box1 -> box0
-        result.groupMap(_._1)(_._2)
-
-      def disintegrates(box: Box): Int =
+      def disintegrate(box: Box): Int =
         def loop(todo: Set[Box], found: Set[Box] = Set.empty): Int =
           if todo.isEmpty then
             found.size - 1
           else
             val box     = todo.head
             val next    = todo - box
-            val support = supports.getOrElse(box, Set.empty[Box]).toSet
+            val support = supports.getOrElse(box, Set.empty[Box])
             val visited = found + box
-            val add     = support.filter(x => (supportedBy(x).toSet -- visited).isEmpty)
+            val add     = support.filter(b => (supportedBy(b) -- visited).isEmpty)
             loop(next ++ add, visited)
         loop(Set(box))
 
-      settled.map(disintegrates).sum
+      settled.map(disintegrate).sum
 
   val stack: Stack =
     Stack(
@@ -85,8 +75,8 @@ object Day22 extends App:
   val answer1: Int = stack.disintegrable
   println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
-  val start2: Long  = System.currentTimeMillis
-  val answer2: Long = stack.disintegrated
+  val start2: Long = System.currentTimeMillis
+  val answer2: Int = stack.disintegrated
   println(s"Answer day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
 
   // Geometry
@@ -100,6 +90,7 @@ object Day22 extends App:
     def <=(that: Pos): Boolean = x <= that.x && y <= that.y && z <= that.z
 
   case class Box(min: Pos, max: Pos):
+
     def intersect(that: Box): Option[Box] =
       val maxmin = min max that.min
       val minmax = max min that.max
@@ -108,7 +99,11 @@ object Day22 extends App:
       else
         None
 
+    def intersects(that: Box): Boolean =
+      intersect(that).isDefined
+
   object Box:
+
     def fromString(s: String): Box =
       s match
         case s"$x1,$y1,$z1~$x2,$y2,$z2" =>
@@ -116,3 +111,11 @@ object Day22 extends App:
           val p2 = Pos(x2.toInt, y2.toInt, z2.toInt)
           Box(p1, p2)
 
+  extension (box: Box)
+
+    def drop(height: Int): Box =
+      val offset = Pos(0, 0, height)
+      Box(box.min - offset, box.max - offset)
+
+    def drop1: Box =
+      drop(1)
