@@ -38,6 +38,10 @@ object Day23 extends App:
 
     case class Trail(from: Pos, path: Set[Pos])
 
+    object Trail:
+      def startFrom(p: Pos): Trail =
+        Trail(p, Set(p))
+
     def directions(c: Char): Pos =
       c match
         case '^' => Pos(0, -1)
@@ -47,15 +51,15 @@ object Day23 extends App:
 
     def solve(icy: Boolean): Int =
 
-      def reachable(from: Pos)(target: Pos): Vector[Pos] =
+      def reachable(from: Pos)(target: Pos): Set[Pos] =
         if target != from && nodes(target) then
-          Vector.empty
+          Set.empty
         else
           val dirs =
             if !icy || maze(target) == '.' then
-              Pos.directions.toVector
+              Pos.directions
             else
-              Vector(directions(maze(target)))
+              Set(directions(maze(target)))
           for
             dir <- dirs
             pos = target + dir
@@ -68,16 +72,14 @@ object Day23 extends App:
           .map(from => from -> Dijkstra.traverse(from, reachable(from)).filter(p => p._1 != from && nodes(p._1)))
           .toMap
 
-      val startNode: Trail = Trail(start, Set(start))
-
-      def neighbouring(trail: Trail): Vector[(Trail, Int)] =
+      def neighbouring(trail: Trail): Iterator[(Trail, Int)] =
         if (trail.from != finish)
           for
-            (to, dist) <- neighbourhood(trail.from).toVector
+            (to, dist) <- neighbourhood(trail.from).iterator
             if !trail.path.contains(to)
           yield Trail(to, trail.path + to) -> dist
         else
-          Vector.empty
+          Iterator.empty
 
       @tailrec
       def loop(todo: Set[Trail], visited: Map[Trail, Int]): Map[Trail, Int] =
@@ -98,22 +100,23 @@ object Day23 extends App:
                   (todo + neighbour, visited + (neighbour -> distance))
           loop(left, updated)
 
-      loop(Set(startNode), Map(startNode -> 0)).values.max
+      val trail: Trail = Trail.startFrom(start)
+      loop(Set(trail), Map(trail -> 0)).values.max
 
-  lazy val input: Input =
+  def input(postfix: String = "-test"): Input =
     Input(
       Source
-        .fromResource(s"input$day.txt")
+        .fromResource(s"input$day$postfix.txt")
         .getLines
         .map(_.toVector)
         .toVector)
 
   val start1: Long = System.currentTimeMillis
-  val answer1: Int = input.solve(icy = true)
+  val answer1: Int = input().solve(icy = true)
   println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long  = System.currentTimeMillis
-  val answer2: Int = input.solve(icy = false)
+  val answer2: Int = input().solve(icy = false)
   println(s"Answer day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
 
   case class Pos(x: Int, y: Int):
@@ -128,7 +131,7 @@ object Day23 extends App:
       Set(Pos(-1, 0), Pos(1, 0), Pos(0, -1), Pos(0, 1))
 
   object Dijkstra:
-    def traverse[A](start: A, reachable: A => Vector[A]): Map[A, Int] =
+    def traverse[A](start: A, reachable: A => Set[A]): Map[A, Int] =
       val found = mutable.Map.empty[A, Int]
       val todo  = mutable.Queue.empty[(Int, A)]
 
