@@ -13,53 +13,55 @@ object Day22 extends App:
         .sortBy(_.min.z)
         .foldLeft(Vector.empty[Box]): (dropped, box) =>
           val height =
-            (1 to Int.MaxValue)
+            Iterator
+              .from(1)
               .find: h =>
                 val dropping = box.drop(h)
                 dropping.min.z == 0 || dropped.exists(_ intersects dropping)
               .getOrElse(sys.error("no dropping height found")) - 1
           dropped :+ box.drop(height)
 
-    val supportedBy: Map[Box, Vector[Box]] =
+    val supportedBy: Map[Box, Set[Box]] =
       settled
         .map: box =>
           box -> settled
-            .filter(_ intersects box.drop(1))
             .filterNot(_ == box)
+            .filter(_ intersects box.drop1)
+            .toSet
         .toMap
 
     def disintegrable: Int =
-      val supports: Vector[Box] =
+      val framework: Set[Box] =
         settled
           .map: box =>
-            supportedBy(box)
-              .filter(_ intersects box.drop(1))
+            supportedBy(box).filter(_ intersects box.drop1)
           .filter(_.size == 1)
           .map(_.head)
-      stack.toSet.size - supports.toSet.size
+          .toSet
+      stack.toSet.size - framework.size
 
     def disintegrated: Int =
-      val supports: Map[Box, Vector[Box]] =
+      val supports: Map[Box, Set[Box]] =
         supportedBy
-          .toVector
-          .flatMap: (box, support) =>
-            support.map(_ -> box)
+          .toSet
+          .flatMap: (box, foundation) =>
+            foundation.map(_ -> box)
           .groupMap(_._1)(_._2)
 
-      def disintegrates(box: Box): Int =
+      def disintegrate(box: Box): Int =
         def loop(todo: Set[Box], found: Set[Box] = Set.empty): Int =
           if todo.isEmpty then
             found.size - 1
           else
             val box     = todo.head
             val next    = todo - box
-            val support = supports.getOrElse(box, Set.empty[Box]).toSet
+            val support = supports.getOrElse(box, Set.empty[Box])
             val visited = found + box
-            val add     = support.filter(x => (supportedBy(x).toSet -- visited).isEmpty)
+            val add     = support.filter(b => (supportedBy(b) -- visited).isEmpty)
             loop(next ++ add, visited)
         loop(Set(box))
 
-      settled.map(disintegrates).sum
+      settled.map(disintegrate).sum
 
   val stack: Stack =
     Stack(
@@ -109,6 +111,11 @@ object Day22 extends App:
           val p2 = Pos(x2.toInt, y2.toInt, z2.toInt)
           Box(p1, p2)
 
-  extension (box: Box) def drop(height: Int): Box =
-    val offset = Pos(0, 0, height)
-    Box(box.min - offset, box.max - offset)
+  extension (box: Box)
+
+    def drop(height: Int): Box =
+      val offset = Pos(0, 0, height)
+      Box(box.min - offset, box.max - offset)
+
+    def drop1: Box =
+      drop(1)
