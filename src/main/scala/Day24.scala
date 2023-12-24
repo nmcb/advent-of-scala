@@ -221,6 +221,7 @@ object Day24 extends App:
     val hitAll = stones.iterator.drop(2).forall(stone => cross(stones(0), stone) == hit)
     Option.when(hitAll)(hit)
 
+
   def solve2() =
     val input =
       Source
