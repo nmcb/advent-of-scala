@@ -103,20 +103,20 @@ object Day23 extends App:
       val trail: Trail = Trail.startFrom(start)
       loop(Set(trail), Map(trail -> 0)).values.max
 
-  def input(postfix: String = "-test"): Input =
+  def input: Input =
     Input(
       Source
-        .fromResource(s"input$day$postfix.txt")
+        .fromResource(s"input$day.txt")
         .getLines
         .map(_.toVector)
         .toVector)
 
   val start1: Long = System.currentTimeMillis
-  val answer1: Int = input().solve(icy = true)
+  val answer1: Int = input.solve(icy = true)
   println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long  = System.currentTimeMillis
-  val answer2: Int = input().solve(icy = false)
+  val answer2: Int = input.solve(icy = false)
   println(s"Answer day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
 
   case class Pos(x: Int, y: Int):
