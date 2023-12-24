@@ -27,7 +27,10 @@ object Day24 extends App:
   val answer1: Int = solve1(min = 200000000000000L, max = 400000000000000L)
   println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
-  /** Find two hailstones flying on parallel lines, two parallel lines define a plane in 3D space. Find two
+
+  /** Attempt 1 - Didn't work
+   *  ------------------------------------------------------------------------------------------------------
+   *  Find two hailstones flying on parallel lines, two parallel lines define a plane in 3D space. Find two
    *  others, they define another plane, two planes intersecting define exactly one line which has to be the
    *  path the rock takes. Calculate intersection point for one hailstone + the line you just solved, find
    *  milliseconds for hail reaching said line from hailstone's initial position + velocity. Repeat for a
@@ -92,61 +95,83 @@ object Day24 extends App:
     val rockLocationBeforeCollision = rockVelocity * -collisionTime
     println(s"rockLocationBeforeCollision=$rockLocationBeforeCollision")
 
-    666
+    ??? // giving up
 
+
+  /** Attempt 2 - Didn't work
+   * ------------------------------------------------------------------------------------------------------
+   * Brute force for rock velocity, calculate the position for one stone, check whether all hit that spot.
+   */
   def solve2BruteForce_WhichIamDefinitelyNot(): Long =
-    val scope = 500
     val stone0 = stones(0)
     val stone1 = stones(1)
 
-    println(s"building ")
-    val search: IndexedSeq[Vec] =
-      for
-        vx <- -scope to scope
-        vy <- -scope to scope
-        vz <- -scope to scope
-        if vx != 0 && vy != 0 && vz != 0
-      yield
-        Vec(vx, vy, vz)
+    val rangeX = stones.map(_.velocity.x).min to stones.map(_.velocity.x).max
+    val rangeY = stones.map(_.velocity.y).min to stones.map(_.velocity.y).max
+    val rangeZ = stones.map(_.velocity.z).min to stones.map(_.velocity.z).max
+    println(s"search space [${rangeZ.size}]")
 
-    search
-      .find: velocity =>
-        // simultaneous linear equation:
-        // x = ab + av*t   y = bb + bv*t
-        // x = cb + cv*u   y = db + dv*u
-        val ab = stone0.location.x
-        val av = stone0.velocity.x - velocity.x
-        val bb = stone0.location.y
-        val bv = stone0.velocity.y - velocity.y
-        val cb = stone1.location.x
-        val cv = stone1.velocity.x - velocity.x
-        val db = stone1.location.y
-        val dv = stone1.velocity.y - velocity.y
-        val determinant = (av * dv) - (bv * cv)
-        if determinant != 0 then
-          val time = (dv * (cb - ab) - cv * (db - bb)) / determinant
-          val x = stone0.location.x + stone0.velocity.x * time - velocity.x * time
-          val y = stone0.location.y + stone0.velocity.y * time - velocity.y * time
-          val z = stone0.location.z + stone0.location.z * time - velocity.z * time
-          // check if this rock throw will hit all hailstones
-          stones.forall: stone =>
-            val t =
-              if      stone.velocity.x != velocity.x then (x - stone.location.x) / (stone.velocity.x - velocity.x)
-              else if stone.velocity.y != velocity.y then (y - stone.location.y) / (stone.velocity.y - velocity.y)
-              else if stone.velocity.z != velocity.z then (y - stone.location.z) / (stone.velocity.z - velocity.z)
-              else sys.error("logic error")
+    var vx: Long = rangeX.min
+    var vy: Long = rangeY.min
+    var vz: Long = rangeZ.min
+    var found: Boolean = false
+    var result: Option[(Long, Long, Long)] = None
+    while !found do
+      // simultaneous linear equation:
+      // x = ab + av*t   y = bb + bv*t
+      // x = cb + cv*u   y = db + dv*u
+      val ab = stone0.location.x
+      val av = stone0.velocity.x - vx
+      val bb = stone0.location.y
+      val bv = stone0.velocity.y - vy
+      val cb = stone1.location.x
+      val cv = stone1.velocity.x - vx
+      val db = stone1.location.y
+      val dv = stone1.velocity.y - vy
+      val determinant = (av * dv) - (bv * cv)
+      if determinant != 0 then
+        val time = (dv * (cb - ab) - cv * (db - bb)) / determinant
+        val x = stone0.location.x + stone0.velocity.x * time - vx * time
+        val y = stone0.location.y + stone0.velocity.y * time - vy * time
+        val z = stone0.location.z + stone0.location.z * time - vz * time
+        // check if this rock throw will hit all hailstones
+        found = stones.forall: stone =>
+          val t =
+            if      stone.velocity.x != vx then (x - stone.location.x) / (stone.velocity.x - vx)
+            else if stone.velocity.y != vy then (y - stone.location.y) / (stone.velocity.y - vy)
+            else if stone.velocity.z != vz then (y - stone.location.z) / (stone.velocity.z - vz)
+            else sys.error("logic error")
 
-            val hitsX = x + t * velocity.x == stone.location.x + t * stone.velocity.x
-            val hitsY = y + t * velocity.y == stone.location.y + t * stone.velocity.y
-            val hitsZ = z + t * velocity.z == stone.location.z + t * stone.velocity.z
-            hitsX && hitsY && hitsZ
-        else
-          false
-      .map: vec =>
-        vec.x + vec.y + vec.z
+          val hitsX = x + t * vx == stone.location.x + t * stone.velocity.x
+          val hitsY = y + t * vy == stone.location.y + t * stone.velocity.y
+          val hitsZ = z + t * vz == stone.location.z + t * stone.velocity.z
+          hitsX && hitsY && hitsZ
+        if found then
+          result = Some(x, y, z)
+
+      vx += 1
+      if vx > rangeX.max then
+        vx = rangeX.min
+        vy += 1
+      if vy > rangeY.max then
+        vy = rangeY.min
+        vz += 1
+        println(s"countdown [${rangeZ.max - vz}]")
+      if vz > rangeZ.max then
+        sys.error("not found")
+
+    result
+      .map((x, y, z) => x + y + z)
       .getOrElse(sys.error("input error"))
 
 
+  /** Attempt 3 - Finally
+   * ------------------------------------------------------------------------------------------------------
+   * Brute force for rock velocity reframed to stand still by subtracting the rock velocity from the stone
+   * velocity. Brute force for rock velocity on the XY plane, Calculate the Z velocity from two stones
+   * and check whether the remaining ones hit that spot. Then calculate the time it took from the found
+   * position, and calculate the unframed rock position from the calculated velocity and time.
+   */
   case class Pos(x: BigInt, y: BigInt, z: BigInt):
     def +(rhs: Pos): Pos = Pos(x + rhs.x, y + rhs.y, z + rhs.z)
     def -(rhs: Pos): Pos = Pos(x - rhs.x, y - rhs.y, z - rhs.z)
@@ -221,7 +246,6 @@ object Day24 extends App:
     val hitAll = stones.iterator.drop(2).forall(stone => cross(stones(0), stone) == hit)
     Option.when(hitAll)(hit)
 
-
   def solve2() =
     val input =
       Source
@@ -254,14 +278,6 @@ object Day24 extends App:
         .head
 
     found.x + found.y + found.z
-
-
-
-
-
-
-
-
 
 
   val start2: Long    = System.currentTimeMillis
