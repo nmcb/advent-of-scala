@@ -102,9 +102,14 @@ object Day25 extends App:
         )
 
       val dot = graph.toDot(root, edgeTransformer)
-      val fileWriter = new FileWriter(new File(s"/tmp/$prefix.dot"))
-      fileWriter.write(dot)
-      fileWriter.close()
+
+      try
+        val fileWriter = new FileWriter(new File(s"/tmp/$prefix.dot"))
+        fileWriter.write(dot)
+        fileWriter.close()
+      catch
+        case _ => println("unable to write dot file [ignoring]")
+
 
     def showDOT(connections: Set[Connection]): Unit =
       writeDOT(connections)
