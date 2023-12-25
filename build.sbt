@@ -25,8 +25,3 @@ Compile / run / javaOptions ++= Seq("-Xmx8G", "-Xss1G")
 
 Test / fork := true
 Test / javaOptions ++= Seq("-Xmx8G", "-Xss1G")
-
-/** Future Day 24 Part 2 ? */
-// Compile / unmanagedJars += {
-//   baseDirectory.value / "unmanaged" / s"scalaz3_3-4.8.14.jar"
-// }
