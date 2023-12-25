@@ -1,7 +1,5 @@
 import scala.annotation.tailrec
 import scala.math.*
-import scala.collection.parallel.*
-import scala.collection.parallel.immutable.ParRange
 
 object Day06 extends App:
 
@@ -23,7 +21,7 @@ object Day06 extends App:
         else
           found
 
-      (0 to time).grouped(8).toParArray.map(r => loop(start = r.start, end = r.end)).sum
+      (0 to time).grouped(8).map(r => loop(start = r.start, end = r.end)).sum
 
   val start1: Long =
     System.currentTimeMillis
