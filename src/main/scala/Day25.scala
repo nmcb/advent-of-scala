@@ -46,8 +46,8 @@ object Day25 extends App:
   val answer1: Int = group0.size * group1.size
   println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
-  val start2: Long  = System.currentTimeMillis
-  val answer2: Int = 666
+  val start2: Long = System.currentTimeMillis
+  val answer2: Int = 50
   println(s"Answer day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
 
   object Dijkstra:
@@ -107,6 +107,5 @@ object Day25 extends App:
 
     def showDOT(connections: Set[Connection]): Unit =
       writeDOT(connections)
-      Runtime
-        .getRuntime
-        .exec(Array("open", s"/tmp/$prefix.pdf"))
+      Runtime.getRuntime.exec(Array("neato", "-Tpdf", s"/tmp/$prefix.dot", "-o", s"/tmp/$prefix.pdf")).waitFor()
+      Runtime.getRuntime.exec(Array("open", s"/tmp/$prefix.pdf")).waitFor()
