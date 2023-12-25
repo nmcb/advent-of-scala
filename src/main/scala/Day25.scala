@@ -19,11 +19,6 @@ object Day25 extends App:
           connections.split(" ").map(name2 => name1 -> name2)
       .toSet
 
-  extension (con: Connection)
-
-    def contains(component: Component): Boolean =
-      con._1 == component || con._2 == component
-
   extension (cs: Set[Connection])
 
     def connectedTo(c: Component): Set[Component] =
@@ -37,6 +32,7 @@ object Day25 extends App:
 
 
   // Human After All
+  Dot.showDOT(connections)
 
   val ignoreTest = Vector("hfx" -> "pzl", "bvb" -> "cmg", "nvd" -> "jqt")
   val ignoreProd = Vector("xkz" -> "mvv", "gbc" -> "hxr", "tmt" -> "pnz")
@@ -58,24 +54,19 @@ object Day25 extends App:
     def reachable[A](start: A, neighbours: A => Set[A]): Set[A] =
       val found = mutable.Map.empty[A, Int]
       val todo = mutable.Queue.empty[(Int, A)]
-
       todo.enqueue((0, start))
-
       while todo.nonEmpty do
         val (dist, node) = todo.dequeue()
         if !found.contains(node) then
           found(node) = dist
-
           def process(newNode: A): Unit =
             if !found.contains(newNode) then
               val newDist = dist + 1
               todo.enqueue((newDist, newNode))
-
           neighbours(node).iterator.foreach(process)
-
       found.keys.toSet
 
-  
+
   /**
    * Thanks JP <3<3<3
    *
@@ -89,7 +80,9 @@ object Day25 extends App:
     import scalax.collection.io.dot.*
     import implicits.*
 
-    def printDOT(connections: Set[Connection], filename: String = "/tmp/graph.dot"): Unit =
+    val prefix = "graph"
+
+    def writeDOT(connections: Set[Connection]): Unit =
       val root = DotRootGraph(directed = false, id = Some(Id("Day25")))
 
       def edgeTransformer(innerEdge: Graph[String, WUnDiEdge[String]]#GraphInnerEdge): Option[(DotGraph, DotEdgeStmt)] =
@@ -101,13 +94,19 @@ object Day25 extends App:
           List(DotAttr(Id("label"), Id(s"${edge.source}/${edge.target}")))
         ))
 
-      val imGraph =
+      val graph =
         Graph.from[Component, WUnDiEdge[Component]](
           connections.components,
           connections.map((a, b) => WUnDiEdge(a, b, 1))
         )
 
-      val dot = imGraph.toDot(root, edgeTransformer)
-      val fileWriter = new FileWriter(new File(filename))
+      val dot = graph.toDot(root, edgeTransformer)
+      val fileWriter = new FileWriter(new File(s"/tmp/$prefix.dot"))
       fileWriter.write(dot)
       fileWriter.close()
+
+    def showDOT(connections: Set[Connection]): Unit =
+      writeDOT(connections)
+      Runtime
+        .getRuntime
+        .exec(Array("open", s"/tmp/$prefix.pdf"))
