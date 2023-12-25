@@ -1,6 +1,6 @@
 import scala.annotation.tailrec
 import scala.collection.mutable
-import scala.io.Source
+import scala.io.*
 import scala.math
 
 object Day24 extends App:
@@ -190,57 +190,57 @@ object Day24 extends App:
               velocity = Pos(x = vx.trim.toLong, y = vy.trim.toLong, z = vz.trim.toLong))
         .toSeq
 
-    def futureIntersection2D(lhs: Stone, rhs: Stone): Option[(Double, Double)] =
-      val Pos(x1, y1, _) = lhs.position
-      val Pos(x2, y2, _) = lhs.position + lhs.velocity
-      val Pos(x3, y3, _) = rhs.position
-      val Pos(x4, y4, _) = rhs.position + rhs.velocity
+    def futureCollide2D(l: Stone, r: Stone): Option[(Double, Double)] =
+      val Pos(x1, y1, _) = l.position
+      val Pos(x2, y2, _) = l.position + l.velocity
+      val Pos(x3, y3, _) = r.position
+      val Pos(x4, y4, _) = r.position + r.velocity
 
       val denominator = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4)
       if denominator == 0 then None
       else
         val x = ((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)).doubleValue / denominator.toDouble
         val y = ((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)).doubleValue / denominator.toDouble
-        val qqq = lhs.velocity.x.sign == (x - x1.doubleValue).sign && lhs.velocity.y.sign == (y - y1.doubleValue).sign
-        val bla = rhs.velocity.x.sign == (x - x3.doubleValue).sign && rhs.velocity.y.sign == (y - y3.doubleValue).sign
-        Option.when(qqq && bla)((x, y))
+        val futureL = l.velocity.x.sign == (x - x1.doubleValue).sign && l.velocity.y.sign == (y - y1.doubleValue).sign
+        val futureR = r.velocity.x.sign == (x - x3.doubleValue).sign && r.velocity.y.sign == (y - y3.doubleValue).sign
+        Option.when(futureL && futureR)((x, y))
 
-    def reframe(stone: Stone, velocity: Pos): Stone =
-      stone.copy(velocity = stone.velocity - velocity)
+    extension (s: Stone) def reframe(velocity: Pos): Stone =
+      s.copy(velocity = s.velocity - velocity)
 
-    def reframe(stone: Seq[Stone], velocity: Pos): Seq[Stone] =
-      stone.map(reframe(_, velocity))
+    extension (ss: Seq[Stone]) def reframe(velocity: Pos): Seq[Stone] =
+      ss.map(_.reframe(velocity))
 
-    def round(value: Double): BigInt =
-      BigDecimal(value).setScale(0, BigDecimal.RoundingMode.HALF_UP).toBigInt
+    extension (d: Double) def toBigInt: BigInt =
+      BigDecimal(d).setScale(0, BigDecimal.RoundingMode.HALF_UP).toBigInt
 
-    def round(xy: (Double, Double)): (BigInt, BigInt) =
-      (round(xy._1), round(xy._2))
+    extension (xy: (Double, Double)) def toBigInt: (BigInt, BigInt) =
+      (xy._1.toBigInt, xy._2.toBigInt)
 
     def collide(stones: Seq[Stone]): Option[(BigInt, BigInt)] =
-      futureIntersection2D(stones(0), stones(1))
-        .map(round)
-        .flatMap: intersection =>
-          val hitAll =
+      futureCollide2D(stones(0), stones(1))
+        .map(_.toBigInt)
+        .flatMap: xy =>
+          val hitall =
             stones
               .iterator
               .drop(2)
               .forall: stone =>
-                futureIntersection2D(stones(0), stone)
-                  .map(round)
-                  .contains(intersection)
-          Option.when(hitAll)(intersection)
+                futureCollide2D(stones(0), stone)
+                  .map(_.toBigInt)
+                  .contains(xy)
+          Option.when(hitall)(xy)
 
-    def calcT(stone: Stone, intersection: (BigInt, BigInt)): BigInt =
-      val (x, y) = intersection
+    def calcT(stone: Stone, xy: (BigInt, BigInt)): BigInt =
+      val (x, y) = xy
       if stone.velocity.x == 0 then (y - stone.position.y) / stone.velocity.y
       else (x - stone.position.x) / stone.velocity.x
 
-    def calcZ(stones: Seq[Stone], intersection: (BigInt, BigInt)): Option[BigInt] =
+    def calcZ(stones: Seq[Stone], xy: (BigInt, BigInt)): Option[BigInt] =
 
       def cross(l: Stone, r: Stone): BigInt =
-        val timeL = calcT(l, intersection)
-        val timeR = calcT(r, intersection)
+        val timeL = calcT(l, xy)
+        val timeR = calcT(r, xy)
         (l.position.z + timeL * l.velocity.z - (r.position.z + timeR * r.velocity.z)) / (timeL - timeR)
 
       val hit = cross(stones(0), stones(1))
@@ -267,7 +267,7 @@ object Day24 extends App:
       val found: Pos =
         search
           .flatMap: velocity =>
-            val translated = reframe(stones, velocity)
+            val translated = stones.reframe(velocity)
             collide(translated)
               .flatMap: location =>
                 calcZ(translated, location).map((location, _))

@@ -1,4 +1,4 @@
-import scala.annotation.tailrec
+import scala.annotation.*
 import scala.collection.mutable
 import scala.io.Source
 
@@ -32,17 +32,16 @@ object Day23Alternative extends App:
     visited(end)
 
   def part2(input: String): Int =
-    val (startPoint, endPoint, layout) = parseMaze(input)
-    val nodes = parseNodes(startPoint, endPoint, layout)
-    val nodeCount = nodes.size.toDouble
+    val (startPoint, endPoint, maze) = parseMaze(input)
+    val nodes = parseNodes(startPoint, endPoint, maze)
     val start = nodes(startPoint)
-    val end = nodes(endPoint)
+    val end   = nodes(endPoint)
 
     var longest = 0
     val queue = mutable.Queue((start, Set.empty[Node], 0))
-    while queue.length > 0 do
+    while queue.nonEmpty do
       val (node, path, dist) = queue.dequeue()
-      if (node == end)
+      if node == end then
         longest = math.max(longest, dist)
       else
         val pathNext = path + node

@@ -72,7 +72,7 @@ object Day20 extends App:
 
     def gcd(l: Long, r: Long): Long = if r == 0 then l.abs else gcd(r, l % r)
     def lcm(l: Long, r: Long): Long = (l * r).abs / gcd(l, r)
-    def lcm(ls: Vector[Long]): Long = ls.reduce(lcm)
+    def lcm(ls: Iterable[Long]): Long = ls.reduce(lcm)
 
     /** the specification shows one '&' outputting to 'rx', we solve for the cycles of its inputs being raised to 'H' */
     def solveRX: Long =
@@ -94,7 +94,7 @@ object Day20 extends App:
           found(from) = pressed
           todo -= from
 
-      lcm(found.view.values.map(_.toLong).toVector)
+      lcm(found.view.values.map(_.toLong))
 
 
   val machine: Machine =

@@ -1,7 +1,6 @@
 import scala.annotation.tailrec
 import scala.io.*
 import scala.math.Ordered.orderingToOrdered
-import scala.collection.parallel.*
 
 object Day07 extends App:
 
@@ -84,7 +83,7 @@ object Day07 extends App:
       strengths(cards).max
 
     lazy val strength2: Strength =
-      combinations.grouped(8).toParArray.map(_.map(cs => strengths(cs).max).max).max
+      combinations.grouped(8).map(_.map(cs => strengths(cs).max).max).max
 
     private def strengths(hand: Cards): List[Strength] =
       def loop(todo: List[(Card, Int)], found: List[Strength] = List.empty): List[Strength] =

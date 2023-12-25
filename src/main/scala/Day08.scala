@@ -41,7 +41,7 @@ object Day08 extends App:
       // note: each start node has a repeating path, ending with a node that ends with a 'Z'
       val starts = nodes.keys.filter(_.endsWith("A")).toSet
       val paths  = starts.map(from => pathTo(_.endsWith("Z"), from, directions))
-      paths.map(_.length.toLong).foldLeft(1L)(lcm)
+      paths.map(_.length.toLong).fold(1L)(lcm)
 
 
   lazy val network: Network =
