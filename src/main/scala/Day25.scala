@@ -1,6 +1,7 @@
 import scala.annotation.tailrec
 import scala.io.Source
 import scala.collection.mutable
+import scala.util.Try
 
 object Day25 extends App:
 
@@ -107,5 +108,8 @@ object Day25 extends App:
 
     def showDOT(connections: Set[Connection]): Unit =
       writeDOT(connections)
-      Runtime.getRuntime.exec(Array("neato", "-Tpdf", s"/tmp/$prefix.dot", "-o", s"/tmp/$prefix.pdf")).waitFor()
-      Runtime.getRuntime.exec(Array("open", s"/tmp/$prefix.pdf")).waitFor()
+      try
+        Runtime.getRuntime.exec(Array("neato", "-Tpdf", s"/tmp/$prefix.dot", "-o", s"/tmp/$prefix.pdf")).waitFor()
+        Runtime.getRuntime.exec(Array("open", s"/tmp/$prefix.pdf")).waitFor()
+      catch
+        case _ => println(s"unable to show visualisation [ignoring]")
