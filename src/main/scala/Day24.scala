@@ -170,7 +170,7 @@ object Day24 extends App:
    * Brute force for rock velocity re-framed to stand still by subtracting the rock velocity from the stone
    * velocity. Brute force for rock velocity on the XY plane, Calculate the Z velocity from two stones and
    * check whether the remaining ones hit that spot. Then calculate the time it took from the found stone
-   * position, and calculate the unframed rock position from the calculated velocity and time.
+   * position, and calculate the unframed unframed rock position back from its velocity and time.
    */
   object Attempt3:
     case class Pos(x: BigInt, y: BigInt, z: BigInt):
@@ -190,17 +190,28 @@ object Day24 extends App:
               velocity = Pos(x = vx.trim.toLong, y = vy.trim.toLong, z = vz.trim.toLong))
         .toSeq
 
+    /** straight forward future collide - this function overflows on input doubles thus we use big ints as positions */
     def futureCollide2D(l: Stone, r: Stone): Option[(Double, Double)] =
+
+      // take the two lines but define them by two points each
       val Pos(x1, y1, _) = l.position
       val Pos(x2, y2, _) = l.position + l.velocity
       val Pos(x3, y3, _) = r.position
       val Pos(x4, y4, _) = r.position + r.velocity
 
-      val denominator = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4)
-      if denominator == 0 then None
+      // inner cross product
+      val denominator: BigInt =
+        (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4)
+
+      if denominator == 0 then
+        // lines are parallel
+        None
       else
+        // intersection point - see wikipedia line intersection
         val x = ((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)).doubleValue / denominator.toDouble
         val y = ((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)).doubleValue / denominator.toDouble
+
+        // does the intersection occur in both lines future
         val futureL = l.velocity.x.sign == (x - x1.doubleValue).sign && l.velocity.y.sign == (y - y1.doubleValue).sign
         val futureR = r.velocity.x.sign == (x - x3.doubleValue).sign && r.velocity.y.sign == (y - y3.doubleValue).sign
         Option.when(futureL && futureR)((x, y))

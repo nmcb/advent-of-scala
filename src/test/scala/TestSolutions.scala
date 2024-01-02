@@ -102,5 +102,5 @@ class TestSolutions extends AnyFunSuite:
   }
   test("Day25") {
     assertResult(569904)(actual = Day25.answer1)
-    assertResult(50)(actual = Day25.answer2)
+    assertResult(50)(actual = Day25.totalStars2023)
   }

@@ -20,7 +20,8 @@ object Day08 extends App:
         case 'R' => nodes.getOrElse(from, sys.error(s"no step right from: $from"))._2
         case _   => sys.error(s"invalid direction: $direction")
 
-    def pathTo(exit: String => Boolean, from: String, directions: Directions, path: String = ""): String =
+    @tailrec
+    final def pathTo(exit: String => Boolean, from: String, directions: Directions, path: String = ""): String =
       if exit(from) then
         path
       else

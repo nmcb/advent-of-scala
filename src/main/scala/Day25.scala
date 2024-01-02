@@ -1,7 +1,7 @@
 import scala.annotation.tailrec
 import scala.io.Source
 import scala.collection.mutable
-import scala.util.Try
+import scala.util.*
 
 object Day25 extends App:
 
@@ -9,6 +9,8 @@ object Day25 extends App:
     this.getClass.getName.drop(3).init
 
   type Component = String
+
+  // todo experiment with `##` and `equals` to allow for unordered pairs
   type Connection = (Component, Component)
 
   val connections: Set[Connection] =
@@ -26,7 +28,7 @@ object Day25 extends App:
       cs.filter(_._1 == c).map(_._2) ++ cs.filter(_._2 == c).map(_._1)
 
     def disconnect(c: Connection): Set[Connection] =
-      cs.filterNot(_ == c).filterNot(_ == c.swap)
+      cs.filterNot(_ == c)
 
     def components: Set[Component] =
       cs.flatMap((a,b) => Set(a, b))
@@ -35,8 +37,8 @@ object Day25 extends App:
   // Human After All
   Dot.showDOT(connections)
 
-  val ignoreTest = Vector("hfx" -> "pzl", "bvb" -> "cmg", "nvd" -> "jqt")
-  val ignoreProd = Vector("xkz" -> "mvv", "gbc" -> "hxr", "tmt" -> "pnz")
+  val ignoreTest = Vector("hfx" -> "pzl", "bvb" -> "cmg", "nvd" -> "jqt") // hardcoded :)
+  val ignoreProd = Vector("xkz" -> "mvv", "gbc" -> "hxr", "tmt" -> "pnz") // also hardcoded ;)
 
   val remove = ignoreProd
   val purged = remove.foldLeft(connections)(_ disconnect _)
@@ -48,23 +50,23 @@ object Day25 extends App:
   println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long = System.currentTimeMillis
-  val answer2: Int = 50
-  println(s"Answer day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
+  val totalStars2023: Int = 50
+  println(s"Answer day $day part 2: ${totalStars2023} [${System.currentTimeMillis - start2}ms]")
 
   object Dijkstra:
-    def reachable[A](start: A, neighbours: A => Set[A]): Set[A] =
-      val found = mutable.Map.empty[A, Int]
-      val todo = mutable.Queue.empty[(Int, A)]
-      todo.enqueue((0, start))
+    def reachable[N](from: N, edges: N => Set[N]): Set[N] =
+      val found = mutable.Map.empty[N, Int]
+      val todo  = mutable.Queue.empty[(Int, N)]
+      todo.enqueue((0, from))
       while todo.nonEmpty do
         val (dist, node) = todo.dequeue()
         if !found.contains(node) then
           found(node) = dist
-          def process(newNode: A): Unit =
+          def process(newNode: N): Unit =
             if !found.contains(newNode) then
               val newDist = dist + 1
               todo.enqueue((newDist, newNode))
-          neighbours(node).iterator.foreach(process)
+          edges(node).iterator.foreach(process)
       found.keys.toSet
 
 
