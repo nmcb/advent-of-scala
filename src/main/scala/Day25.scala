@@ -53,8 +53,6 @@ object Day25 extends App:
   val totalStars2023: Int = 50
   println(s"Answer day $day part 2: ${totalStars2023} [${System.currentTimeMillis - start2}ms]")
 
-  println(Karger(connections).calculateMinGraph)
-
   object Dijkstra:
     def reachable[N](from: N, edges: N => Set[N]): Set[N] =
       val found = mutable.Map.empty[N, Int]
