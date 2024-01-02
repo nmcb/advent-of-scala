@@ -91,15 +91,12 @@ class TestSolutions extends AnyFunSuite:
   }
   test("Day23") {
     assertResult(2430)(actual = Day23.answer1)
-    assertResult(6534)(actual = Day23.answer2) // 55 seconds
-    // assertResult(2430)(actual = Day23.answer1)
-    // assertResult(6534)(actual = Day23.answer2) // 10 minutes
+    assertResult(6534)(actual = Day23.answer2)
   }
   test("Day24") {
     assertResult(14799)(actual = Day24.answer1)
     assertResult(1007148211789625L)(actual = Day24.answer2)
-
-  }
+}
   test("Day25") {
     assertResult(569904)(actual = Day25.answer1)
     assertResult(50)(actual = Day25.totalStars2023)
