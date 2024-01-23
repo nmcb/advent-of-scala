@@ -12,19 +12,7 @@ object Day01 extends App:
       .toList
 
   val digits: Map[String, Char] =
-    (0 to 9).map(i => i.toString -> i.toChar).toMap
-//    Map(
-//      "1" -> '1',
-//      "2" -> '2',
-//      "3" -> '3',
-//      "4" -> '4',
-//      "5" -> '5',
-//      "6" -> '6',
-//      "7" -> '7',
-//      "8" -> '8',
-//      "9" -> '9',
-//      "0" -> '0'
-//    )
+    (0 to 9).map(_.toString).map(n => n -> n.head).toMap
 
   def recover(replacements: Map[String, Char])(line: String): Int =
 
