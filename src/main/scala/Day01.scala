@@ -12,30 +12,23 @@ object Day01 extends App:
       .toList
 
   val digits: Map[String, Char] =
-    Map(
-      "1" -> '1',
-      "2" -> '2',
-      "3" -> '3',
-      "4" -> '4',
-      "5" -> '5',
-      "6" -> '6',
-      "7" -> '7',
-      "8" -> '8',
-      "9" -> '9',
-      "0" -> '0'
-    )
+    (0 to 9).map(_.toString).map(n => n -> n.head).toMap
 
-  def recover(replacements: Map[String, Char])(side: String): Int =
+  def recover(replacements: Map[String, Char])(line: String): Int =
 
-    def left(side: String): (String, Char) =
-      replacements.find((p,_) => side.startsWith(p)).getOrElse(left(side.tail))
+    def firstLeftDigit(side: String): (String, Char) =
+      replacements
+        .find((p,_) => side.startsWith(p))
+        .getOrElse(firstLeftDigit(side.tail))
 
 
-    def right(side: String): (String, Char) =
-      replacements.find((p,_) => side.endsWith(p)).getOrElse(right(side.init))
+    def firstRightDigit(side: String): (String, Char) =
+      replacements
+        .find((p,_) => side.endsWith(p))
+        .getOrElse(firstRightDigit(side.init))
 
-    val (_,l) = left(side)
-    val (_,r) = right(side)
+    val (_,l) = firstLeftDigit(line)
+    val (_,r) = firstRightDigit(line)
     s"$l$r".toInt
 
   val start1: Long =
