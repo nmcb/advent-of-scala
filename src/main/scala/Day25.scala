@@ -37,7 +37,7 @@ object Day25 extends App:
   // Human After All
   Dot.showDOT(connections)
 
-  val ignoreTest = Vector("hfx" -> "pzl", "bvb" -> "cmg", "nvd" -> "jqt") // hardcoded :)
+  val ignoreTest = Vector("pzl" -> "hfx", "cmg" -> "bvb", "jqt" -> "nvd") // hardcoded :)
   val ignoreProd = Vector("xkz" -> "mvv", "gbc" -> "hxr", "tmt" -> "pnz") // also hardcoded ;)
 
   val remove = ignoreProd
@@ -45,9 +45,10 @@ object Day25 extends App:
   val group0 = Dijkstra.reachable(remove(0)._1, purged.connectedTo)
   val group1 = purged.components -- group0
 
+
   val start1: Long = System.currentTimeMillis
   val answer1: Int = group0.size * group1.size
-  println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer day $day part 1: ${group0.size} * ${group1.size} = ${answer1} [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long = System.currentTimeMillis
   val totalStars2023: Int = 50
