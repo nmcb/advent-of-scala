@@ -53,6 +53,5 @@ object SecurityExercise extends App:
   given Random = Random(2023_12_25)
 
   val (vertices: Set[Vertex], _) = routes.minCut(3)
-
-  println(vertices.head.size)
-  println(vertices.last.size)
+  val cluster0 = vertices.head.size
+  val cluster1 = vertices.last.size
