@@ -45,7 +45,10 @@ object SecurityExercise extends App:
         val nextRoutes: Vector[Route]  = routes.filterNot(r => vc.contains(r.a) && vc.contains(r.b))
         karger(nextClusters, nextRoutes)
 
-  given Random = Random(2023_12_25)
+  given Random = Random(1)
   val (clusters: Set[Cluster], _) = routes.minCut(3)
   val cluster0 = clusters.head.size
   val cluster1 = clusters.last.size
+
+  println(cluster0)
+  println(cluster1)
