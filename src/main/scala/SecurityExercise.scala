@@ -8,8 +8,13 @@ object SecurityExercise extends App:
   type Node    = String
   type Cluster = Set[Node]
 
-  case class Route(a: Node, b: Node):
-    def distinct: Set[Cluster] = Set(Set(a), Set(b))
+  case class Route(a: Node, b: Node)
+
+  object Route:
+    def fromString(s: String): Set[Route] =
+      s match
+        case s"$from: $tos" =>
+          tos.split(" ").map((to: Node) => Route(from, to)).toSet
 
   val routes: Vector[Route] =
     Source
@@ -18,22 +23,9 @@ object SecurityExercise extends App:
       .flatMap(Route.fromString)
       .toVector
 
-  object Route:
-    def fromString(s: String): Set[Route] =
-      s match
-        case s"$from: $tos" =>
-          tos.split(" ").map((to: Node) => Route(from, to)).toSet
+  extension (routes: Vector[Route])
 
-    extension (self: Vector[Route])
-      def minCut(cardinality: Int)(using r: Random): (Set[Cluster], Vector[Route]) =
-        @tailrec def loop(clusters: Set[Cluster], routes: Vector[Route]): (Set[Cluster], Vector[Route]) =
-          val (cs: Set[Cluster], rs: Vector[Route]) = Karger.karger(clusters, routes)
-          if rs.size == cardinality then (cs, rs) else loop(clusters, r.shuffle(routes))
-        val distinct: Set[Cluster] = self.flatMap(_.distinct).toSet
-        loop(distinct, self)
-
-  object Karger:
-    @tailrec def karger(clusters: Set[Cluster], routes: Vector[Route]): (Set[Cluster], Vector[Route]) =
+    @tailrec def karger(clusters: Set[Cluster]): (Set[Cluster], Vector[Route]) =
       if clusters.size <= 2 then
         (clusters, routes)
       else
@@ -42,8 +34,16 @@ object SecurityExercise extends App:
         val vb: Cluster = clusters.find(_.contains(b)).get
         val vc: Cluster = va ++ vb
         val nextClusters: Set[Cluster] = clusters - va - vb + vc
-        val nextRoutes: Vector[Route]  = routes.filterNot(r => vc.contains(r.a) && vc.contains(r.b))
-        karger(nextClusters, nextRoutes)
+        val nextRoutes: Vector[Route] = routes.filterNot(r => vc.contains(r.a) && vc.contains(r.b))
+        nextRoutes.karger(nextClusters)
+
+    def minCut(cardinality: Int)(using r: Random): (Set[Cluster], Vector[Route]) =
+      @tailrec def loop(clusters: Set[Cluster], routes: Vector[Route]): (Set[Cluster], Vector[Route]) =
+        val (cs: Set[Cluster], rs: Vector[Route]) = routes.karger(clusters)
+        if rs.size == cardinality then (cs, rs) else loop(clusters, r.shuffle(routes))
+
+      val clusters: Set[Cluster] = routes.flatMap(r => Set(Set(r.a), Set(r.b))).toSet
+      loop(clusters, routes)
 
   given Random = Random(1)
   val (clusters: Set[Cluster], _) = routes.minCut(3)
