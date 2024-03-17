@@ -2,7 +2,14 @@ import scala.util.*
 import scala.annotation.*
 import scala.io.*
 
+/** @see https://en.wikipedia.org/wiki/Karger%27s_algorithm */
 object SecurityExercise extends App:
+
+  type Node    = String
+  type Cluster = Set[Node]
+
+  case class Route(a: Node, b: Node):
+    def distinct: Set[Cluster] = Set(Set(a), Set(b))
 
   val routes: Vector[Route] =
     Source
@@ -11,47 +18,34 @@ object SecurityExercise extends App:
       .flatMap(Route.fromString)
       .toVector
 
-  type Vertex = Set[String]
-
-  case class Route(a: String, b: String):
-    def vertices: Set[Vertex] = Set(Set(a), Set(b))
-
   object Route:
     def fromString(s: String): Set[Route] =
       s match
-        case s"$a: $b" =>
-          b.split(" ").map((b: String) => Route(a, b)).toSet
+        case s"$from: $tos" =>
+          tos.split(" ").map((to: Node) => Route(from, to)).toSet
 
     extension (self: Vector[Route])
-      def vertices: Set[Vertex] =
-        self.flatMap(_.vertices).toSet
-
-      def minCut(cardinality: Int)(using r: Random): (Set[Vertex], Vector[Route]) =
-        @tailrec def loop(vertices: Set[Vertex], edges: Vector[Route], i: Int = 1): (Set[Vertex], Vector[Route]) =
-          val (v: Set[Vertex], e: Vector[Route]) = Karger.karger(vertices, edges)
-          if e.size == cardinality then (v, e) else loop(vertices, r.shuffle(edges), i + 1)
-        loop(self.vertices, self)
+      def minCut(cardinality: Int)(using r: Random): (Set[Cluster], Vector[Route]) =
+        @tailrec def loop(clusters: Set[Cluster], routes: Vector[Route]): (Set[Cluster], Vector[Route]) =
+          val (cs: Set[Cluster], rs: Vector[Route]) = Karger.karger(clusters, routes)
+          if rs.size == cardinality then (cs, rs) else loop(clusters, r.shuffle(routes))
+        val distinct: Set[Cluster] = self.flatMap(_.distinct).toSet
+        loop(distinct, self)
 
   object Karger:
-    @tailrec def karger(vertices: Set[Vertex], edges: Vector[Route]): (Set[Vertex], Vector[Route]) =
-      if vertices.size <= 2 then (vertices, edges)
+    @tailrec def karger(clusters: Set[Cluster], routes: Vector[Route]): (Set[Cluster], Vector[Route]) =
+      if clusters.size <= 2 then
+        (clusters, routes)
       else
-        val Route(a: String, b: String) = edges.head
-        val va: Vertex = vertices.find(_.contains(a)).get
-        val vb: Vertex = vertices.find(_.contains(b)).get
-        val vc: Vertex = va ++ vb
-
-        val nextVertices: Set[Vertex] =
-          vertices - va - vb + vc
-
-        val nextRoutes: Vector[Route] =
-          edges.filterNot:
-            case Route(a, b) => vc.contains(a) && vc.contains(b)
-
-        karger(nextVertices, nextRoutes)
+        val Route(a: Node, b: Node) = routes.head
+        val va: Cluster = clusters.find(_.contains(a)).get
+        val vb: Cluster = clusters.find(_.contains(b)).get
+        val vc: Cluster = va ++ vb
+        val nextClusters: Set[Cluster] = clusters - va - vb + vc
+        val nextRoutes: Vector[Route]  = routes.filterNot(r => vc.contains(r.a) && vc.contains(r.b))
+        karger(nextClusters, nextRoutes)
 
   given Random = Random(2023_12_25)
-
-  val (vertices: Set[Vertex], _) = routes.minCut(3)
-  val cluster0 = vertices.head.size
-  val cluster1 = vertices.last.size
+  val (clusters: Set[Cluster], _) = routes.minCut(3)
+  val cluster0 = clusters.head.size
+  val cluster1 = clusters.last.size
