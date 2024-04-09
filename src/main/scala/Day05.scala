@@ -11,12 +11,12 @@ object Day05 extends App:
   case class Range(min: Long, max: Long):
     assert(min <= max)
 
-    def intersect(that: Range): Option[Range] =
+    infix def intersect(that: Range): Option[Range] =
       val maxmin = min max that.min
       val minmax = max min that.max
       optional(min = maxmin, max = minmax)
 
-    def diff(that: Range): Set[Range] =
+    infix def diff(that: Range): Set[Range] =
       this intersect that match
         case None          => Set(this)
         case Some(overlap) => Set(optional(min, overlap.min - 1), optional(overlap.max + 1, max)).flatten
@@ -34,11 +34,11 @@ object Day05 extends App:
 
   case class Dependency(target: Long, source: Long, length: Long):
     val sourceRange: Range = Range(source, source + length - 1)
-    def mapBy(that: Range): Option[Range] =
+    infix def mapBy(that: Range): Option[Range] =
       (that intersect sourceRange).map(r => Range(r.min - source + target, r.max - source + target))
 
   case class Dependencies(dependencies: Set[Dependency]):
-    def mapBy(that: Range): Set[Range] =
+    infix def mapBy(that: Range): Set[Range] =
       val mapped   = dependencies.flatMap(_ mapBy that)
       val unmapped = dependencies.foldLeft(Set(that))((acc,dep) => acc.flatMap(_ diff dep.sourceRange))
       mapped ++ unmapped

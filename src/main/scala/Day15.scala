@@ -49,7 +49,7 @@ object Day15 extends App:
           Some(Vector((label, focal)))
       )
 
-    def process(op: Op): Boxes =
+    infix def process(op: Op): Boxes =
       op.remove.map(remove).orElse(op.update.map(update)).getOrElse(sys.error("noop"))
 
     def power: Int =
