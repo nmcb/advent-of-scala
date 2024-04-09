@@ -33,7 +33,7 @@ object Day14 extends App:
       Source
         .fromResource(s"input$day.txt")
         .getLines
-        .map(parse _)
+        .map(parse)
         .toList
 
     def segment(f: Pos, t: Pos): List[Pos] =
