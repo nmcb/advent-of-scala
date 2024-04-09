@@ -27,7 +27,7 @@ object Day25 extends App:
     def connectedTo(c: Component): Set[Component] =
       cs.filter(_._1 == c).map(_._2) ++ cs.filter(_._2 == c).map(_._1)
 
-    def disconnect(c: Connection): Set[Connection] =
+    infix def disconnect(c: Connection): Set[Connection] =
       cs.filterNot(_ == c)
 
     def components: Set[Component] =

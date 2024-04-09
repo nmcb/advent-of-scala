@@ -29,20 +29,20 @@ object Day18 extends App:
   case class Pos(x: Int, y: Int):
     def -(b: Pos): Pos = Pos(x - b.x, y - b.y)
     def +(b: Pos): Pos = Pos(x + b.x, y + b.y)
-    def min(b: Pos): Pos = Pos(math.min(x, b.x), math.min(y, b.y))
-    def max(b: Pos): Pos = Pos(math.max(x, b.x), math.max(y, b.y))
+    infix def min(b: Pos): Pos = Pos(math.min(x, b.x), math.min(y, b.y))
+    infix def max(b: Pos): Pos = Pos(math.max(x, b.x), math.max(y, b.y))
     def >=(b: Pos): Boolean = x >= b.x && y >= b.y
     def <=(b: Pos): Boolean = x <= b.x && y <= b.y
     def ×(that: Pos): Long = x.toLong * that.y.toLong - that.x.toLong * y.toLong
 
-    def move1(op: Op): Vector[Pos] =
+    infix def move1(op: Op): Vector[Pos] =
       op match
         case Op('U', length) => Vector.tabulate(length)(dy => Pos(x, y - dy - 1))
         case Op('D', length) => Vector.tabulate(length)(dy => Pos(x, y + dy + 1))
         case Op('L', length) => Vector.tabulate(length)(dx => Pos(x - dx - 1, y))
         case Op('R', length) => Vector.tabulate(length)(dx => Pos(x + dx + 1, y))
 
-    def move2(op: Op): Pos =
+    infix def move2(op: Op): Pos =
       op match
         case Op('U', length) => Pos(x, y - length)
         case Op('D', length) => Pos(x, y + length)

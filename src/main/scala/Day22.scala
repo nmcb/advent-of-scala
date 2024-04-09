@@ -84,8 +84,8 @@ object Day22 extends App:
   case class Pos(x: Int, y: Int, z: Int):
     def -(that: Pos): Pos = Pos(x - that.x, y - that.y, z - that.z)
     def +(that: Pos): Pos = Pos(x + that.x, y + that.y, z + that.z)
-    def min(that: Pos): Pos = Pos(x min that.x, y min that.y, z min that.z)
-    def max(that: Pos): Pos = Pos(x max that.x, y max that.y, z max that.z)
+    infix def min(that: Pos): Pos = Pos(x min that.x, y min that.y, z min that.z)
+    infix def max(that: Pos): Pos = Pos(x max that.x, y max that.y, z max that.z)
     def >=(that: Pos): Boolean = x >= that.x && y >= that.y && z >= that.z
     def <=(that: Pos): Boolean = x <= that.x && y <= that.y && z <= that.z
 
@@ -99,7 +99,7 @@ object Day22 extends App:
       else
         None
 
-    def intersects(that: Box): Boolean =
+    infix def intersects(that: Box): Boolean =
       intersect(that).isDefined
 
   object Box:

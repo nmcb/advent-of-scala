@@ -74,7 +74,7 @@ object Day21 extends App:
       val stepsToGrids = steps / gridSize
       val gridsToSteps = steps % gridSize
 
-      def add(grid: Grid): Collect =
+      infix def add(grid: Grid): Collect =
         if grid.steps % gridSize == gridsToSteps then
           copy(gridPlotsScan = gridPlotsScan :+ grid.plots.size)
         else
