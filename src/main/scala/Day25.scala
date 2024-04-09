@@ -89,22 +89,25 @@ object Day25 extends App:
     def writeDOT(connections: Set[Connection]): Unit =
       val root = DotRootGraph(directed = false, id = Some(Id("Day25")))
 
-      def edgeTransformer(innerEdge: Graph[String, WUnDiEdge[String]]#GraphInnerEdge): Option[(DotGraph, DotEdgeStmt)] =
+      def edgeTransformer(index: Map[Component,Int])(innerEdge: Graph[Int, WUnDiEdge[Int]]#GraphInnerEdge): Option[(DotGraph, DotEdgeStmt)] =
         val edge = innerEdge.outer
         val label = edge.weight.toInt
         Some(root, DotEdgeStmt(
           NodeId(edge.source),
           NodeId(edge.target),
-          List(DotAttr(Id("label"), Id(s"${edge.source}/${edge.target}")))
+          List() // (DotAttr(Id("label"), Id(s"${edge.source}/${edge.target}")))
         ))
 
+      val index: Map[Component,Int] =
+        connections.components.zipWithIndex.toMap
+
       val graph =
-        Graph.from[Component, WUnDiEdge[Component]](
-          connections.components,
-          connections.map((a, b) => WUnDiEdge(a, b, 1))
+        Graph.from[Int, WUnDiEdge[Int]](
+          index.values,
+          connections.map((a, b) => WUnDiEdge(index(a) , index(b), 1))
         )
 
-      val dot = graph.toDot(root, edgeTransformer)
+      val dot = graph.toDot(root, edgeTransformer(index))
 
       try
         val fileWriter = new FileWriter(new File(s"/tmp/$prefix.dot"))
