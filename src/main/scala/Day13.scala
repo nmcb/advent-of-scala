@@ -150,7 +150,7 @@ object Day13 extends App:
     def digits: P[Int] =
       satisfy(_.isDigit).oneOrMore.map(_.mkString("").toInt)
 
-    def separated[A](sep: P[_], pa: P[A]): P[List[A]] =
+    def separated[A](sep: P[?], pa: P[A]): P[List[A]] =
       for { h <- pa.opt ; t <- (sep ~ pa).zeroOrMore } yield
         h.map(_ :: t).getOrElse(List.empty)
 

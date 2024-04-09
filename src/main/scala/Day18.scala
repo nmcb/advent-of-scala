@@ -17,12 +17,12 @@ object Day18 extends App:
   case class Box(x: Int, y: Int, z: Int):
     import Box.*
 
-    def -(b: Box): Box = Box(x - b.x, y - b.y, z - b.z)
-    def +(b: Box): Box = Box(x + b.x, y + b.y, z + b.z)
-    def min(b: Box): Box = Box(math.min(x, b.x), math.min(y, b.y), math.min(z, b.z))
-    def max(b: Box): Box = Box(math.max(x, b.x), math.max(y, b.y), math.max(z, b.z))
-    def >=(b: Box): Boolean = x >= b.x && y >= b.y && z >= b.z
-    def <=(b: Box): Boolean = x <= b.x && y <= b.y && z <= b.z
+    infix def -(b: Box): Box = Box(x - b.x, y - b.y, z - b.z)
+    infix def +(b: Box): Box = Box(x + b.x, y + b.y, z + b.z)
+    infix def min(b: Box): Box = Box(math.min(x, b.x), math.min(y, b.y), math.min(z, b.z))
+    infix def max(b: Box): Box = Box(math.max(x, b.x), math.max(y, b.y), math.max(z, b.z))
+    infix def >=(b: Box): Boolean = x >= b.x && y >= b.y && z >= b.z
+    infix def <=(b: Box): Boolean = x <= b.x && y <= b.y && z <= b.z
 
     def neighbours: Set[Box] =
       val xs = Set(Box(-1, 0, 0), Box(1, 0, 0))

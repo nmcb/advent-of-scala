@@ -14,7 +14,7 @@ object Day09 extends App:
 
   case class Pos(x: Int, y: Int):
 
-    def move(d: Dir): Pos =
+    infix def move(d: Dir): Pos =
       d match
         case U => copy(y = y + 1)
         case D => copy(y = y - 1)
@@ -80,7 +80,7 @@ object Day09 extends App:
       val nh = s.head.move(d)
       s.tail.foldLeft(List(nh))((a,t) => a :+ t.follow(a.last))
 
-    def move(cmd: Cmd): List[Bac] =
+    infix def move(cmd: Cmd): List[Bac] =
       List
         .fill(cmd.steps)(cmd.dir)
         .foldLeft(List(this))((rs,d) => rs :+ Bac(step(d, rs.last.strep)))

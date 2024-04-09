@@ -15,7 +15,7 @@ object Day20 extends App:
 
   def solve(input: List[Long], key: Int = 1, runs: Int = 1): List[Long] =
 
-    extension (buffer: Buffer[(Long,Int)]) def mix(element: (Long,Int)): Buffer[(Long,Int)] =
+    extension (buffer: Buffer[(Long,Int)]) infix def mix(element: (Long,Int)): Buffer[(Long,Int)] =
       val (steps,_) = element
       val from = buffer.indexOf(element)
       buffer.remove(from)
