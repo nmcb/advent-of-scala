@@ -1,7 +1,7 @@
 lazy val root =
   project
     .in(file("."))
-    .settings( scalaVersion := "3.5.1"
+    .settings( scalaVersion := "3.5.2"
              , name         := "aoc-2022"
              , version      := "0.1.0"
              , libraryDependencies ++= Seq(
