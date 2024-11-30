@@ -170,7 +170,7 @@ object Day24 extends App:
    * Brute force for rock velocity re-framed to stand still by subtracting the rock velocity from the stone
    * velocity. Brute force for rock velocity on the XY plane, Calculate the Z velocity from two stones and
    * check whether the remaining ones hit that spot. Then calculate the time it took from the found stone
-   * position, and calculate the unframed unframed rock position back from its velocity and time.
+   * position, and calculate the unframed rock position backwards from its velocity and time.
    */
   object Attempt3:
     case class Pos(x: BigInt, y: BigInt, z: BigInt):
