@@ -15,9 +15,6 @@ object Day01 extends App:
         .toList
     (values.map(_._1).sorted, values.map(_._2).sorted)
 
-  def distance(a: Int, b: Int): Int =
-    if a >= b then a - b else b - a
-
   val start1: Long = System.currentTimeMillis
   val answer1: Int = left.zip(right).map((l,r) => if l >= r then l - r else r - l).sum
   println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
