@@ -22,7 +22,7 @@ object Day02 extends App:
       differences.forall(d => d < 0)
 
     private lazy val isBounded: Boolean =
-      differences.map(math.abs).forall(d => d >= 1 && d <= 3)
+      differences.forall(d => d.abs >= 1 && d.abs <= 3)
 
     def isSafe: Boolean =
       (isIncreasing || isDecreasing) && isBounded
