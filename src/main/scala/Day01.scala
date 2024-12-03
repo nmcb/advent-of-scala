@@ -5,14 +5,14 @@ object Day01 extends App:
   val day: String =
     this.getClass.getName.drop(3).init
 
-  val (left, right): (List[Int], List[Int]) =
+  val (left, right): (Seq[Int], Seq[Int]) =
     val values =
       Source
         .fromResource(s"input$day.txt")
         .getLines
         .map:
           case s"$l   $r" => (l.toInt, r.toInt)
-        .toList
+        .toSeq
     (values.map(_._1).sorted, values.map(_._2).sorted)
 
   val start1: Long = System.currentTimeMillis

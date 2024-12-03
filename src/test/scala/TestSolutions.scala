@@ -9,3 +9,7 @@ class TestSolutions extends AnyFunSuite:
     assertResult(486)(actual = Day02.answer1)
     assertResult(540)(actual = Day02.answer2)
   }
+  test("Day03") {
+    assertResult(179834255)(actual = Day03.answer1)
+    assertResult( 80570939)(actual = Day03.answer2)
+  }
