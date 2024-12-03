@@ -14,8 +14,8 @@ object Day03 extends App:
     s match
       case "" =>
         result
-      case s"mul($l,$r)$rest" if l.toIntOption.isDefined && r.toIntOption.isDefined =>
-        solve1(rest, result + (l.toInt * r.toInt))
+      case s"mul($l,$r)$rest" if l.toIntOption.nonEmpty && r.toIntOption.nonEmpty =>
+        solve1(rest, result + l.toInt * r.toInt)
       case _ =>
         solve1(s.tail, result)
 
@@ -27,8 +27,8 @@ object Day03 extends App:
     s match
       case "" =>
         a
-      case s"mul($l,$r)$rest" if l.toIntOption.isDefined && r.toIntOption.isDefined && enabled =>
-        solve2(rest, a + (l.toInt * r.toInt), enabled)
+      case s"mul($l,$r)$rest" if l.toIntOption.nonEmpty && r.toIntOption.nonEmpty && enabled =>
+        solve2(rest, a + l.toInt * r.toInt, enabled)
       case s"don't()$rest" =>
         solve2(rest, a, false)
       case s"do()$rest" =>
