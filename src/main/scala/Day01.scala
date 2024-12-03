@@ -7,12 +7,9 @@ object Day01 extends App:
 
   val (left, right): (Seq[Int], Seq[Int]) =
     val values =
-      Source
-        .fromResource(s"input$day.txt")
-        .getLines
-        .map:
-          case s"$l   $r" => (l.toInt, r.toInt)
-        .toSeq
+      Source.fromResource(s"input$day.txt").getLines.toSeq.map:
+        case s"$l   $r" => (l.toInt, r.toInt)
+
     (values.map(_._1).sorted, values.map(_._2).sorted)
 
   val start1: Long = System.currentTimeMillis

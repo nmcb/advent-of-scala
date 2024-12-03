@@ -25,10 +25,7 @@ object Day02 extends App:
       differences.forall(d => d.abs >= 1 && d.abs <= 3)
 
     private lazy val withOneLevelRemoved: Seq[Report] =
-      levels
-        .indices
-        .map: i =>
-          Report(levels.take(i) ++ levels.drop(i + 1))
+      levels.indices.map(i => Report(levels.take(i) ++ levels.drop(i + 1)))
 
     lazy val isSafe: Boolean =
       (isIncreasing || isDecreasing) && isBounded
@@ -38,12 +35,7 @@ object Day02 extends App:
 
 
   private val reports: Seq[Report] =
-    Source
-      .fromResource(s"input$day.txt")
-      .getLines
-      .map: s =>
-        Report(s.split(' ').map(_.toInt).toSeq)
-      .toSeq
+    Source.fromResource(s"input$day.txt").getLines.map(s => Report(s.split(' ').map(_.toInt).toSeq)).toSeq
 
   val start1: Long = System.currentTimeMillis
   val answer1: Int = reports.count(_.isSafe)
