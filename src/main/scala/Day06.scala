@@ -29,18 +29,15 @@ object Day06 extends App:
     val sizeX: Int = positions.head.size
     val sizeY: Int = positions.size
 
-    def peek(x: Int, y: Int): Char =
-      if x >= 0 & y >= 0 & x < sizeX & y < sizeY then positions(y)(x) else ' '
-
     def peek(p: Pos): Char =
-      peek(p.x, p.y)
+      if p.x >= 0 & p.y >= 0 & p.x < sizeX & p.y < sizeY then positions(p.y)(p.x) else ' '
 
     val start: Pos =
       val guards =
         for {
           x <- 0 until sizeX
           y <- 0 until sizeY
-          if peek(x, y) == '^'
+          if positions(y)(x) == '^'
         } yield Pos(x, y)
       guards.head
 
@@ -58,7 +55,7 @@ object Day06 extends App:
       walkGuard(start, N).distinct.size
 
     def peekWithObstruction(p: Pos, obstruct: Pos): Char =
-      if p == obstruct then '#' else peek(p.x, p.y)
+      if p == obstruct then '#' else peek(p)
 
     val possibleObstructions: Vector[Pos] =
       walkGuard(start, N).tail.distinct
