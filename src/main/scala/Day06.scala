@@ -7,26 +7,25 @@ object Day06 extends App:
 
   enum Dir:
     case N, E, S, W
+    def right: Dir =
+      this match
+        case N => E
+        case S => W
+        case E => S
+        case W => N
 
   import Dir.*
 
-  case class Pos(x: Int, y: Int, d: Dir):
-    def step: Pos =
-      d match
+  case class Pos(x: Int, y: Int):
+    def step(dir: Dir): Pos =
+      dir match
         case N => copy(y = y - 1)
         case S => copy(y = y + 1)
         case E => copy(x = x + 1)
         case W => copy(x = x - 1)
 
-    def right: Pos =
-      d match
-        case N => copy(d = E)
-        case S => copy(d = W)
-        case E => copy(d = S)
-        case W => copy(d = N)
 
-
-  case class Grid(positions: List[List[Char]]):
+  case class Grid(positions: Vector[Vector[Char]]):
     val sizeX: Int = positions.head.size
     val sizeY: Int = positions.size
 
@@ -42,45 +41,47 @@ object Day06 extends App:
           x <- 0 until sizeX
           y <- 0 until sizeY
           if peek(x, y) == '^'
-        } yield Pos(x, y, N)
+        } yield Pos(x, y)
       guards.head
 
-    def walk1(pos: Pos, result: Vector[Pos] = Vector.empty): Vector[Pos] =
-      peek(pos.step) match
-        case ' '       => result :+ pos
-        case '.' | '^' => walk1(pos.step, result :+ pos)
-        case '#'       => walk1(pos.right, result)
+    def walkGuard(pos: Pos, dir: Dir, result: Vector[Pos] = Vector.empty): Vector[Pos] =
+      val next = pos.step(dir)
+      peek(next) match
+        case ' '       =>
+          result :+ pos
+        case '.' | '^' =>
+          walkGuard(next, dir, result :+ pos)
+        case '#'       =>
+          walkGuard(pos, dir.right, result)
 
     def solve1: Int =
-      walk1(start).map(p => (p.x, p.y)).distinct.size
+      walkGuard(start, N).distinct.size
 
-    def peek2(p: Pos, overruleX: Int, overruleY: Int): Char =
-      if p.x == overruleX & p.y == overruleY then '#' else peek(p.x, p.y)
+    def peekWithObstruction(p: Pos, obstruct: Pos): Char =
+      if p == obstruct then '#' else peek(p.x, p.y)
 
-    def walkCircular(pos: Pos, overruleX: Int, overruleY: Int, result: Vector[Pos] = Vector.empty): Boolean =
-      if result.contains(pos) then
+    val possibleObstructions: Vector[Pos] =
+      walkGuard(start, N).tail.distinct
+
+    def walkCircular(pos: Pos, dir: Dir, obstruct: Pos, visited: Set[(Pos, Dir)] = Set.empty): Boolean =
+      if visited.contains((pos, dir)) then
         true
       else
-        peek2(pos.step, overruleX, overruleY) match
-          case ' '       => false
-          case '.' | '^' => walkCircular(pos.step, overruleX, overruleY, result :+ pos)
-          case '#'       => walkCircular(pos.right, overruleX, overruleY, result)
-
-    val empties: List[(Int,Int)] =
-      for {
-        (p, y) <- positions.zipWithIndex
-        (c, x) <- p.zipWithIndex
-        if c == '.'
-      } yield (x, y)
+        val next = pos.step(dir)
+        peekWithObstruction(next, obstruct) match
+          case ' ' =>
+            false
+          case '.' | '^' =>
+            walkCircular(next, dir, obstruct, visited + ((pos, dir)))
+          case '#' =>
+            walkCircular(pos, dir.right, obstruct, visited)
 
     def solve2: Int =
-      empties.count: (x,y) =>
-        walkCircular(start, x, y)
-
+      possibleObstructions.count(p => walkCircular(start, N, p))
 
 
   private val grid: Grid =
-    Grid(Source.fromResource(s"input$day.txt").getLines.map(_.toList).toList)
+    Grid(Source.fromResource(s"input$day.txt").getLines.map(_.toVector).toVector)
 
   val start1: Long = System.currentTimeMillis
   val answer1: Int = grid.solve1
