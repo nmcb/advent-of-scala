@@ -21,11 +21,10 @@ object Day07 extends App:
 
     def valid(operators: Operators): Boolean =
       Equation
-        .combinations(arguments.length - 1, operators)
+        .combinations1(arguments.length - 1, operators)
         .exists: combination =>
-          val (computation: Long, _) =
-            combination.foldLeft((arguments.head, arguments.tail)):
-              case ((accumulator, remaining), operator) => (operator(accumulator)(remaining.head) , remaining.tail)
+          val (computation: Long, _) = combination.foldLeft((arguments.head, arguments.tail)):
+            case ((accumulator, remaining), operator) => (operator(accumulator)(remaining.head) , remaining.tail)
           computation == result
 
   val input: List[Equation] =
@@ -36,18 +35,37 @@ object Day07 extends App:
       .toList
 
   object Equation:
+
     val cache: mutable.Map[(Int, Operators), Combinations] = mutable.Map.empty
-    def combinations(n: Int, operators: Operators): Combinations = cache.getOrElseUpdate((n, operators), {
+    def combinations1(n: Int, operators: Operators): Combinations = cache.getOrElseUpdate((n, operators), {
       def leftPad(todo: Operators, padTo: Combinations, result: Combinations = List.empty): Combinations =
         todo match
           case Nil => result
-          case h :: t => leftPad(t, padTo, result ++ padTo.map(h :: _))
+          case h :: t => leftPad(t, padTo, result ++ padTo.map(h +: _))
 
       def loop(todo: Int, result: Combinations = List(List.empty)): Combinations =
         if todo == 0 then result else loop(todo - 1, leftPad(operators, result))
 
       loop(n)
     })
+
+    def combinations2[A](n: Int, elements: List[A]): Iterator[List[A]] =
+      val m = elements.length
+      val size = math.pow(m, n).toInt
+      val divs = List.unfold(1)(i => Option.when(i * m <= size)(i, i * m)).reverse
+      def generate(row: Int)(idx: Int): A = elements(row / divs(idx) % m)
+      def combination(row: Int): List[A] = List.tabulate(n)(generate(row))
+      Iterator.tabulate(size)(combination)
+
+    def combinations3[A](n: Int, elements: List[A]): Iterator[List[A]] =
+      if n > 0 then
+        for {
+          h <- elements.iterator
+          t <- combinations3(n - 1, elements)
+        } yield h :: t
+      else
+        Iterator.single(List.empty)
+
 
   val start1: Long  = System.currentTimeMillis
   val answer1: Long = input.filter(_.valid(OperatorsPart1)).map(_.result).sum
@@ -56,3 +74,7 @@ object Day07 extends App:
   val start2: Long  = System.currentTimeMillis
   val answer2: Long = input.filter(_.valid(OperatorsPart2)).map(_.result).sum
   println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+
+
+
+//  combinations(4, List('a','b','c')).foreach(println)
