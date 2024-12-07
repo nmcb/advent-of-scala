@@ -76,5 +76,22 @@ object Day07 extends App:
   println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
 
 
+  /** https://github.com/stewSquared/advent-of-code/blob/master/src/main/scala/2024/Day07.worksheet.sc */
+  def solvable(equation: Equation): Boolean =
+    def loop(lhs: Long, rhs: List[Long]): Boolean =
+      rhs match
+        case Nil => ???
+        case head :: Nil => head == lhs
+        case n :: ns =>
+          /* complement addition       */
+          loop(lhs - n, ns)
+            /* complement multiplication */
+            || ((lhs % n == 0) && loop(lhs / n, ns))
+            /* complement concatenation  */
+            || (lhs > n && lhs.toString.endsWith(n.toString) && loop(lhs.toString.dropRight(n.toString.length).toLong, ns))
 
-//  combinations(4, List('a','b','c')).foreach(println)
+    loop(equation.result, equation.arguments.reverse)
+
+  val start2Stewart: Long  = System.currentTimeMillis
+  val answer2Stewart: Long = input.filter(solvable).map(_.result).sum
+  println(s"Answer day $day part 2: $answer2Stewart [${System.currentTimeMillis - start2Stewart}ms] (Stewart)")
