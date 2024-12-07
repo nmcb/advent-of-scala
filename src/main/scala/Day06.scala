@@ -41,24 +41,24 @@ object Day06 extends App:
         } yield Pos(x, y)
       guards.head
 
-    def walkGuard(pos: Pos, dir: Dir, result: Vector[Pos] = Vector.empty): Vector[Pos] =
+    def walkGuard(pos: Pos, dir: Dir, result: Set[Pos] = Set.empty): Set[Pos] =
       val next = pos.step(dir)
       peek(next) match
         case ' '       =>
-          result :+ pos
+          result + pos
         case '.' | '^' =>
-          walkGuard(next, dir, result :+ pos)
+          walkGuard(next, dir, result + pos)
         case '#'       =>
           walkGuard(pos, dir.right, result)
 
     def solve1: Int =
-      walkGuard(start, N).distinct.size
+      walkGuard(start, N).size
 
     def peekWithObstruction(p: Pos, obstruct: Pos): Char =
       if p == obstruct then '#' else peek(p)
 
-    val possibleObstructions: Vector[Pos] =
-      walkGuard(start, N).tail.distinct
+    val possibleObstructions: Set[Pos] =
+      walkGuard(start, N) - start
 
     def walkCircular(pos: Pos, dir: Dir, obstruct: Pos, visited: Set[(Pos, Dir)] = Set.empty): Boolean =
       if visited.contains((pos, dir)) then
