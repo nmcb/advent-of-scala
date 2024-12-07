@@ -20,11 +20,12 @@ object Day07 extends App:
   case class Equation(result: Long, arguments: List[Long]):
 
     def valid(operators: Operators): Boolean =
-      Equation.combinations(arguments.length - 1, operators)
-        .exists: list =>
+      Equation
+        .combinations(arguments.length - 1, operators)
+        .exists: combination =>
           val (computation: Long, _) =
-            list.foldLeft((arguments.head, arguments.tail)):
-              case ((acc, arg), operator) => (operator(acc)(arg.head) , arg.tail)
+            combination.foldLeft((arguments.head, arguments.tail)):
+              case ((accumulator, remaining), operator) => (operator(accumulator)(remaining.head) , remaining.tail)
           computation == result
 
   val input: List[Equation] =
