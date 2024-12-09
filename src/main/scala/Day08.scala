@@ -1,5 +1,4 @@
 import scala.io.*
-import scala.collection.parallel.CollectionConverters.*
 
 object Day08 extends App:
 
