@@ -1,4 +1,5 @@
 import scala.io.*
+import scala.annotation.*
 
 object Day09 extends App:
 
@@ -13,19 +14,20 @@ object Day09 extends App:
   object Block:
     def free: Block = Block(-1)
 
-
   val disk: Vector[Block] =
+    @tailrec
     def loop(todo: List[Char], id: Int = 0, result: Vector[Block] = Vector.empty): Vector[Block] =
       todo match
         case Nil =>
           result
         case size :: free :: rest =>
-          loop(rest, id + 1, result ++ Vector.fill(size.toString.toInt)(Block(id)) ++ Vector.fill(free.toString.toInt)(Block(-1)))
+          loop(rest, id + 1, result ++ Vector.fill(size.asDigit)(Block(id)) ++ Vector.fill(free.asDigit)(Block.free))
         case size :: Nil =>
-          loop(Nil, id + 1, result ++ Vector.fill(size.toString.toInt)(Block(id)))
+          loop(Nil, id + 1, result ++ Vector.fill(size.asDigit)(Block(id)))
     loop(Source.fromResource(s"input$day.txt").mkString.trim.toList)
 
   def compact1(disk: Vector[Block]): Vector[Block] =
+    @tailrec
     def loop(d: Vector[Block], l: Int, r: Int): Vector[Block] =
       if l >= r then
         d
@@ -38,6 +40,7 @@ object Day09 extends App:
     loop(disk, 0, disk.size - 1)
 
   def checksum(disk: Vector[Block]): Long =
+    @tailrec
     def loop(d: Vector[Block], position: Long = 0, result: Long = 0): Long =
       if d.isEmpty then
         result
@@ -61,49 +64,51 @@ object Day09 extends App:
     def free(size: Int): Chunk          = Chunk(-1, size)
 
     def convert(disk: Vector[Block]): Vector[Chunk] =
-      def loop(d: Vector[Block], result: Vector[Chunk]): Vector[Chunk] =
-        if d.isEmpty then
+      @tailrec
+      def loop(blocks: Vector[Block], result: Vector[Chunk]): Vector[Chunk] =
+        if blocks.isEmpty then
           result
         else
-          val block = d.head
+          val block = blocks.head
           val last  = result.last
           if block.isFreeBlock then
             if last.isFreeChunk then
-              loop(d.tail, result.init :+ last.copy(size = last.size + 1))
+              loop(blocks.tail, result.init :+ last.copy(size = last.size + 1))
             else
-              loop(d.tail, result :+ Chunk.free(1))
+              loop(blocks.tail, result :+ Chunk.free(1))
           else
             if last.id == block.id then
-              loop(d.tail, result.init :+ last.copy(size = last.size + 1))
+              loop(blocks.tail, result.init :+ last.copy(size = last.size + 1))
             else
-              loop(d.tail, result :+ Chunk.file(block.id, 1))
+              loop(blocks.tail, result :+ Chunk.file(block.id, 1))
 
       loop(disk, Vector(Chunk.file(disk.head.id, 0)))
 
-  extension (d: Vector[Chunk]) def asString: String =
-    d.foldLeft("")((a,c) => a + c.toBlocks.map(_.asString).mkString(""))
+  extension (chunks: Vector[Chunk]) def asString: String =
+    chunks.foldLeft("")((a, c) => a + c.toBlocks.map(_.asString).mkString(""))
 
   def compact2(disk: Vector[Block]): Vector[Block] =
-    def loop(d: Vector[Chunk], id: Int): Vector[Chunk] =
-      if id == 0 then
-        d
+    @tailrec
+    def loop(chunks: Vector[Chunk], id: Int): Vector[Chunk] =
+      if id <= 0 then
+        chunks
       else
-        val (_, fileIdx)  = d.zipWithIndex.find((c,i) => c.id == id).head
-        val (left, right) = d.splitAt(fileIdx)
-        val trial = right.head
-        left.zipWithIndex.find((c, i) => c.isFreeChunk & c.size >= trial.size) match
-          case None =>
-            loop(d, id - 1)
-          case Some(free, freeIdx) =>
-            val nextLeft =
-              if free.size != trial.size then
-                left.patch(freeIdx, Vector(trial, free.copy(size = free.size - trial.size)), 1)
-              else
-                left.patch(freeIdx, Vector(trial), 1)
-            val nextRight =
-              right.updated(0, Chunk.free(trial.size))
-            loop(nextLeft ++ nextRight, id - 1)
-            
+        val chunksWithIndex = chunks.zipWithIndex
+        val (file, fileIdx) = chunksWithIndex.find((c,_) => c.id == id).head
+        chunksWithIndex
+          .find((chunk, idx) => idx <= fileIdx & chunk.isFreeChunk & chunk.size >= file.size) match
+            case None =>
+              loop(chunks, id - 1)
+            case Some(free, freeIdx) =>
+              val patch =
+                if free.size != file.size then
+                  Vector(file, free.copy(size = free.size - file.size))
+                else
+                  Vector(file)
+
+              val update = chunks.patch(fileIdx, Vector(Chunk.free(file.size)), 1).patch(freeIdx, patch, 1)
+              loop(update, id - 1)
+
     val converted = Chunk.convert(disk)
     val start = converted.map(_.id).max
     loop(converted, start).flatMap(_.toBlocks)
