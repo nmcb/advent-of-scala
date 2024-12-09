@@ -70,15 +70,15 @@ object Day09 extends App:
           result
         else
           val block = blocks.head
-          val last  = result.last
+          val chunk = result.last
           if block.isFreeBlock then
-            if last.isFreeChunk then
-              loop(blocks.tail, result.init :+ last.copy(size = last.size + 1))
+            if chunk.isFreeChunk then
+              loop(blocks.tail, result.init :+ chunk.copy(size = chunk.size + 1))
             else
               loop(blocks.tail, result :+ Chunk.free(1))
           else
-            if last.id == block.id then
-              loop(blocks.tail, result.init :+ last.copy(size = last.size + 1))
+            if chunk.id == block.id then
+              loop(blocks.tail, result.init :+ chunk.copy(size = chunk.size + 1))
             else
               loop(blocks.tail, result :+ Chunk.file(block.id, 1))
 
@@ -100,14 +100,15 @@ object Day09 extends App:
             case None =>
               loop(chunks, id - 1)
             case Some(free, freeIdx) =>
+              val next = chunks.patch(fileIdx, Vector(Chunk.free(file.size)), 1)
+
               val patch =
-                if free.size != file.size then
+                if free.size > file.size then
                   Vector(file, free.copy(size = free.size - file.size))
                 else
                   Vector(file)
 
-              val update = chunks.patch(fileIdx, Vector(Chunk.free(file.size)), 1).patch(freeIdx, patch, 1)
-              loop(update, id - 1)
+              loop(next.patch(freeIdx, patch, 1), id - 1)
 
     val converted = Chunk.convert(disk)
     val start = converted.map(_.id).max

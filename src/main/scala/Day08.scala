@@ -35,7 +35,7 @@ object Day08 extends App:
         .toSet
 
     def createTwice(a: Pos, b: Pos): Set[Pos] =
-      Set(a + a - b, b - a + b).filter(within)
+      Set(a + a - b, b + b - a).filter(within)
 
     def antiNodesPart1: Set[Pos] =
       pairs.flatMap((c,ps) => ps.flatMap(createTwice))
