@@ -154,7 +154,7 @@ object Day09 extends App:
       input.map(_.asDigit).foldLeft((Array.empty[Mem], 0)):
         case ((mem, pos), len) =>
           (mem :+ Mem(pos, len), pos + len)
-
+          
     for {
       used <- (input.length - 1 to 0 by -2).map(mem.apply)
       free <- (1 until input.length  by  2).map(mem.apply)
