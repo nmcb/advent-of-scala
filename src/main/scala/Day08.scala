@@ -11,8 +11,6 @@ object Day08 extends App:
   case class Pos(x: Int, y: Int):
     infix def +(that: Pos): Pos     = Pos(x + that.x, y + that.y)
     infix def -(that: Pos): Pos     = Pos(x - that.x, y - that.y)
-    infix def delta(that: Pos): Pos = Pos((x max that.x) - (x min that.x), (y max that.y) - (y min that.y))
-
 
   case class Grid(grid: Vector[String]):
     val sizeX = grid.head.length
