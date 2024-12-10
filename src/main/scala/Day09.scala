@@ -114,6 +114,63 @@ object Day09 extends App:
     val start = converted.map(_.id).max
     loop(converted, start).flatMap(_.toBlocks)
 
-  val start2: Long  = System.currentTimeMillis
-  val answer2: Long = checksum(compact2(disk))
-  println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  val start2A: Long  = System.currentTimeMillis
+  val answer2A: Long = checksum(compact2(disk))
+  println(s"Answer day $day part 2A: $answer2A [${System.currentTimeMillis - start2A}ms]")
+
+  /**
+   * class Mem():
+   *   def __init__(b, pos, len): b.pos = pos; b.len = len
+   *   def val(b): return (2*b.pos + b.len-1) * b.len // 2
+   *
+   * pos, mem = 0, []
+   * for len in map(int, input()):
+   *   mem += [Mem(pos, len)]
+   *   pos += len
+   *
+   * for used in mem[::-2]:
+   *   for free in mem[1::2]:
+   *     if (free.pos <= used.pos
+   *     and free.len >= used.len):
+   *       used.pos  = free.pos
+   *       free.pos += used.len
+   *       free.len -= used.len
+   *
+   * print(sum(id*m.val() for id, m in enumerate(mem[::2])))
+   */
+
+  val input: String =
+    Source.fromResource(s"input$day.txt").mkString.trim
+
+  val start2B: Long =
+    System.currentTimeMillis
+
+  val answer2B: Long =
+    class Mem(var pos: Int, var len: Int):
+      infix def value(id: Int, pointer: Int = pos, result: Long = 0): Long =
+        if pointer > pos + len - 1 then result else value(id, pointer + 1, result + pointer * id)
+
+    val (mem: Array[Mem], _) =
+      input.map(_.asDigit).foldLeft((Array.empty[Mem], 0)):
+        case ((mem, pos), len) =>
+          (mem :+ Mem(pos, len), pos + len)
+
+    val usedDisk = (input.length - 1 to 0 by -2).map(mem.apply)
+    val freeDisk = (1 until input.length  by  2).map(mem.apply)
+
+    for {
+      used <- usedDisk
+      free <- freeDisk
+      if free.pos <= used.pos & free.len >= used.len
+    } yield {
+      used.pos  = free.pos
+      free.pos += used.len
+      free.len -= used.len
+    }
+
+    usedDisk
+      .zipWithIndex
+      .map(_ value _)
+      .sum
+
+  println(s"Answer day $day part 2B: $answer2B [${System.currentTimeMillis - start2B}ms] (Mutable)")

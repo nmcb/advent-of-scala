@@ -14,10 +14,9 @@ object Day10 extends App:
     def move(d: Dir): Pos =
       d match
         case N => Pos(x, y - 1)
-        case E => Pos(x+ 1, y)
+        case E => Pos(x + 1, y)
         case S => Pos(x, y + 1)
         case W => Pos(x - 1, y)
-
 
   case class Grid(grid: Vector[Vector[Int]]):
     val sizeX = grid.head.size
@@ -38,10 +37,10 @@ object Day10 extends App:
         x <- (0 until sizeX).toSet
       } yield Pos(x, y)
 
-    lazy val starts: Set[Vector[Pos]] =
-      positions.filter(p => peek(p) == 0).map(Vector(_))
+    lazy val starts: Set[Pos] =
+      positions.filter(p => peek(p) == 0)
 
-    lazy val walks: Set[Vector[Pos]] =
+    def paths(start: Pos): Set[Vector[Pos]] =
 
       def step(trail: Vector[Pos]): Set[Vector[Pos]] =
         neighbours(trail.last).filter(n => within(n) & peek(n) == peek(trail.last) + 1).map(p => trail :+ p)
@@ -50,13 +49,13 @@ object Day10 extends App:
         val result = trails.filter(t => peek(t.last) == current)
         if current >= 9 then result else loop(result.flatMap(step), current + 1)
 
-      loop(starts, 0)
+      loop(Set(Vector(start)), 0)
 
     def solve1: Int =
-      walks.groupMap(_.head)(_.last).values.map(_.size).sum
+      starts.flatMap(paths).groupMap(_.head)(_.last).values.map(_.size).sum
 
     def solve2: Int =
-      walks.size
+      starts.flatMap(paths).size
 
   val grid: Grid =
     Grid(Source.fromResource(s"input$day.txt").getLines.map(_.map(_.asDigit).toVector).toVector)
