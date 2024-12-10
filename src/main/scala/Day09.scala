@@ -155,12 +155,9 @@ object Day09 extends App:
         case ((mem, pos), len) =>
           (mem :+ Mem(pos, len), pos + len)
 
-    val usedDisk = (input.length - 1 to 0 by -2).map(mem.apply)
-    val freeDisk = (1 until input.length  by  2).map(mem.apply)
-
     for {
-      used <- usedDisk
-      free <- freeDisk
+      used <- (input.length - 1 to 0 by -2).map(mem.apply)
+      free <- (1 until input.length  by  2).map(mem.apply)
       if free.pos <= used.pos & free.len >= used.len
     } yield {
       used.pos  = free.pos
@@ -168,9 +165,10 @@ object Day09 extends App:
       free.len -= used.len
     }
 
-    usedDisk
+    (0 to input.size - 1 by 2)
+      .map(mem.apply)
       .zipWithIndex
       .map(_ value _)
-      .sum
+    .sum
 
   println(s"Answer day $day part 2B: $answer2B [${System.currentTimeMillis - start2B}ms] (Mutable)")
