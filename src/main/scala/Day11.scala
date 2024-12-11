@@ -40,7 +40,7 @@ object Day11 extends App:
         loop(
           result
             .foldLeft(Vector.empty[(Stone, Long)]):
-              case (updates, (stone, count)) => updates ++ handle(stone).map(_ -> count) :+ (stone -> (-count))
+              case (updates, (stone, count)) => updates ++ handle(stone).map(_ -> count) :+ (stone -> -count)
             .groupMapReduce(_._1)(_._2)(_ + _)
             .foldLeft(result.toMap):
               case (next, (update, delta)) =>
