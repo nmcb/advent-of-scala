@@ -169,6 +169,6 @@ object Day09 extends App:
       .map(mem.apply)
       .zipWithIndex
       .map(_ value _)
-    .sum
+      .sum
 
   println(s"Answer day $day part 2B: $answer2B [${System.currentTimeMillis - start2B}ms] (Mutable)")
