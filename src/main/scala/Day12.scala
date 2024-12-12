@@ -1,7 +1,7 @@
-import scala.io.*
 import scala.annotation.*
+import scala.io.*
 
-object Day11 extends App:
+object Day12 extends App:
 
   val day: String =
     this.getClass.getName.drop(3).init
@@ -22,7 +22,6 @@ object Day11 extends App:
       case n =>
         Vector((n.toLong * 2024).toString))
       .map(_ -> count) :+ (stone -> -count)
-    
   val stones: Vector[(Stone,Long)] =
     Source
       .fromResource(s"input$day.txt")

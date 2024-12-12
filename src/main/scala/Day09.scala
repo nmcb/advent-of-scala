@@ -165,10 +165,44 @@ object Day09 extends App:
       free.len -= used.len
     }
 
-    (0 to input.size - 1 by 2)
+    (0 until input.length by 2)
       .map(mem.apply)
       .zipWithIndex
       .map(_ value _)
       .sum
 
   println(s"Answer day $day part 2B: $answer2B [${System.currentTimeMillis - start2B}ms] (Mutable)")
+
+  def checksumJP(result: Vector[Int]): Long = result.zipWithIndex.foldLeft(0L) { case (acc, (c, i)) =>
+    if c == -1 then acc else acc + i * c
+  }
+
+  val inputJP = Source.fromResource(s"input$day.txt").getLines().toVector.head.toVector
+
+  val start2C: Long =
+    System.currentTimeMillis
+
+  val initFilesLeft: Vector[(Int, Int)] = inputJP.zipWithIndex.filter((c, i) => i % 2 == 0).map((c, i) => (c.asDigit, i))
+  val result2 = input.zipWithIndex.foldLeft((Vector.empty[Int], initFilesLeft)) {
+    case ((acc, filesLeft), (c, i)) if i % 2 == 1 || filesLeft.forall((d, j) => j != i) =>
+      @annotation.tailrec
+      def fillWithLastEligible(acc: Vector[Int], toFill: Int, filesLeft: Vector[(Int, Int)]): (Vector[Int], Vector[(Int, Int)]) = {
+        val rightEligible = filesLeft.findLast((d, j) => d <= toFill && i < j)
+        rightEligible match {
+          case None => (acc ++ Vector.fill(toFill)(-1), filesLeft)
+          case Some((d, j)) =>
+            fillWithLastEligible(
+              acc ++ Vector.fill(d)(j / 2),
+              toFill - d,
+              filesLeft.patch(filesLeft.lastIndexOf((d, j)), Nil, 1)
+            )
+        }
+      }
+
+      fillWithLastEligible(acc, c.asDigit, filesLeft)
+    case ((acc, filesLeft), (c, i)) if i % 2 == 0 => (acc ++ Vector.fill(c.asDigit)(i / 2), filesLeft)
+    case _ => ???
+  }
+
+  println(s"Answer day $day part 2C: ${checksumJP(result2._1)} [${System.currentTimeMillis - start2C}ms] (JP)")
+

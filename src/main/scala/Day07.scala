@@ -44,7 +44,7 @@ object Day07 extends App:
           case h :: t => leftPad(t, padTo, result ++ padTo.map(h +: _))
 
       def loop(todo: Int, result: Combinations = List(List.empty)): Combinations =
-        if todo == 0 then result else loop(todo - 1, leftPad(operators, result))
+        if todo <= 0 then result else loop(todo - 1, leftPad(operators, result))
 
       loop(n)
     })
