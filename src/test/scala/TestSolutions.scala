@@ -4,6 +4,7 @@ class TestSolutions extends AnyFunSuite:
   test("Day01") {
     assertResult( 2057374)(actual = Day01.answer1)
     assertResult(23177084)(actual = Day01.answer2)
+                 23085022
   }
   test("Day02") {
     assertResult(486)(actual = Day02.answer1)
@@ -46,4 +47,8 @@ class TestSolutions extends AnyFunSuite:
   test("Day11") {
     assertResult(         217443L)(actual = Day11.answer1)
     assertResult(257246536026785L)(actual = Day11.answer2)
+  }
+  test("Day12") {
+    assertResult(1518548)(actual = Day12.answer1)
+    assertResult( 909564)(actual = Day12.answer2)
   }
