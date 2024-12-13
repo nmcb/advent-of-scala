@@ -6,9 +6,7 @@ object Day12 extends App:
   val day: String =
     this.getClass.getName.drop(3).init
 
-
   type Tree = Char
-
 
   enum Dir:
     case N, E, S, W
@@ -56,25 +54,29 @@ object Day12 extends App:
       perimeter.size
 
     def perimeterSides: Int =
-      def countSegmentsFrom(list: List[Int]): Int =
+      
+      def countSides(positions: Set[Int]): Int =
         @tailrec
         def loop(l: List[Int], last: Option[Int] = None, result: Int = 0): Int =
           l match
             case Nil                            => result
             case h :: t if last.contains(h - 1) => loop(t, Some(h), result)
             case h :: t                         => loop(t, Some(h), result + 1)
-        loop(list.sorted)
+        loop(positions.toList.sorted)
+
+      def fencePositions(d: Dir, p: Map[Dir,Set[Pos]], g: Pos => Int, f: Pos => Int): Map[Int,Set[Int]] =
+        p.get(d).map(_.groupMap(g)(f)).getOrElse(sys.error(s"no fence: $d"))
 
       val fence = perimeter.groupMap(_._2)(_._1)
-      val n = fence.get(N).map(_.toList.groupMap(_.y)(_.x)).getOrElse(sys.error("no fence: N"))
-      val e = fence.get(E).map(_.toList.groupMap(_.x)(_.y)).getOrElse(sys.error("no fence: E"))
-      val s = fence.get(S).map(_.toList.groupMap(_.y)(_.x)).getOrElse(sys.error("no fence: S"))
-      val w = fence.get(W).map(_.toList.groupMap(_.x)(_.y)).getOrElse(sys.error("no fence: W"))
+      val n = fencePositions(N, fence, _.y, _.x)
+      val e = fencePositions(E, fence, _.x, _.y)
+      val s = fencePositions(S, fence, _.y, _.x)
+      val w = fencePositions(W, fence, _.x, _.y)
 
-      List(n, e, s, w).foldLeft(0): (total, alignedFencePositions) =>
-        total + alignedFencePositions.foldLeft(0):
-          case (sides, (_, fencePositions)) =>
-            sides + countSegmentsFrom(fencePositions)
+      List(n, e, s, w).foldLeft(0): (total, groupedFencePositions) =>
+        total + groupedFencePositions.foldLeft(0):
+          case (sides, (_, alignedFencePositions)) =>
+            sides + countSides(alignedFencePositions)
 
     def fencePrize: Int =
       area * perimeterLength

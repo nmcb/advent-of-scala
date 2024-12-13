@@ -114,9 +114,9 @@ object Day09 extends App:
     val start = converted.map(_.id).max
     loop(converted, start).flatMap(_.toBlocks)
 
-  val start2A: Long  = System.currentTimeMillis
-  val answer2A: Long = checksum(compact2(disk))
-  println(s"Answer day $day part 2A: $answer2A [${System.currentTimeMillis - start2A}ms]")
+  val start2: Long  = System.currentTimeMillis
+  val answer2: Long = checksum(compact2(disk))
+  println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
 
   /**
    * class Mem():
@@ -142,10 +142,10 @@ object Day09 extends App:
   val input: String =
     Source.fromResource(s"input$day.txt").mkString.trim
 
-  val start2B: Long =
+  val start2Mutable: Long =
     System.currentTimeMillis
 
-  val answer2B: Long =
+  val answer2Mutable: Long =
     class Mem(var pos: Int, var len: Int):
       infix def value(id: Int, pointer: Int = pos, result: Long = 0): Long =
         if pointer > pos + len - 1 then result else value(id, pointer + 1, result + pointer * id)
@@ -171,19 +171,23 @@ object Day09 extends App:
       .map(_ value _)
       .sum
 
-  println(s"Answer day $day part 2B: $answer2B [${System.currentTimeMillis - start2B}ms] (Mutable)")
+  println(s"Answer day $day part 2: $answer2Mutable [${System.currentTimeMillis - start2Mutable}ms] (Mutable)")
 
-  def checksumJP(result: Vector[Int]): Long = result.zipWithIndex.foldLeft(0L) { case (acc, (c, i)) =>
-    if c == -1 then acc else acc + i * c
-  }
+  def checksumJP(result: Vector[Int]): Long =
+    result.zipWithIndex.foldLeft(0L):
+      case (acc, (c, i)) => if c == -1 then acc else acc + i * c
 
-  val inputJP = Source.fromResource(s"input$day.txt").getLines().toVector.head.toVector
+  val inputJP =
+    Source.fromResource(s"input$day.txt").getLines().toVector.head.toVector
 
-  val start2C: Long =
+  val startJP: Long =
     System.currentTimeMillis
 
-  val initFilesLeft: Vector[(Int, Int)] = inputJP.zipWithIndex.filter((c, i) => i % 2 == 0).map((c, i) => (c.asDigit, i))
-  val result2 = input.zipWithIndex.foldLeft((Vector.empty[Int], initFilesLeft)) {
+  val initFilesLeft: Vector[(Int, Int)] =
+    inputJP.zipWithIndex.filter((c, i) => i % 2 == 0).map((c, i) => (c.asDigit, i))
+    
+  val answer2JP =
+    input.zipWithIndex.foldLeft((Vector.empty[Int], initFilesLeft)) {
     case ((acc, filesLeft), (c, i)) if i % 2 == 1 || filesLeft.forall((d, j) => j != i) =>
       @annotation.tailrec
       def fillWithLastEligible(acc: Vector[Int], toFill: Int, filesLeft: Vector[(Int, Int)]): (Vector[Int], Vector[(Int, Int)]) = {
@@ -204,5 +208,5 @@ object Day09 extends App:
     case _ => ???
   }
 
-  println(s"Answer day $day part 2C: ${checksumJP(result2._1)} [${System.currentTimeMillis - start2C}ms] (JP)")
+  println(s"Answer day $day part 2: ${checksumJP(answer2JP._1)} [${System.currentTimeMillis - startJP}ms] (JP)")
 
