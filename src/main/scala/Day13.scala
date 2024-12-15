@@ -27,7 +27,7 @@ object Day13 extends App:
       case s"Button A: X+$x, Y+$y" => Pos(x.toLong, y.toLong)
     val bs = lines.collect:
       case s"Button B: X+$x, Y+$y" => Pos(x.toLong, y.toLong)
-    val ps   = lines.collect:
+    val ps = lines.collect:
       case s"Prize: X=$x, Y=$y"    => Pos(x.toLong, y.toLong)
     as.zip(bs).zip(ps).map:
       case ((a,b),p) => Machine(a, b, p)

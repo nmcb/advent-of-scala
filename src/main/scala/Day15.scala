@@ -43,6 +43,7 @@ object Day15 extends App:
     def isBox(p: Pos): Boolean  = grid(p) == 'O' | grid(p) == ']' | grid(p) == '['
 
     def moves(p: Pos, d: Dir): Set[Move] =
+      @tailrec
       def loop(todo: Set[Pos], updates: Set[Move] = Set.empty): Set[Move] =
 
         def widen(c: Set[Pos]): Set[Pos] =
