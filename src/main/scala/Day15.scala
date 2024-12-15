@@ -19,12 +19,16 @@ object Day15 extends App:
     def coordinate: Int =
       100 * y + x
 
+  type Move = (Pos,Pos)
+  
+  extension (m: Move) def from = m._1
+  extension (m: Move) def to   = m._2
 
   case class Grid(grid: Map[Pos,Char]):
-    val sizeX: Int = grid.keys.maxBy(_.x).x + 1
-    val sizeY: Int = grid.keys.maxBy(_.y).y + 1
-    val boxes: Set[Pos] = grid.filter((_,c) => c == 'O' | c == '[').keySet
-    val robot: Pos      = grid.find((_,c) => c == '@').map(_._1).head
+    lazy val sizeX: Int = grid.keys.maxBy(_.x).x + 1
+    lazy val sizeY: Int = grid.keys.maxBy(_.y).y + 1
+    lazy val robotPosition: Pos     = grid.find((_, c) => c == '@').map(_._1).head
+    lazy val boxPositions: Set[Pos] = grid.filter((_, c) => c == 'O' | c == '[').keySet
 
     override def toString: String =
       val representation = for {
@@ -38,8 +42,8 @@ object Day15 extends App:
     def isWall(p: Pos): Boolean = grid(p) == '#'
     def isBox(p: Pos): Boolean  = grid(p) == 'O' | grid(p) == ']' | grid(p) == '['
 
-    def moves(p: Pos, d: Dir): Set[(Pos,Pos)] =
-      def loop(tos: Set[Pos], updates: Set[(Pos,Pos)] = Set.empty): Set[(Pos,Pos)] =
+    def moves(p: Pos, d: Dir): Set[Move] =
+      def loop(todo: Set[Pos], updates: Set[Move] = Set.empty): Set[Move] =
 
         def widen(c: Set[Pos]): Set[Pos] =
           val pl = c.minBy(_.x)
@@ -48,21 +52,20 @@ object Day15 extends App:
           val r = if (d == '^' | d == 'v') & grid(pr) == '[' then Set(pr.copy(x = pr.x + 1)) else Set.empty
           l ++ c ++ r
 
-        def unblocked(ms: Set[(Pos,Pos)]): Boolean = ms.map(_._2).forall(isFree)
-        def blocked(ms: Set[(Pos,Pos)]): Boolean   = ms.map(_._2).exists(isWall)
+        def unblocked(ms: Set[Pos]): Boolean = ms.forall(isFree)
+        def blocked(ms: Set[Pos]): Boolean   = ms.exists(isWall)
 
-        val moves = widen(tos).map(from => from -> from.move(d))
-        if unblocked(moves) then
-          updates ++ moves
-        else if blocked(moves) then
-          Set.empty
-        else
-          loop(tos = widen(moves.map(_._2).filter(isBox)), updates = updates ++ moves)
+        val moves = widen(todo).map(from => from -> from.move(d))
+        val tos   = moves.map(_.to)
+
+        if      unblocked(tos) then updates ++ moves
+        else if blocked(tos)   then Set.empty
+        else                        loop(todo = widen(tos).filter(isBox), updates = updates ++ moves)
 
       loop(Set(p))
 
     infix def push(d: Dir): Grid =
-      val updates = moves(robot, d)
+      val updates = moves(robotPosition, d)
       if updates.isEmpty then
         this
       else
@@ -71,9 +74,9 @@ object Day15 extends App:
             case (g,(f,t)) => g.updated(t, grid(f))
 
         val updatedAndCleaned: Map[Pos,Char] =
-          val fs = updates.map(_._1)
-          val ts = updates.map(_._2)
-          fs.filter(f => !ts.contains(f)).foldLeft(updated)((g,p) => g.updated(p, '.'))
+          val froms = updates.map(_.from)
+          val tos   = updates.map(_.to)
+          froms.diff(tos).foldLeft(updated)((g, p) => g.updated(p, '.'))
 
         Grid(updatedAndCleaned)
 
@@ -97,11 +100,11 @@ object Day15 extends App:
     (Grid(positions.toMap), moves)
 
   val start1: Long  = System.currentTimeMillis
-  val answer1: Int = moves.foldLeft(grid)(_ push _).boxes.map(_.coordinate).sum
+  val answer1: Int = moves.foldLeft(grid)(_ push _).boxPositions.map(_.coordinate).sum
   println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long = System.currentTimeMillis
-  val answer2: Int = moves.foldLeft(grid.resize)(_ push _).boxes.map(_.coordinate).sum
+  val answer2: Int = moves.foldLeft(grid.resize)(_ push _).boxPositions.map(_.coordinate).sum
   println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
 
 
