@@ -102,17 +102,16 @@ object Day16 extends App:
     def solve2: Long =
       case class Best(cost: Long, path: Set[Pos])
       case class State(tracers: Vector[Tracer], costs: Costs, best: Best):
+
+        def update(t: Tracer, cs: Costs, b: Best): Best =
+          if      t.pos != end | t.cost > b.cost then b
+          else if t.cost < b.cost                then Best(t.cost, t.path)
+          else                                        b.copy(path = b.path ++ t.path)
+
         def next: State =
           tracers.foldLeft(copy(tracers = Vector.empty[Tracer])):
             case (state, tracer) =>
-              val b =
-                if tracer.pos != end | tracer.cost > state.best.cost then
-                  state.best
-                else if tracer.cost < state.best.cost then
-                  Best(tracer.cost, tracer.path)
-                else
-                  state.best.copy(path = state.best.path ++ tracer.path)
-
+              val b  = update(tracer, state.costs, state.best)
               val ts = tracer.options.filter(t => advance(t, state.costs))
               val cs = state.costs ++ ts.map(next => next.pos -> next.dir -> next.cost)
               State(tracers = state.tracers ++ ts, costs = cs, best = b)
