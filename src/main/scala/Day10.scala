@@ -1,69 +1,53 @@
 import scala.io.*
+import nmcb.*
+
+import Grid.*
 
 object Day10 extends App:
 
   val day: String =
-    this.getClass.getName.drop(3).init
+    getClass.getName.drop(3).init
 
-  enum Dir:
-    case N, E, S, W
+  val grid: Grid[Int] =
+    val matrix = Source.fromResource(s"input$day.txt").getLines.map(_.toSeq)
+    Grid.fromMatrix(matrix).map(_.asDigit)
 
-  import Dir.*
+  val heads: Set[Pos] =
+    grid.filter(_.element == 0)
 
-  case class Pos(x: Int, y: Int):
-    def move(d: Dir): Pos =
-      d match
-        case N => Pos(x, y - 1)
-        case E => Pos(x + 1, y)
-        case S => Pos(x, y + 1)
-        case W => Pos(x - 1, y)
+  type TrailHead = Set[Vector[Pos]]
 
-  case class Grid(grid: Vector[Vector[Int]]):
-    val sizeX = grid.head.size
-    val sizeY = grid.size
+  extension (trails: TrailHead)
+    def reachableSummits: Iterable[Int] =
+      trails.groupMap(_.head)(_.last).values.map(_.size)
 
-    def within(p: Pos): Boolean =
-      p.x >= 0 & p.y >= 0 & p.x < sizeX & p.y < sizeY
 
-    def peek(p: Pos): Int =
-      if within(p) then grid(p.y)(p.x) else sys.error(s"out of bounds: $p")
+  extension (g: Grid[Int])
 
-    def neighbours(p: Pos): Set[Pos] =
-      Set(N, E, S, W).map(p.move).filter(within)
+    def trailsFrom(head: Pos): TrailHead =
 
-    lazy val positions: Set[Pos] =
-      for {
-        y <- (0 until sizeY).toSet
-        x <- (0 until sizeX).toSet
-      } yield Pos(x, y)
+      def step(trail: Vector[Pos]): TrailHead =
+        trail.last.adj
+          .filter(n => g.within(n) && g.peek(n) == g.peek(trail.last) + 1)
+          .map(p => trail :+ p)
 
-    lazy val starts: Set[Pos] =
-      positions.filter(p => peek(p) == 0)
-
-    def paths(start: Pos): Set[Vector[Pos]] =
-
-      def step(trail: Vector[Pos]): Set[Vector[Pos]] =
-        neighbours(trail.last).filter(n => within(n) & peek(n) == peek(trail.last) + 1).map(p => trail :+ p)
-
-      def loop(trails: Set[Vector[Pos]], current: Int): Set[Vector[Pos]] =
-        val result = trails.filter(t => peek(t.last) == current)
+      def loop(trails: TrailHead, current: Int): TrailHead =
+        val result = trails.filter(trail => g.peek(trail.last) == current)
         if current >= 9 then result else loop(result.flatMap(step), current + 1)
 
-      loop(Set(Vector(start)), 0)
+      loop(Set(Vector(head)), 0)
 
-    def solve1: Int =
-      starts.flatMap(paths).groupMap(_.head)(_.last).values.map(_.size).sum
+    def score: Long =
+      heads.flatMap(grid.trailsFrom).reachableSummits.sum
 
-    def solve2: Int =
-      starts.flatMap(paths).size
+    def rating: Long =
+      heads.flatMap(grid.trailsFrom).size
 
-  val grid: Grid =
-    Grid(Source.fromResource(s"input$day.txt").getLines.map(_.map(_.asDigit).toVector).toVector)
 
   val start1: Long  = System.currentTimeMillis
-  val answer1: Long = grid.solve1
+  val answer1: Long = grid.score
   println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long  = System.currentTimeMillis
-  val answer2: Long = grid.solve2
+  val answer2: Long = grid.rating
   println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

@@ -31,10 +31,19 @@ case class Grid[A](matrix: Vector[Vector[A]]):
   def find(a: A): Pos =
     elements.find(_.element == a).get.pos
 
+  def filter(f: ((Pos,A)) => Boolean): Set[Pos] =
+    elements.filter(f).map(_.pos)
+
+  def map[B](f: A => B): Grid[B] =
+    Grid(matrix.map(_.map(f)))
+
 object Grid:
 
   def fromLines(lines: Iterator[String]): Grid[Char] =
     Grid(lines.map(_.toVector).toVector)
+
+  def fromMatrix[A](matrix: Iterator[Seq[A]]): Grid[A] =
+    Grid(matrix.iterator.to(Vector).map(_.iterator.to(Vector)))
 
   extension [A](tuple: (Pos,A))
     def pos: Pos   = tuple._1

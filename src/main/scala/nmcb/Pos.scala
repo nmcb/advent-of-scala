@@ -7,12 +7,15 @@ case class Pos(x: Int, y: Int):
   infix inline def -(p: Pos): Pos = copy(x = x - p.x, y = y - p.y)
   infix inline def *(i: Int): Pos = copy(x = x * i, y = y * i)
 
-  def step(dir: Dir): Pos =
+  def move(dir: Dir): Pos =
     dir match
       case N => copy(y = y - 1)
-      case S => copy(y = y + 1)
       case E => copy(x = x + 1)
+      case S => copy(y = y + 1)
       case W => copy(x = x - 1)
+
+  def adj: Set[Pos] =
+    Dir.values.map(move).toSet
 
 
   def withinBounds(min: Pos, max: Pos): Boolean =
