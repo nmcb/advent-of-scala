@@ -11,8 +11,8 @@ object Day14 extends App:
     infix def +(that: Pos): Pos =
       Pos(x + that.x, y + that.y)
 
-    lazy val neighbours: Set[Pos] =
-      Set(copy(x = x - 1), copy(x = x + 1), copy(y = y - 1), copy(y = y + 1))
+    lazy val neighbours: List[Pos] =
+      List(copy(x = x - 1), copy(x = x + 1), copy(y = y - 1), copy(y = y + 1))
 
     inline def neighbourOf(p: Pos): Boolean =
       neighbours.contains(p)
@@ -65,19 +65,27 @@ object Day14 extends App:
     def safetyFactor: Long =
       List(robotsInQ1, robotsInQ2, robotsInQ3, robotsInQ4).map(_.size.toLong).product
 
-    def connected: Set[Set[Pos]] =
-      @tailrec
-      def loop(todo: Vector[Pos], result: Set[Set[Pos]]): Set[Set[Pos]] =
-        if todo.isEmpty then
-          result
-        else
-          val remove = result.filter(_.exists(_.neighbourOf(todo.head)))
-          val add = remove.foldLeft(Set.empty[Pos])(_ ++ _) + todo.head
-          loop(todo.tail, result = result -- remove + add)
+    def robotClusters: Set[Set[Pos]] =
 
-      val todo = robotsByPos.keys.toVector
-      val start = Set(Set(todo.head))
-      loop(todo.tail, start)
+      def cluster(todo: List[Pos], inside: Set[Pos], found: Set[Pos] = Set.empty): Set[Pos] =
+        todo match
+          case Nil =>
+            found
+          case p :: rest =>
+            if inside.contains(p) then
+              cluster(p.neighbours ++ rest, inside - p, found + p)
+            else
+              cluster(rest, inside - p, found)
+
+      def loop(robots: List[Pos], inside: Set[Pos], clusters: Set[Set[Pos]] = Set.empty): Set[Set[Pos]] =
+        robots match
+          case Nil =>
+            clusters
+          case robot :: rest =>
+            val c = cluster(List(robot), inside)
+            loop(rest, inside -- c, clusters + c)
+            
+      loop(robotsByPos.keys.toList, robotsByPos.keySet)
 
   val start1: Long  = System.currentTimeMillis
   val answer1: Long = (0 until 100).foldLeft(space)((s,_) => s.next).safetyFactor
@@ -88,7 +96,7 @@ object Day14 extends App:
     val (_, iterations) = Iterator
       .iterate(space)(_.next)
       .zipWithIndex
-      .find((s,_) => s.connected.maxBy(_.size).size > 50)
+      .find((s,t) => s.robotClusters.maxBy(_.size).size > 50)
       .get
     iterations
 
