@@ -41,8 +41,8 @@ object Day16 extends App:
       )
 
   case class Maze(maze: Vector[Vector[Char]]):
-    val sizeX = maze.head.size
-    val sizeY = maze.size
+    val sizeX: Int = maze.head.size
+    val sizeY: Int = maze.size
 
     override def toString: String =
       maze.map(_.mkString("")).mkString("\n")
