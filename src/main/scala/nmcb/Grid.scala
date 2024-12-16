@@ -10,14 +10,14 @@ case class Grid[A](matrix: Vector[Vector[A]]):
   val minPos: Pos = zero
   val maxPos: Pos = (sizeX - 1, sizeY - 1).toPos
 
-  lazy val elements: Seq[(Pos,A)] =
+  lazy val elements: Set[(Pos,A)] =
     positions.map(p => p -> peek(p))
 
-  lazy val positions: Seq[Pos] =
-    for { x <- 0 until sizeX ; y <- 0 until sizeY } yield (x, y).toPos
+  lazy val positions: Set[Pos] =
+    (for { x <- 0 until sizeX ; y <- 0 until sizeY } yield (x, y).toPos).toSet
 
   def within(p: Pos): Boolean =
-    p.withinBounds(min = Pos.zero, max = Pos(sizeX, sizeY))
+    p.withinBounds(minPos, maxPos)
 
   def peek(p: Pos): A =
     matrix(p.y)(p.x)
