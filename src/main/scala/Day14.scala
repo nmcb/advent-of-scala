@@ -53,30 +53,32 @@ object Day14 extends App:
     def next: Space =
       copy(robots = robots.map(move))
 
-    def robotsIn(min: Pos, max: Pos): Vector[Robot] =
-      robots.filter(r => r.p.x >= min.x & r.p.x <= max.x & r.p.y >= min.y & r.p.y <= max.y)
-
-    val mid = Pos(sizeX / 2, sizeY / 2)
-    def robotsInQ1: Vector[Robot] = robotsIn(Pos(0, 0), Pos(mid.x - 1, mid.y - 1))
-    def robotsInQ2: Vector[Robot] = robotsIn(Pos(mid.x + 1, 0), Pos(sizeX - 1, mid.y - 1))
-    def robotsInQ3: Vector[Robot] = robotsIn(Pos(0, mid.y + 1), Pos(mid.x - 1, sizeY - 1))
-    def robotsInQ4: Vector[Robot] = robotsIn(Pos(mid.x + 1, mid.y+1), Pos(sizeX - 1, sizeY - 1))
-
     def safetyFactor: Long =
+
+      def robotsIn(min: Pos, max: Pos): Vector[Robot] =
+        robots.filter(r => r.p.x >= min.x & r.p.x <= max.x & r.p.y >= min.y & r.p.y <= max.y)
+
+      val mid = Pos(sizeX / 2, sizeY / 2)
+      val robotsInQ1: Vector[Robot] = robotsIn(Pos(0, 0), Pos(mid.x - 1, mid.y - 1))
+      val robotsInQ2: Vector[Robot] = robotsIn(Pos(mid.x + 1, 0), Pos(sizeX - 1, mid.y - 1))
+      val robotsInQ3: Vector[Robot] = robotsIn(Pos(0, mid.y + 1), Pos(mid.x - 1, sizeY - 1))
+      val robotsInQ4: Vector[Robot] = robotsIn(Pos(mid.x + 1, mid.y+1), Pos(sizeX - 1, sizeY - 1))
       List(robotsInQ1, robotsInQ2, robotsInQ3, robotsInQ4).map(_.size.toLong).product
 
     def robotClusters: Set[Set[Pos]] =
 
+      @tailrec
       def cluster(todo: List[Pos], inside: Set[Pos], found: Set[Pos] = Set.empty): Set[Pos] =
         todo match
           case Nil =>
             found
           case p :: rest =>
             if inside.contains(p) then
-              cluster(p.neighbours ++ rest, inside - p, found + p)
+              cluster(rest ++ p.neighbours, inside - p, found + p)
             else
               cluster(rest, inside - p, found)
 
+      @tailrec
       def loop(robots: List[Pos], inside: Set[Pos], clusters: Set[Set[Pos]] = Set.empty): Set[Set[Pos]] =
         robots match
           case Nil =>
@@ -84,7 +86,7 @@ object Day14 extends App:
           case robot :: rest =>
             val c = cluster(List(robot), inside)
             loop(rest, inside -- c, clusters + c)
-            
+
       loop(robotsByPos.keys.toList, robotsByPos.keySet)
 
   val start1: Long  = System.currentTimeMillis
@@ -96,7 +98,7 @@ object Day14 extends App:
     val (_, iterations) = Iterator
       .iterate(space)(_.next)
       .zipWithIndex
-      .find((s,t) => s.robotClusters.maxBy(_.size).size > 50)
+      .find((s,t) => s.robotClusters.exists(_.size > 50))
       .get
     iterations
 
