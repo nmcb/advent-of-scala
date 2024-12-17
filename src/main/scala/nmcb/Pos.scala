@@ -17,9 +17,9 @@ case class Pos(x: Int, y: Int):
   def adj: Set[Pos] =
     Dir.values.map(move).toSet
 
-
   def withinBounds(min: Pos, max: Pos): Boolean =
     x >= min.x & x <= max.x & y >= min.y & y <= max.y
+
 
 object Pos:
 

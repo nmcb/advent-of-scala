@@ -1,5 +1,8 @@
 import scala.io.*
 
+import nmcb.*
+import Extensions.*
+
 object Day16 extends App:
 
   val day: String =
@@ -66,9 +69,6 @@ object Day16 extends App:
     lazy val end: Pos         = find(_ == 'E').head
     lazy val walls: Set[Pos]  = find(_ == '#').toSet
     lazy val inside: Set[Pos] = find(_ == '.').toSet
-
-    extension [A](self: Iterator[A]) def findMap[B](f: A => Option[B]): B =
-      self.flatMap(f).next()
 
     type Costs = Map[(Pos,Dir),Long]
 
