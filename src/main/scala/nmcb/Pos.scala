@@ -17,6 +17,12 @@ case class Pos(x: Int, y: Int):
   def adj: Set[Pos] =
     Dir.values.map(move).toSet
 
+  def adjWithinBounds(min: Pos, max: Pos): Set[Pos] =
+    adj.filter(_.withinBounds(min, max))
+
+  def adjWithinGrid[A](g: Grid[A]): Set[Pos] =
+    adjWithinBounds(g.minPos, g.maxPos)
+
   def withinBounds(min: Pos, max: Pos): Boolean =
     x >= min.x & x <= max.x & y >= min.y & y <= max.y
 

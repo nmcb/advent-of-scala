@@ -22,6 +22,9 @@ case class Grid[A](matrix: Vector[Vector[A]]):
   def peek(p: Pos): A =
     matrix(p.y)(p.x)
 
+  def contains(p: Pos, a: A): Boolean =
+    peekOption(p).contains(a)
+
   def peekOption(p: Pos): Option[A] =
     Option.when(p.withinBounds(minPos, maxPos))(matrix(p.y)(p.x))
 

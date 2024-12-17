@@ -1,60 +1,51 @@
 import scala.annotation.*
 import scala.io.*
+import nmcb.*
+
+import Dir.*
+
 
 object Day12 extends App:
 
   val day: String =
     this.getClass.getName.drop(3).init
 
-  type Tree = Char
+  type Tree   = Char
+  type Fence  = (Pos,Dir)
+  type Fences = Set[Fence]
 
-  enum Dir:
-    case N, E, S, W
+  extension (f: Fence)
+    def pos: Pos = f._1
+    def dir: Dir = f._2
 
-  import Dir.*
+    def adjacentTo(p: Pos): Boolean =
+      f.pos.move(f.dir) == p
 
+    def adjacentTo(ps: Set[Pos]): Boolean =
+      ps.exists(f.adjacentTo)
 
-  case class Pos(x: Int, y: Int):
-
-    def move(d: Dir): Pos =
-      d match
-        case N => copy(y = y - 1)
-        case E => copy(x = x + 1)
-        case S => copy(y = y + 1)
-        case W => copy(x = x - 1)
-
-    def adjacent(pos: Pos): Option[Dir] =
-      Dir.values.find(d => move(d) == pos)
-
-    def neighbours: Set[Pos] =
-      Set(move(N), move(E), move(S), move(W))
-
-
-  type Perimeter = Set[(Pos,Dir)]
-
-  object Perimeter:
-
-    def of(pos: Pos): Perimeter =
-      Set((pos, N), (pos, E), (pos, S), (pos, W))
-
-    extension (perimeter: Perimeter) def add(pos: Pos): Perimeter =
-      val keep = perimeter.filterNot((p,d) => p.adjacent(pos).contains(d))
-      val add  = of(pos).filterNot((p,d) => perimeter.exists((a,_) => a == p.move(d)))
+  extension (fences: Fences)
+    def add(pos: Pos): Fences =
+      val keep = fences.filterNot(_.adjacentTo(pos))
+      val add  = Fences.around(pos).filterNot(_.adjacentTo(fences.map(_.pos)))
       keep ++ add
 
-  import Perimeter.*
 
+  object Fences:
 
-  case class Region(tree: Tree, plots: Set[Pos], perimeter: Perimeter):
+    def around(pos: Pos): Fences =
+      Set((pos, N), (pos, E), (pos, S), (pos, W))
+
+  case class Region(tree: Tree, plots: Set[Pos], fences: Fences):
 
     def area: Int =
       plots.size
 
-    def perimeterLength: Int =
-      perimeter.size
+    def fencesLength: Int =
+      fences.size
 
-    def perimeterSides: Int =
-      
+    def fencesSides: Int =
+
       def countSides(positions: Set[Int]): Int =
         @tailrec
         def loop(l: List[Int], last: Option[Int] = None, result: Int = 0): Int =
@@ -67,7 +58,7 @@ object Day12 extends App:
       def fencePositions(d: Dir, p: Map[Dir,Set[Pos]], g: Pos => Int, f: Pos => Int): Map[Int,Set[Int]] =
         p.get(d).map(_.groupMap(g)(f)).getOrElse(sys.error(s"no fence: $d"))
 
-      val fence = perimeter.groupMap(_._2)(_._1)
+      val fence = fences.groupMap(_._2)(_._1)
       val n = fencePositions(N, fence, _.y, _.x)
       val e = fencePositions(E, fence, _.x, _.y)
       val s = fencePositions(S, fence, _.y, _.x)
@@ -79,76 +70,55 @@ object Day12 extends App:
             sides + countSides(alignedFencePositions)
 
     def fencePrize: Int =
-      area * perimeterLength
+      area * fencesLength
 
     def fencePrizeWithBulkDiscount: Int =
-      area * perimeterSides
+      area * fencesSides
 
     def add(p: Pos): Region =
-      copy(plots = plots + p, perimeter = perimeter.add(p))
+      copy(plots = plots + p, fences = fences.add(p))
 
     def contains(p: Pos): Boolean =
       plots.contains(p)
 
 
-  type Garden = Vector[Vector[Tree]]
+  extension (g: Grid[Tree])
 
-  object Garden:
-
-    extension (g: Garden) def sizeX: Int =
-      g.headOption.map(_.size).getOrElse(0)
-
-    extension (g: Garden) def sizeY: Int =
-      g.size
-
-    extension (g: Garden) def within(p: Pos) =
-      p.x >= 0 & p.y >= 0 & p.x < g.sizeX & p.y < g.sizeY
-
-    extension (g: Garden) def tree(p: Pos): Option[Tree] =
-      Option.when(g.within(p))(g(p.y)(p.x))
-
-    extension (g: Garden) def plots: Set[Pos] =
-      for {
-        (l, y) <- g.zipWithIndex.toSet
-        (c, x) <- l.zipWithIndex
-      } yield Pos(x, y)
-
-    extension (g: Garden) def region(pos: Pos): Region =
-
-      val tree = g.tree(pos).getOrElse(sys.error(s"out of bounds: $pos"))
-
+    def regionOf(pos: Pos): Region =
+      val tree = g.peek(pos)
       @tailrec
-      def loop(todo: Set[Pos], region: Region = Region(tree, Set(pos), perimeter = Perimeter.of(pos))): Region =
-        if todo.isEmpty then region else
+      def loop(todo: Set[Pos], region: Region): Region =
+        if todo.isEmpty then
+          region
+        else
           val p = todo.head
-          val t = todo - p
-          if g.tree(p).contains(tree) & !region.contains(p) then
-            loop(t ++ p.neighbours.filter(p => g.within(p) & !region.contains(p)).toVector, region.add(p))
+          val t = todo.tail
+          if !region.contains(p) && g.contains(p, tree) then
+            loop(t ++ p.adjWithinGrid(g).filterNot(region.contains), region.add(p))
           else
             loop(t, region)
 
-      loop(pos.neighbours.filter(p => g.within(p)))
+      val r = Region(tree, Set(pos), fences = Fences.around(pos))
+      loop(pos.adjWithinGrid(g), r)
 
-    extension (g: Garden) def regions: Vector[Region] =
+    def regions: Vector[Region] =
       @tailrec
       def loop(todo: Set[Pos], visited: Set[Pos] = Set.empty, result: Vector[Region] = Vector.empty): Vector[Region] =
         if todo.isEmpty then
           result
         else
           val p = todo.head
-          val t = todo - p
+          val t = todo.tail
           if visited.contains(p) then
             loop(t, visited, result)
           else
-            val r = g.region(p)
+            val r = g.regionOf(p)
             loop(t, visited = visited ++ r.plots, result :+ r)
 
-      loop(g.plots)
+      loop(g.positions)
 
-  val garden: Garden =
-    Source.fromResource(s"input$day.txt").getLines.toVector.map(_.toVector)
-
-  import Garden.*
+  val garden: Grid[Tree] =
+    Grid.fromLines(Source.fromResource(s"input$day.txt").getLines)
 
   val start1: Long  = System.currentTimeMillis
   val answer1: Long = garden.regions.map(_.fencePrize).sum
