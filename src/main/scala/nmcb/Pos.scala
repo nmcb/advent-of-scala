@@ -31,6 +31,10 @@ object Pos:
 
   def zero: Pos = Pos(0, 0)
 
-  extension (tuple: (Int,Int))
+  extension (tuple: (Int, Int))
     def toPos: Pos = Pos(tuple._1, tuple._2)
 
+  extension [A](it: Array[A])
+    def toPos: Pos =
+      assert(it.size == 2)
+      Pos(it(0).toString.toInt, it(1).toString.toInt)

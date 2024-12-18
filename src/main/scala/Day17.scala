@@ -2,7 +2,7 @@ import scala.io.*
 import scala.annotation.*
 
 import nmcb.*
-import Extensions.*
+import extensions.*
 
 object Day17 extends App:
 
@@ -57,20 +57,6 @@ object Day17 extends App:
     def displayOut: String =
       display(out)
 
-    def quineA: Long =
-      @tailrec
-      def loop(search: String, digits: Int, a: Long): Long =
-        val next = cpu.copy(a = a).run
-        val out  = next.displayOut.leftPadTo(digits, '0')
-
-        if out == search                        then a
-        else if out == search.takeRight(digits) then loop(search, digits + 1, a << 3)
-        else                                         loop(search, digits, a + 1)
-
-      val program: String = cpu.program.mkString("")
-      val search = program.leftPadTo(program.length, '0')
-      loop(search, 1, 0)
-
   val cpu: CPU =
     val input =
       Source.fromResource(s"input$day.txt").getLines
@@ -90,6 +76,20 @@ object Day17 extends App:
   val answer1: String = cpu.run.displayOut.mkString(",")
   println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
+  def quineA(cpu: CPU): Long =
+    @tailrec
+    def loop(search: String, digits: Int, a: Long): Long =
+      val next = cpu.copy(a = a).run
+      val out = next.displayOut.leftPadTo(digits, '0')
+
+      if out == search then a
+      else if out == search.takeRight(digits) then loop(search, digits + 1, a << 3)
+      else loop(search, digits, a + 1)
+
+    val program: String = cpu.program.mkString("")
+    val search = program.leftPadTo(program.length, '0')
+    loop(search, 1, 0)
+
   val start2: Long  = System.currentTimeMillis
-  val answer2: Long = cpu.quineA
+  val answer2: Long = quineA(cpu)
   println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

@@ -1,5 +1,6 @@
 import scala.io.*
 import nmcb.*
+import extensions.*
 
 import Grid.*
 

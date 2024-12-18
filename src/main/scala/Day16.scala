@@ -1,7 +1,7 @@
 import scala.io.*
 
 import nmcb.*
-import Extensions.*
+import extensions.*
 
 object Day16 extends App:
 

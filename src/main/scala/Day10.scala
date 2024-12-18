@@ -1,7 +1,6 @@
 import scala.io.*
 import nmcb.*
-
-import Grid.*
+import extensions.*
 
 object Day10 extends App:
 
@@ -13,7 +12,7 @@ object Day10 extends App:
     Grid.fromMatrix(matrix).map(_.asDigit)
 
   val heads: Set[Pos] =
-    grid.filter(_.element == 0)
+    grid.filter(_.element == 0).map(_.pos)
 
   type TrailHead = Set[Vector[Pos]]
 
