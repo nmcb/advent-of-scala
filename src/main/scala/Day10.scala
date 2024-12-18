@@ -1,6 +1,6 @@
 import scala.io.*
 import nmcb.*
-import extensions.*
+import predef.*
 
 object Day10 extends App:
 

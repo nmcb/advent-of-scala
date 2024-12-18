@@ -2,7 +2,7 @@ import scala.io.*
 import scala.annotation.*
 
 import nmcb.*
-import extensions.*
+import predef.*
 
 object Day17 extends App:
 

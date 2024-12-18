@@ -1,6 +1,6 @@
 package nmcb
 
-import extensions.*
+import predef.*
 import Pos.*
 
 case class Grid[A](matrix: Vector[Vector[A]]):

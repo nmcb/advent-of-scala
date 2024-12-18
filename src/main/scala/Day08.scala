@@ -1,6 +1,6 @@
 import scala.io.*
 import nmcb.*
-import extensions.*
+import predef.*
 
 import Grid.*
 
@@ -12,7 +12,7 @@ object Day08 extends App:
 
 
   extension (g: Grid[Char])
-    def pairs: Set[(Char,Set[(Pos, Pos)])] =
+    def pairs: Set[(Char,Set[(Pos,Pos)])] =
       g.elements
         .filter(_.element != '.')
         .groupMap(_.element)(_.pos)

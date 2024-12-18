@@ -6,6 +6,7 @@ import scala.io.*
 object Day18 extends App:
 
   import Pos.*
+  import Dijkstra.*
 
   val day: String =
     getClass.getName.drop(3).init
