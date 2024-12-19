@@ -17,7 +17,7 @@ object Day18 extends App:
   val start1: Long = System.currentTimeMillis
   val answer1: Int =
     val fallen = bytes.take(1024).foldLeft(memory)(_.updated(_, '#'))
-    val graph  = Graph.fromGrid(fallen, node = '.')
+    val graph  = Graph.fromGrid(fallen, '.')
     val result = Dijkstra.run(graph, fallen.minPos)
     result.distanceTo(fallen.maxPos).get
 
@@ -26,7 +26,7 @@ object Day18 extends App:
   @tailrec
   def loop(todo: Vector[Pos], grid: Grid[Char]): Pos =
     val test     = grid.updated(todo.head, '.')
-    val graph    = Graph.fromGrid(test, node = '.')
+    val graph    = Graph.fromGrid(test, '.')
     val distance = Dijkstra.run(graph, test.minPos).distanceTo(test.maxPos)
     if distance.isEmpty then loop(todo.tail, test) else todo.head
 
@@ -34,3 +34,5 @@ object Day18 extends App:
   val answer2: Pos = loop(bytes.reverse, bytes.foldLeft(memory)(_.updated(_, '#')))
 
   println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+
+

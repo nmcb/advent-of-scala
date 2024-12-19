@@ -31,7 +31,10 @@ case class Grid[A](matrix: Vector[Vector[A]]):
   def peekOrElse(p: Pos, default: => A): A =
     peekOption(p).getOrElse(default)
 
-  def find(a: A): Pos =
+  def findAll(a: A): Set[Pos] =
+    elements.filter(_.element == a).map(_.pos)
+
+  def findOne(a: A): Pos =
     elements.find(_.element == a).get.pos
 
   def filter(f: ((Pos,A)) => Boolean): Set[(Pos,A)] =

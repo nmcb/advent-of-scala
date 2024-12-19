@@ -1,6 +1,7 @@
 package nmcb
 
 import predef.*
+import Pos.*
 
 import scala.annotation.*
 
@@ -22,11 +23,15 @@ object Dijkstra:
     def empty[A]: Graph[A] =
       Graph(Map.empty)
 
-    def fromGrid[A](grid: Grid[A], node: A, dist: (A,A) => Int = (_: A, _: A) => 1): Graph[Pos] =
-      grid.elements.filter(_.element == node).foldLeft(Graph.empty): (graph, from) =>
-        from.pos.adjWithinGrid(grid).filter(grid.contains(_, node))
-          .foldLeft(graph): (graph, to) =>
-            graph.add(Edge(from.pos, to, dist(from.element, grid.peek(to))))
+    def fromGrid[A](grid: Grid[A], node: A, dist: (Pos,Pos) => Int = (_,_) => 1): Graph[Pos] =
+      grid.elements
+        .filter(_.element == node)
+        .foldLeft(Graph.empty): (graph,from) =>
+          from.pos
+            .adjWithinGrid[A](grid, _.element == node)
+            .filter(p => grid.contains(p, node))
+            .foldLeft(graph): (graph, to) =>
+              graph.add(Edge(from.pos, to, dist(from.pos, to)))
 
   case class Result[A](edgeTo: Map[A,Edge[A]], distancesTo: Map[A,Int]):
 
@@ -46,6 +51,7 @@ object Dijkstra:
 
   import scala.collection.mutable
 
+  /** classic dijkstra traverses the shortest found paths first */
   def run[A](graph: Graph[A], from: A): Result[A] =
     val edgeTo: mutable.Map[A,Edge[A]] = mutable.Map.empty
     val distTo: mutable.Map[A,Int]     = mutable.Map.from(graph.neighbours.map((node,_) => node -> Int.MaxValue))
@@ -66,6 +72,20 @@ object Dijkstra:
             queue.enqueue((edge.to, distTo(edge.to)))
 
     Result(edgeTo.toMap, distTo.toMap)
+
+  /** breadth first flooding */
+  def reachable[N](start: N, edgesFrom: N => Set[N]): Set[N] =
+    val found = mutable.Set.empty[N]
+    val todo  = mutable.Queue.empty[N]
+    todo.enqueue(start)
+    while todo.nonEmpty do
+      val from = todo.dequeue
+      if !found.contains(from) then
+        found += from
+        edgesFrom(from).iterator.foreach: to =>
+          if !found.contains(to) then
+            todo.enqueue(to)
+    found.toSet
 
   extension [A](path: Vector[Edge[A]])
     def toTrail: Vector[A] =

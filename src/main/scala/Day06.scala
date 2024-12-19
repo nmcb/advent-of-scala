@@ -33,7 +33,7 @@ object Day06 extends App:
           case '#'       => walkCircular(pos, dir.cw, obstruct, visited)
 
 
-  val start: Pos   = grid.find('^')
+  val start: Pos   = grid.findOne('^')
   val time1: Long = System.currentTimeMillis
   val answer1: Int = grid.walkGuard(start, N).size
   println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - time1}ms]")

@@ -20,8 +20,8 @@ case class Pos(x: Int, y: Int):
   def adjWithinBounds(min: Pos, max: Pos): Set[Pos] =
     adj.filter(_.withinBounds(min, max))
 
-  def adjWithinGrid[A](g: Grid[A]): Set[Pos] =
-    adjWithinBounds(g.minPos, g.maxPos)
+  def adjWithinGrid[A](g: Grid[A], filter: ((Pos,A)) => Boolean): Set[Pos] =
+    adjWithinBounds(g.minPos, g.maxPos).filter(p => filter(p, g.peek(p)))
 
   def withinBounds(min: Pos, max: Pos): Boolean =
     x >= min.x & x <= max.x & y >= min.y & y <= max.y

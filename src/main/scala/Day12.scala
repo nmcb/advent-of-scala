@@ -1,5 +1,6 @@
 import scala.annotation.*
 import scala.io.*
+
 import nmcb.*
 
 import Dir.*
@@ -94,12 +95,12 @@ object Day12 extends App:
           val p = todo.head
           val t = todo.tail
           if !region.contains(p) && g.contains(p, tree) then
-            loop(t ++ p.adjWithinGrid(g).filterNot(region.contains), region.add(p))
+            loop(t ++ p.adjWithinGrid(g, e => !region.contains(e._1)), region.add(p))
           else
             loop(t, region)
 
       val r = Region(tree, Set(pos), fences = Fences.around(pos))
-      loop(pos.adjWithinGrid(g), r)
+      loop(pos.adjWithinGrid(g, _ => true), r)
 
     def regions: Vector[Region] =
       @tailrec
