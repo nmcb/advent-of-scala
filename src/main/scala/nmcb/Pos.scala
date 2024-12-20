@@ -26,6 +26,9 @@ case class Pos(x: Int, y: Int):
   def withinBounds(min: Pos, max: Pos): Boolean =
     x >= min.x & x <= max.x & y >= min.y & y <= max.y
 
+  def manhattan(p: Pos): Long =
+    math.abs(x - p.x) + math.abs(y - p.y)
+    
 
 object Pos:
 

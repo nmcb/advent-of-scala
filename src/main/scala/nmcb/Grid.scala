@@ -34,8 +34,8 @@ case class Grid[A](matrix: Vector[Vector[A]]):
   def findAll(a: A): Set[Pos] =
     elements.filter(_.element == a).map(_.pos)
 
-  def findOne(a: A): Pos =
-    elements.find(_.element == a).get.pos
+  def findOne(a: A, default: => Pos = sys.error(s"not found")): Pos =
+    elements.find(_.element == a).map(_.pos).getOrElse(default)
 
   def filter(f: ((Pos,A)) => Boolean): Set[(Pos,A)] =
     elements.filter(f)

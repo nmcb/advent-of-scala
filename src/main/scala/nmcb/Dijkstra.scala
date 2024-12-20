@@ -63,7 +63,6 @@ object Dijkstra:
     while (queue.nonEmpty)
       val (minDistNode, _) = queue.dequeue()
       val edges = graph.neighbours.getOrElse(minDistNode, Vector.empty)
-
       edges.foreach: edge =>
         if distTo(edge.to) > distTo(edge.from) + edge.weight then
           distTo.update(edge.to, distTo(edge.from) + edge.weight)
