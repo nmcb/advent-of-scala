@@ -2,14 +2,11 @@ import scala.annotation.*
 import scala.io.*
 
 import nmcb.*
-
 import Dir.*
-
 
 object Day12 extends App:
 
-  val day: String =
-    this.getClass.getName.drop(3).init
+  val day: String = getClass.getName.filter(_.isDigit)
 
   type Tree   = Char
   type Fence  = (Pos,Dir)
