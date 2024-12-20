@@ -2,6 +2,7 @@ package nmcb
 
 import predef.*
 import Pos.*
+import Dijkstra.*
 
 case class Grid[A](matrix: Vector[Vector[A]]):
 
@@ -55,6 +56,13 @@ case class Grid[A](matrix: Vector[Vector[A]]):
   def asString: String =
     matrix.map(_.mkString("")).mkString("\n")
 
+  def extractPath(from: A, to: A, node: A): (Pos,Pos,Grid[A]) =
+    val fromPos  = findOne(from)
+    val toPos    = findOne(to)
+    val cleared  = updated(fromPos, node).updated(toPos, node)
+    (fromPos, toPos, cleared)
+
+
 object Grid:
 
   def fromLines(lines: Iterator[String]): Grid[Char] =
@@ -68,3 +76,14 @@ object Grid:
 
   def fill[A](sizeX: Int, sizeY: Int, default: A): Grid[A] =
     Grid(Vector.fill(sizeX, sizeY)(default))
+
+  extension [A](g: (Pos,Pos,Grid[A]))
+    def from: Pos = g._1
+    def to: Pos   = g._2
+    def cleared: Grid[A] = g._3
+
+    def shortest: Vector[Pos] =
+      Dijkstra
+        .run(Graph.fromGrid(cleared, cleared.peek(from)), from)
+        .pathTo(to)
+        .toTrail

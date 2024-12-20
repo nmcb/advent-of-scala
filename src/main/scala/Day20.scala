@@ -2,36 +2,27 @@ import nmcb.*
 import scala.io.*
 import scala.annotation.*
 
-import Dijkstra.*
 import Option.*
 
 object Day20 extends App:
 
-  val day: String =
-    getClass.getName.drop(3).init
-
-  case class Design(stripes: String)
-
-  val racetrack = Grid.fromLines(Source.fromResource(s"input$day.txt").getLines)
-  val start     = racetrack.findOne('S')
-  val end       = racetrack.findOne('E')
-  val updated   = racetrack.updated(start, '.').updated(end, '.')
-  val graph     = Graph.fromGrid(updated, '.')
-  val result    = Dijkstra.run(graph, start)
-  val path      = result.pathTo(end).toTrail
+  val day: String   = getClass.getName.filter(_.isDigit).mkString("")
+  val input: String = Source.fromResource(s"input$day.txt").mkString.trim
 
   def cheats(path: Vector[Pos], timeframe: Long): Long =
     @tailrec
-    def loop(trail: Vector[(Pos,Int)], cheated: Long): Long =
+    def trace(trail: Vector[(Pos,Int)], cheated: Long): Long =
       if trail.nonEmpty then
         val (from,time) = trail.head
         val rest        = trail.tail
         val saved = rest.flatMap((to,left) => when(from.manhattan(to) <= timeframe)(left - time - from.manhattan(to)))
-        loop(rest, cheated + saved.count(_ >= 100))
+        trace(rest, cheated + saved.count(_ >= 100))
       else
         cheated
 
-    loop(path.zipWithIndex, 0L)
+    trace(path.zipWithIndex, 0L)
+
+  val path: Vector[Pos] = Grid.fromLines(input.linesIterator).extractPath('S', 'E', '.').shortest
 
   val start1: Long  = System.currentTimeMillis
   val answer1: Long = cheats(path, 2)
