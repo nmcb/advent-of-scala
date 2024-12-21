@@ -1,4 +1,3 @@
-import nmcb.*
 import org.scalatest.funsuite.AnyFunSuite
 
 class TestDay19 extends AnyFunSuite:

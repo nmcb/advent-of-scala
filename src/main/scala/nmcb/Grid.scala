@@ -1,6 +1,7 @@
 package nmcb
 
 import predef.*
+
 import Pos.*
 import Dijkstra.*
 
@@ -27,16 +28,19 @@ case class Grid[A](matrix: Vector[Vector[A]]):
     peekOption(p).contains(a)
 
   def peekOption(p: Pos): Option[A] =
-    Option.when(p.withinBounds(minPos, maxPos))(matrix(p.y)(p.x))
+    Option.when(p.withinBounds(minPos, maxPos))(peek(p))
 
   def peekOrElse(p: Pos, default: => A): A =
     peekOption(p).getOrElse(default)
+
+  def find(a: A): Option[Pos] =
+    elements.find(_.element == a).map(_.pos)
 
   def findAll(a: A): Set[Pos] =
     elements.filter(_.element == a).map(_.pos)
 
   def findOne(a: A, default: => Pos = sys.error(s"not found")): Pos =
-    elements.find(_.element == a).map(_.pos).getOrElse(default)
+    find(a).getOrElse(default)
 
   def filter(f: ((Pos,A)) => Boolean): Set[(Pos,A)] =
     elements.filter(f)

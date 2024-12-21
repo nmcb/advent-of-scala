@@ -5,7 +5,7 @@ import Dir.*
 case class Pos(x: Int, y: Int):
   infix inline def +(p: Pos): Pos = copy(x = x + p.x, y = y + p.y)
   infix inline def -(p: Pos): Pos = copy(x = x - p.x, y = y - p.y)
-  infix inline def *(i: Int): Pos = copy(x = x * i, y = y * i)
+  infix inline def *(i: Int): Pos = copy(x = x * i  , y = y * i  )
 
   def move(dir: Dir): Pos =
     dir match
@@ -28,11 +28,12 @@ case class Pos(x: Int, y: Int):
 
   def manhattan(p: Pos): Long =
     math.abs(x - p.x) + math.abs(y - p.y)
-    
+
 
 object Pos:
 
-  def zero: Pos = Pos(0, 0)
+  def zero: Pos =
+    Pos(0, 0)
 
   extension (tuple: (Int, Int))
     def toPos: Pos = Pos(tuple._1, tuple._2)
