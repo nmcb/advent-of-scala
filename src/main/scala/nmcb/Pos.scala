@@ -7,7 +7,7 @@ case class Pos(x: Int, y: Int):
   infix inline def -(p: Pos): Pos = copy(x = x - p.x, y = y - p.y)
   infix inline def *(i: Int): Pos = copy(x = x * i  , y = y * i  )
 
-  def move(dir: Dir): Pos =
+  infix inline def +(dir: Dir): Pos =
     dir match
       case N => copy(y = y - 1)
       case E => copy(x = x + 1)
@@ -15,7 +15,12 @@ case class Pos(x: Int, y: Int):
       case W => copy(x = x - 1)
 
   def adj: Set[Pos] =
-    Dir.values.map(move).toSet
+    Dir.values.map(+).toSet
+
+  def pathToAdj(n: Pos): Vector[Dir] =
+    val ew = if x != n.x then Vector(if n.x < x then W else E) else Vector.empty
+    val ns = if y != n.y then Vector(if n.y < y then N else S) else Vector.empty
+    ew ++ ns
 
   def adjWithinBounds(min: Pos, max: Pos): Set[Pos] =
     adj.filter(_.withinBounds(min, max))
@@ -26,9 +31,8 @@ case class Pos(x: Int, y: Int):
   def withinBounds(min: Pos, max: Pos): Boolean =
     x >= min.x & x <= max.x & y >= min.y & y <= max.y
 
-  def manhattan(p: Pos): Long =
+  infix def manhattan(p: Pos): Long =
     math.abs(x - p.x) + math.abs(y - p.y)
-
 
 object Pos:
 

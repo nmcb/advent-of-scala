@@ -5,14 +5,14 @@ import predef.*
 import Pos.*
 import Dijkstra.*
 
-case class Grid[A](matrix: Vector[Vector[A]]):
+case class Grid[+A](matrix: Vector[Vector[A]]):
 
   val sizeY: Int = matrix.size
   val sizeX: Int = matrix.head.size
   val minPos: Pos = Pos.zero
   val maxPos: Pos = (sizeX - 1, sizeY - 1).toPos
 
-  lazy val elements: Set[(Pos,A)] =
+  def elements[A1 >: A]: Set[(Pos,A1)] =
     positions.map(p => p -> peek(p))
 
   lazy val positions: Set[Pos] =
@@ -24,28 +24,28 @@ case class Grid[A](matrix: Vector[Vector[A]]):
   def peek(p: Pos): A =
     matrix(p.y)(p.x)
 
-  def contains(p: Pos, a: A): Boolean =
+  def contains[A1 >: A](p: Pos, a: A1): Boolean =
     peekOption(p).contains(a)
 
   def peekOption(p: Pos): Option[A] =
     Option.when(p.withinBounds(minPos, maxPos))(peek(p))
 
-  def peekOrElse(p: Pos, default: => A): A =
+  def peekOrElse[A1 >: A](p: Pos, default: => A1): A1 =
     peekOption(p).getOrElse(default)
 
-  def find(a: A): Option[Pos] =
+  def find[A1 >: A](a: A1): Option[Pos] =
     elements.find(_.element == a).map(_.pos)
 
-  def findAll(a: A): Set[Pos] =
+  def findAll[A1 >: A](a: A1): Set[Pos] =
     elements.filter(_.element == a).map(_.pos)
 
-  def findOne(a: A, default: => Pos = sys.error(s"not found")): Pos =
+  def findOne[A1 >: A](a: A1, default: => Pos = sys.error(s"not found")): Pos =
     find(a).getOrElse(default)
 
-  def filter(f: ((Pos,A)) => Boolean): Set[(Pos,A)] =
+  def filter[A1 >: A](f: ((Pos,A1)) => Boolean): Set[(Pos,A1)] =
     elements.filter(f)
 
-  def filterNot(f: ((Pos,A)) => Boolean): Set[(Pos,A)] =
+  def filterNot[A1 >: A](f: ((Pos,A1)) => Boolean): Set[(Pos,A1)] =
     elements.filterNot(f)
 
   def map[B](f: A => B): Grid[B] =
@@ -54,13 +54,13 @@ case class Grid[A](matrix: Vector[Vector[A]]):
   def row(y: Int): Vector[A] =
     matrix(y)
 
-  def updated(p: Pos, a: A): Grid[A] =
+  def updated[A1 >: A](p: Pos, a: A1): Grid[A1] =
     Grid(matrix.updated(p.y, row(p.y).updated(p.x, a)))
 
   def asString: String =
     matrix.map(_.mkString("")).mkString("\n")
 
-  def extractPath(from: A, to: A, node: A): (Pos,Pos,Grid[A]) =
+  def extractPath[A1 >: A](from: A1, to: A1, node: A1): (Pos,Pos,Grid[A1]) =
     val fromPos  = findOne(from)
     val toPos    = findOne(to)
     val cleared  = updated(fromPos, node).updated(toPos, node)

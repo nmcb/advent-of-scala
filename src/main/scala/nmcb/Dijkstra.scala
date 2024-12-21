@@ -33,6 +33,7 @@ object Dijkstra:
             .foldLeft(graph): (graph, to) =>
               graph.add(Edge(from.pos, to, dist(from.pos, to)))
 
+
   case class Result[A](edgeTo: Map[A,Edge[A]], distancesTo: Map[A,Int]):
 
     def pathTo(node: A): Vector[Edge[A]] =
@@ -48,6 +49,7 @@ object Dijkstra:
 
     def distanceTo(node: A): Option[Int] =
       distancesTo.get(node).filter(_ < Int.MaxValue)
+
 
   import scala.collection.mutable
 
@@ -85,6 +87,17 @@ object Dijkstra:
           if !found.contains(to) then
             todo.enqueue(to)
     found.toSet
+
+
+  def run[A,B](a: A)(f: A => Either[Set[A],B]): Vector[B] =
+    val results = mutable.ArrayBuffer.empty[B]
+    val queue   = mutable.Queue(a)
+    while queue.nonEmpty do
+      f(queue.dequeue) match
+        case Right(result)    => results += result
+        case Left(neighbours) => queue.enqueueAll(neighbours)
+    results.toVector
+
 
   extension [A](path: Vector[Edge[A]])
     def toTrail: Vector[A] =

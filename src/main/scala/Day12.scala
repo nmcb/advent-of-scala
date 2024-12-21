@@ -17,7 +17,7 @@ object Day12 extends App:
     def dir: Dir = f._2
 
     def adjacentTo(p: Pos): Boolean =
-      f.pos.move(f.dir) == p
+      f.pos + f.dir == p
 
     def adjacentTo(ps: Set[Pos]): Boolean =
       ps.exists(f.adjacentTo)

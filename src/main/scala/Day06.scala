@@ -13,7 +13,7 @@ object Day06 extends App:
   extension (g: Grid[Char])
 
     def walkGuard(pos: Pos, dir: Dir, result: Set[Pos] = Set.empty): Set[Pos] =
-      val next = pos.move(dir)
+      val next = pos + dir
       g.peekOrElse(next, ' ') match
         case ' '       => result + pos
         case '.' | '^' => walkGuard(next, dir, result + pos)
@@ -26,7 +26,7 @@ object Day06 extends App:
       if visited.contains((pos, dir)) then
         true
       else
-        val next = pos.move(dir)
+        val next = pos + dir
         g.peekWithObstruction(next, obstruct) match
           case ' '       => false
           case '.' | '^' => walkCircular(next, dir, obstruct, visited + ((pos, dir)))
