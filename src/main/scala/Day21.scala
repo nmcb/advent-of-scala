@@ -24,7 +24,7 @@ object Day21 extends App:
         |<v>
         |""".stripMargin)
 
-  val dirKeyBy:Map[Dir,Char] =
+  val buttonBy: Map[Dir,Char] =
     Map(
       E -> '>',
       W -> '<',
@@ -33,21 +33,23 @@ object Day21 extends App:
     )
 
   def solve(codes: Vector[String], robots: Int): Long =
-    val cache: mutable.Map[(Pos, Pos, Int), Long] = mutable.Map.empty
+
+    val cache: mutable.Map[(Pos,Pos,Int),Long] =
+      mutable.Map.empty
 
     def gridBy(robot: Int): Grid[Char] =
       if robot == 0 then numGrid else dirGrid
 
     def solution(code: Vector[Char], robot: Int): Long =
       code
-        .foldLeft[(Pos,Long)](gridBy(robot).findOne('A') -> 0L): (counts, char) =>
+        .foldLeft[(Pos,Long)](gridBy(robot).findOne('A') -> 0L): (counts,char) =>
           val to = gridBy(robot).findOne(char)
           to -> (counts.element + shortest(counts.pos, to, robot))
         .element
 
     def shortest(from: Pos, to: Pos, robot: Int): Long = cache.getOrElseUpdate((from,to,robot), {
       val answers = Dijkstra.run((from, Vector.empty[Char])):
-        case (start, code) if start == to => Right(
+        case (p, code) if p == to => Right(
             if robot < robots then
               solution(code :+ 'A', robot + 1)
             else
@@ -56,7 +58,7 @@ object Day21 extends App:
         case (p, code) => Left(
             p.pathToAdj(to)
               .filterNot(d => gridBy(robot).contains(p + d, '.'))
-              .map(d => (p + d, code :+ dirKeyBy(d)))
+              .map(d => (p + d, code :+ buttonBy(d)))
               .toSet
           )
       answers.min
