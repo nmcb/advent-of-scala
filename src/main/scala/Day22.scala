@@ -10,30 +10,29 @@ object Day22 extends App:
 
   case class Secret(number: Long):
 
-    inline def prune(n: Long): Long  = n % 16777216
-    inline def mix(l: Long, n: Long) = l ^ n
+    inline def mix(l: Long)(n: Long) =
+      l ^ n
 
-    inline def mul(v: Long, n: Long): Long =
-      val mul    = n * v
-      val mixed  = mix(mul, n)
-      val pruned = prune(mixed)
-      pruned
+    inline def prune(n: Long): Long =
+      n % 16777216
 
-    inline def div(v: Long, n: Long): Long =
-      val div    = n / v
-      val mixed  = mix(div, n)
-      val pruned = prune(mixed)
-      pruned
+    inline def phases(operation: Long => Long)(n: Long): Long =
+      (operation andThen mix(n) andThen prune)(n)
+
+    inline def mul(v: Long)(n: Long): Long =
+      phases(_ * v)(n)
+
+    inline def div(v: Long)(n: Long): Long =
+      phases(_ / v)(n)
+
+    inline def stages(number: Long): Long =
+      (mul(64) andThen div(32) andThen mul(2048))(number)
 
     def next: Secret =
-      val stage1 = mul(  64, number)
-      val stage2 = div(  32, stage1)
-      val stage3 = mul(2048, stage2)
-
-      Secret(stage3)
+      Secret(stages(number))
 
   val start1: Long  = System.currentTimeMillis
-  val answer1: Long = input.map(initial => Iterator.range(0, 2000).foldLeft(initial)((l,_) => l.next)).map(_.number).sum
+  val answer1: Long = input.map[Long](initial => Iterator.iterate(initial, 2001)(_.next).map(_.number).drain).sum
   println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   extension (p: (Seq[Long],Long))
