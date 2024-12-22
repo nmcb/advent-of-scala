@@ -35,28 +35,49 @@ object Day22 extends App:
   extension (l: Long)
     def bin: String = l.toBinaryString.padTo(64 - l.toString.length, '0')
 
-
-
-
-
-
-  println(input.mkString("\n"))
-
-  val start1: Long = System.currentTimeMillis
-  val answer1: Long =
-    input
-      .map: initial =>
-        val n =
-          Iterator.range(0, 2000)
-          .foldLeft(initial): (l, _) =>
-            val n = l.next
-            n
-          .number
-        println(n)
-        n
-      .sum
+  val start1: Long  = System.currentTimeMillis
+  val answer1: Long = input.map(initial => Iterator.range(0, 2000).foldLeft(initial)((l,_) => l.next)).map(_.number).sum
 
   println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+
+  case class Buyer(initial: Secret):
+    val secrets = Vector.range(0, 1999).foldLeft(Vector(initial))((a,_) => a :+ a.last.next)
+    val prices  = secrets.map(_.number.toString.last.asDigit)
+    val diffs   = 0 +: prices.sliding(2).map(d => d(1) - d(0)).toVector
+
+    val highestPrice          = prices.drop(5).max
+    val highestPriceIndexes   = prices.zipWithIndex.drop(5).filter(_._1 == highestPrice).map(_._2)
+
+    val priceWithIndexToPriceSequence =
+      (0 to 9).foldLeft(Vector.empty[((Int,Int),Vector[Int])]): (acc,price) =>
+        val priceIndexes = prices.zipWithIndex.drop(5).filter(_._1 == price).map(_._2)
+
+        priceIndexes.foldLeft(acc): (acc,idx) =>
+          acc :+ (prices(idx) -> idx) -> diffs.slice(idx - 3, idx + 1)
+
+    def pricesWithIndexesBy(sequence: Vector[Int]): Vector[(Int,Int)] =
+      diffs.sliding(4)
+        .zipWithIndex
+        .map((seq,idx) => prices(idx + 3) -> (idx + 3) -> seq)
+        .filter(_._2 == sequence)
+        .map(_._1)
+        .toVector
+
+
+  val buyers = input.map(Buyer.apply)
+//  println(buyers.map(_.diffs.mkString("\n")))
+//  println(buyers.map(_.highestPrice))
+//  println(buyers.map(_.highestPriceIndexes))
+
+
+  val x = buyers.map(_.pricesWithIndexesBy(Vector(-2,1,-1,3)))
+  println(x)
+
+  val y = buyers.map(b => b.priceWithIndexToPriceSequence.)
+//  println(y)
+
+
+
 
   val start2: Long = System.currentTimeMillis
   val answer2: Long = 666
