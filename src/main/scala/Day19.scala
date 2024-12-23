@@ -1,6 +1,8 @@
 import scala.collection.*
 import scala.io.*
 
+import nmcb.predef.*
+
 object Day19 extends App:
 
   val day: String =
@@ -13,13 +15,13 @@ object Day19 extends App:
     (ts.split(',').map(_.trim).toVector, ds.linesIterator.toVector)
 
   def count(towels: Vector[String], target: String): Long =
-    val cache = mutable.Map("" -> 1L)
-    def loop(remaining: String): Long = cache.getOrElseUpdate(remaining,
-      towels
-        .filter(remaining.startsWith)
-        .map(t => loop(remaining.drop(t.length)))
-        .sum
-    )
+    val cache = memo("" -> 1L)
+    def loop(remaining: String): Long =
+      cache.memoize(remaining):
+        towels
+          .filter(remaining.startsWith)
+          .map(t => loop(remaining.drop(t.length)))
+          .sum
     loop(target)
 
   val start1: Long  = System.currentTimeMillis

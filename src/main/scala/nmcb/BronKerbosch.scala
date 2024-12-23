@@ -1,0 +1,24 @@
+package nmcb
+
+object BronKerbosch:
+
+  /** Computes the maximum clique, i.e. the largest group of neighbouring nodes. */
+  def run[A](neighbors: Map[A,Set[A]]): Set[A] =
+    var maximum: Set[A] = Set.empty
+
+    def loop(r: Set[A], p: Set[A], x: Set[A]): Unit =
+      if p.isEmpty && x.isEmpty then
+        if r.size > maximum.size then maximum = r
+      else
+        val u  = (p union x).maxBy(neighbors(_).size)
+        var p2 = p
+        var x2 = x
+        for
+          v <- p diff neighbors(u)
+        yield
+          loop(r + v, p2 intersect neighbors(v), x2 intersect neighbors(v))
+          p2 -= v
+          x2 += v
+
+    loop(Set.empty, neighbors.keySet, Set.empty)
+    maximum

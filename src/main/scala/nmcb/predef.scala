@@ -1,5 +1,7 @@
 package nmcb
 
+import scala.collection.*
+
 object predef:
 
   extension [A](i: Iterator[A])
@@ -21,3 +23,10 @@ object predef:
 
   extension [A](s: Seq[A])
     def toTuple: (A,A) = (s(0), s(1))
+
+  def memo[K,V](initial: (K,V)*): mutable.Map[K,V] =
+    mutable.Map.empty[K,V] ++ initial
+
+  extension [K,V](cache: mutable.Map[K,V])
+    def memoize(k: K)(v: => V): V =
+      cache.getOrElseUpdate(k, v)

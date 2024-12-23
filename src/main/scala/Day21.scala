@@ -48,7 +48,7 @@ object Day21 extends App:
         .element
 
     def shortest(from: Pos, to: Pos, robot: Int): Long = cache.getOrElseUpdate((from,to,robot), {
-      val answers = Dijkstra.run((from, Vector.empty[Char])):
+      val answers = Dijkstra.breadthFirstSearch((from, Vector.empty[Char])):
         case (p, code) if p == to => Right(
             if robot < robots then
               solution(code :+ 'A', robot + 1)

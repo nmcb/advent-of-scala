@@ -89,7 +89,7 @@ object Dijkstra:
     found.toSet
 
 
-  def run[A,B](a: A)(f: A => Either[Set[A],B]): Vector[B] =
+  def breadthFirstSearch[A,B](a: A)(f: A => Either[Set[A],B]): Vector[B] =
     val results = mutable.ArrayBuffer.empty[B]
     val queue   = mutable.Queue(a)
     while queue.nonEmpty do
