@@ -16,7 +16,7 @@ object BronKerbosch:
         for
           v <- p diff neighbours(u)
         yield
-          loop(r + v, p2 intersect neighbours(v), x2 intersect neighbours(v))
+          loop(r + v, p intersect neighbours(v), x intersect neighbours(v))
           p2 -= v
           x2 += v
 
