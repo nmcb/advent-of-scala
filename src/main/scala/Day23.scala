@@ -3,6 +3,7 @@ import predef.*
 
 import scala.io.*
 
+/** credits simon saan - https://sim642.eu/ */
 object Day23 extends App:
 
   val day: String =

@@ -1,5 +1,7 @@
+import nmcb.*
+import predef.*
+
 import scala.io.*
-import collection.mutable
 
 object Day07 extends App:
 
@@ -36,18 +38,18 @@ object Day07 extends App:
 
   object Equation:
 
-    val cache: mutable.Map[(Int, Operators), Combinations] = mutable.Map.empty
-    def combinations1(n: Int, operators: Operators): Combinations = cache.getOrElseUpdate((n, operators), {
-      def leftPad(todo: Operators, padTo: Combinations, result: Combinations = List.empty): Combinations =
-        todo match
-          case Nil => result
-          case h :: t => leftPad(t, padTo, result ++ padTo.map(h +: _))
+    val cache = memo[(Int, Operators), Combinations]()
+    def combinations1(n: Int, operators: Operators): Combinations =
+      cache.memoize(n, operators):
+        def leftPad(todo: Operators, padTo: Combinations, result: Combinations = List.empty): Combinations =
+          todo match
+            case Nil => result
+            case h :: t => leftPad(t, padTo, result ++ padTo.map(h +: _))
 
-      def loop(todo: Int, result: Combinations = List(List.empty)): Combinations =
-        if todo <= 0 then result else loop(todo - 1, leftPad(operators, result))
+        def loop(todo: Int, result: Combinations = List(List.empty)): Combinations =
+          if todo <= 0 then result else loop(todo - 1, leftPad(operators, result))
 
-      loop(n)
-    })
+        loop(n)
 
     def combinations2[A](n: Int, elements: List[A]): Iterator[List[A]] =
       val m = elements.length

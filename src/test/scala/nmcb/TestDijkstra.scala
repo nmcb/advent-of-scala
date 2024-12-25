@@ -1,12 +1,9 @@
 package nmcb
 
 import predef.*
-
-import Pos.*
+import Dijkstra.*
 
 import org.scalatest.funsuite.AnyFunSuite
-
-import Dijkstra.*
 
 val input =
   """.###...

@@ -45,7 +45,7 @@ object Day17 extends App:
         case 5 => copy(out = (out << 3) + (combo & 0x07), ip = ip + 2)
         case 6 => copy(b = a >> combo, ip = ip + 2)
         case 7 => copy(c = a >> combo, ip = ip + 2)
-        case _ => sys.error(s"Invalid r.performead: ip=$ip, inst=${program(ip)}")
+        case _ => sys.error(s"Invalid r.performed: ip=$ip, inst=${program(ip)}")
 
     @tailrec
     final def display(current: Long, result: String = ""): String =

@@ -1,6 +1,7 @@
 import scala.annotation.*
 import scala.io.*
 
+/** visual inspection - then coded recognizers - see /doc/img/visual-inspection-day25.pdf */
 object Day24 extends App:
 
   val day: String = getClass.getName.filter(_.isDigit).mkString("")
@@ -93,12 +94,12 @@ object Day24 extends App:
       .filter(_ != "z45")
       .toSet
 
-  def debugAND(operations: Vector[Gate]): Set[Wire] =
-    operations
+  def debugAND(gates: Vector[Gate]): Set[Wire] =
+    gates
       .filter: op =>
         op.isAND && op.lhs.asNumber != "00" && (op.lhs.startsWith("x") || op.rhs.startsWith("x"))
       .filter: op =>
-        !operations.exists: op2 =>
+        !gates.exists: op2 =>
           (op2.lhs == op.out || op2.rhs == op.out) && op2.isOR
       .map(_.out)
       .toSet

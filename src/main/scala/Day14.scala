@@ -1,3 +1,5 @@
+import nmcb.*
+
 import scala.io.*
 import scala.annotation.*
 
@@ -5,17 +7,6 @@ object Day14 extends App:
 
   val day: String =
     this.getClass.getName.drop(3).init
-
-  case class Pos(x: Int, y: Int):
-
-    infix def +(that: Pos): Pos =
-      Pos(x + that.x, y + that.y)
-
-    lazy val neighbours: List[Pos] =
-      List(copy(x = x - 1), copy(x = x + 1), copy(y = y - 1), copy(y = y + 1))
-
-    inline def neighbourOf(p: Pos): Boolean =
-      neighbours.contains(p)
 
   case class Robot(p: Pos, v: Pos)
 
@@ -74,7 +65,7 @@ object Day14 extends App:
             found
           case p :: rest =>
             if inside.contains(p) then
-              cluster(rest ++ p.neighbours, inside - p, found + p)
+              cluster(rest ++ p.adj, inside - p, found + p)
             else
               cluster(rest, inside - p, found)
 

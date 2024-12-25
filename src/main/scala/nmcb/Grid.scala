@@ -6,11 +6,12 @@ import Pos.*
 import Dijkstra.*
 
 case class Grid[+A](matrix: Vector[Vector[A]]):
-
   val sizeY: Int = matrix.size
   val sizeX: Int = matrix.head.size
   val minPos: Pos = Pos.zero
   val maxPos: Pos = (sizeX - 1, sizeY - 1).toPos
+
+  assert(matrix.forall(row => row.size == sizeX))
 
   def elements[A1 >: A]: Set[(Pos,A1)] =
     positions.map(p => p -> peek(p))
@@ -68,7 +69,7 @@ case class Grid[+A](matrix: Vector[Vector[A]]):
 
   def dropRow(y: Int): Grid[A] =
     Grid(matrix.zipWithIndex.filter((r,i) => i != y).map((r,i) => r))
-    
+
   def transpose: Grid[A] =
     Grid(matrix.transpose)
 

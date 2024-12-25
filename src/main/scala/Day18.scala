@@ -32,7 +32,4 @@ object Day18 extends App:
 
   val start2: Long = System.currentTimeMillis
   val answer2: Pos = loop(bytes.reverse, bytes.foldLeft(memory)(_.updated(_, '#')))
-
   println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
-
-

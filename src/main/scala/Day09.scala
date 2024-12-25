@@ -208,5 +208,5 @@ object Day09 extends App:
     case _ => ???
   }
 
-  println(s"Answer day $day part 2: ${checksumJP(answer2JP._1)} [${System.currentTimeMillis - startJP}ms]  (JP)")
+  println(s"Answer day $day part 2: ${checksumJP(answer2JP._1)} [${System.currentTimeMillis - startJP}ms] (JP)")
 
