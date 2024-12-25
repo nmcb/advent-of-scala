@@ -6,32 +6,34 @@ object Day25 extends App:
 
   val day: String = getClass.getName.filter(_.isDigit).mkString("")
 
-  val schematics: Vector[Grid[Char]] =
+  type Schematic = Grid[Char]
+
+  val schematics: Vector[Schematic] =
     Source.fromResource(s"input$day.txt")
       .mkString
       .split("\n\n")
       .map(_.split("\n").iterator)
       .map(Grid.fromLines).toVector
 
-  extension (schema: Grid[Char])
+  extension (schematic: Schematic)
 
     def isLock: Boolean =
-      schema.row(schema.minPos.y).forall(_ == '#')
+      schematic.row(schematic.minPos.y).forall(_ == '#')
 
     def isKey: Boolean =
-      schema.row(schema.maxPos.y).forall(_ == '#')
+      schematic.row(schematic.maxPos.y).forall(_ == '#')
 
     def heights: Vector[Int] =
-      schema
-        .dropRow(if schema.isLock then schema.minPos.y else schema.maxPos.y)
+      schematic
+        .dropRow(if schematic.isLock then schematic.minPos.y else schematic.maxPos.y)
         .transpose
         .matrix
         .map(_.count(_ == '#'))
 
-  def overlap(lock: Grid[Char], key: Grid[Char]): Boolean =
+  def overlap(lock: Schematic, key: Schematic): Boolean =
     lock.heights.zip(key.heights).exists(_ + _ > lock.maxPos.y - 1)
 
-  def fit(schematics: Vector[Grid[Char]]): Int =
+  def fit(schematics: Vector[Schematic]): Int =
     val fits =
       for
         lock <- schematics.filter(_.isLock)
@@ -39,7 +41,6 @@ object Day25 extends App:
         if !overlap(lock, key)
       yield
         (lock, key)
-
     fits.distinct.size
 
   val start1: Long = System.currentTimeMillis
