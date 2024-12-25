@@ -66,6 +66,12 @@ case class Grid[+A](matrix: Vector[Vector[A]]):
     val cleared  = updated(fromPos, node).updated(toPos, node)
     (fromPos, toPos, cleared)
 
+  def dropRow(y: Int): Grid[A] =
+    Grid(matrix.zipWithIndex.filter((r,i) => i != y).map((r,i) => r))
+    
+  def transpose: Grid[A] =
+    Grid(matrix.transpose)
+
 
 object Grid:
 
