@@ -7,7 +7,7 @@ case class Pos(x: Int, y: Int):
   infix inline def -(p: Pos): Pos = copy(x = x - p.x, y = y - p.y)
   infix inline def *(i: Int): Pos = copy(x = x * i  , y = y * i  )
 
-  infix inline def +(dir: Dir): Pos =
+  infix inline def step(dir: Dir): Pos =
     dir match
       case N => copy(y = y - 1)
       case E => copy(x = x + 1)
@@ -15,9 +15,9 @@ case class Pos(x: Int, y: Int):
       case W => copy(x = x - 1)
 
   def adj: Set[Pos] =
-    Dir.values.map(+).toSet
+    Dir.values.map(step).toSet
 
-  def pathToAdj(n: Pos): Vector[Dir] =
+  def dirTo(n: Pos): Vector[Dir] =
     val ew = if x != n.x then Vector(if n.x < x then W else E) else Vector.empty
     val ns = if y != n.y then Vector(if n.y < y then N else S) else Vector.empty
     ew ++ ns

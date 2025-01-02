@@ -8,7 +8,7 @@ object Day05 extends App:
   case class Rule(before: Int, after: Int):
 
     def applicable(x: Int, y: Int): Boolean =
-      (before == x & after == y) | (before == y & after == x)
+      (before == x && after == y) || (before == y && after == x)
 
   case class Update(order: List[Int]):
 
@@ -51,7 +51,7 @@ object Day05 extends App:
     (x: Int, y: Int) =>
       rules.find(_.applicable(x, y)) match
         case None    => 0
-        case Some(r) => if r.before == x & r.after == y then 1 else -1
+        case Some(r) => if r.before == x && r.after == y then 1 else -1
 
   val start2: Long = System.currentTimeMillis
   val answer2: Int = updates.filterNot(_.validBy(rules)).map(_.sorted).map(_.middle).sum

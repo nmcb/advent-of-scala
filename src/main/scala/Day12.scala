@@ -17,15 +17,15 @@ object Day12 extends App:
     def dir: Dir = f._2
 
     def adjacentTo(p: Pos): Boolean =
-      f.pos + f.dir == p
+      (f.pos step f.dir) == p
 
-    def adjacentTo(ps: Set[Pos]): Boolean =
+    def containsAdjacentTo(ps: Set[Pos]): Boolean =
       ps.exists(f.adjacentTo)
 
   extension (fences: Fences)
     def add(pos: Pos): Fences =
       val keep = fences.filterNot(_.adjacentTo(pos))
-      val add  = Fences.around(pos).filterNot(_.adjacentTo(fences.map(_.pos)))
+      val add  = Fences.around(pos).filterNot(_.containsAdjacentTo(fences.map(_.pos)))
       keep ++ add
 
 
@@ -89,12 +89,12 @@ object Day12 extends App:
         if todo.isEmpty then
           region
         else
-          val p = todo.head
-          val t = todo.tail
-          if !region.contains(p) && g.contains(p, tree) then
-            loop(t ++ p.adjWithinGrid(g, e => !region.contains(e._1)), region.add(p))
+          val pos  = todo.head
+          val rest = todo.tail
+          if !region.contains(pos) && g.contains(pos, tree) then
+            loop(rest ++ pos.adjWithinGrid(g, (p,_) => !region.contains(p)), region.add(pos))
           else
-            loop(t, region)
+            loop(rest, region)
 
       val r = Region(tree, Set(pos), fences = Fences.around(pos))
       loop(pos.adjWithinGrid(g, _ => true), r)

@@ -10,7 +10,13 @@ object Day21 extends App:
   val day: String           = getClass.getName.filter(_.isDigit).mkString("")
   val input: Vector[String] = Source.fromResource(s"input$day.txt").getLines.toVector
 
-  val numGrid: Grid[Char] =
+  type Button = Char
+
+  object Button:
+    val enter: Button = 'A'
+    val empty: Button = '.'
+
+  val numericKeypad: Grid[Button] =
     Grid.fromString(
       """789
         |456
@@ -18,13 +24,13 @@ object Day21 extends App:
         |.0A
         |""".stripMargin)
 
-  val dirGrid: Grid[Char] =
+  val directionKeypad: Grid[Button] =
     Grid.fromString(
       """.^A
         |<v>
         |""".stripMargin)
 
-  val buttonBy: Map[Dir,Char] =
+  val directionButtonBy: Map[Dir,Button] =
     Map(
       E -> '>',
       W -> '<',
@@ -32,37 +38,46 @@ object Day21 extends App:
       S -> 'v'
     )
 
-  def solve(codes: Vector[String], robots: Int): Long =
+  type Pushes = String
+
+  extension (t: (Pos,Long))
+    def pos: Pos    = t._1
+    def count: Long = t._2
+
+  def solve(buttonPushes: Vector[Pushes], robots: Int): Long =
     val cache = memo[(Pos,Pos,Int),Long]()
 
-    def gridBy(robot: Int): Grid[Char] =
-      if robot == 0 then numGrid else dirGrid
+    def keypadBy(robot: Int): Grid[Button] =
+      if robot == 0 then numericKeypad else directionKeypad
 
-    def solution(code: Vector[Char], robot: Int): Long =
-      code
-        .foldLeft[(Pos,Long)](gridBy(robot).findOne('A') -> 0L): (counts,char) =>
-          val to = gridBy(robot).findOne(char)
-          to -> (counts.element + shortest(counts.pos, to, robot))
-        .element
+    def pointerMovesFor(outputs: Vector[Button], robot: Int): Long =
+      val from = keypadBy(robot).findOne(Button.enter)
+      outputs
+        .foldLeft[(Pos,Long)](from -> 0L):
+          case (moves, button) =>
+            val to = keypadBy(robot).findOne(button)
+            to -> (moves.count + shortestPath(moves.pos, to, robot))
+        .count
 
-    def shortest(from: Pos, to: Pos, robot: Int): Long = cache.memoize(from,to,robot):
-      Dijkstra
-        .breadthFirstSearch((from, Vector.empty[Char])):
-          case (p, code) if p == to => Right(
-              if robot < robots then
-                solution(code :+ 'A', robot + 1)
-              else
-                code.length + 1L
-            )
-          case (p, code) => Left(
-              p.pathToAdj(to)
-                .filterNot(d => gridBy(robot).contains(p + d, '.'))
-                .map(d => (p + d, code :+ buttonBy(d)))
-                .toSet
-            )
-        .min
+    def shortestPath(from: Pos, to: Pos, robot: Int): Long =
+      cache.memoize(from,to,robot):
+        Dijkstra
+          .breadthFirstSearch((from,Vector.empty[Button])):
+            case (p,pushes) if p == to => Right(
+                if robot < robots then
+                  pointerMovesFor(pushes :+ Button.enter, robot + 1)
+                else
+                  pushes.length + 1L
+              )
+            case (p,code) => Left(
+                p.dirTo(to)
+                  .filterNot(d => keypadBy(robot).contains(p step d, Button.empty))
+                  .map(d => (p step d, code :+ directionButtonBy(d)))
+                  .toSet
+              )
+          .min
 
-    codes.map(code => solution(code.toVector, 0) * code.filter(_.isDigit).toLong).sum
+    buttonPushes.map(pushes => pointerMovesFor(pushes.toVector, 0) * pushes.filter(_.isDigit).toLong).sum
 
   val start1: Long  = System.currentTimeMillis
   val answer1: Long = solve(input, 2)
