@@ -7,10 +7,10 @@ import Dir.*
 
 object Day21 extends App:
 
-  val day: String           = getClass.getName.filter(_.isDigit).mkString("")
-  val input: Vector[String] = Source.fromResource(s"input$day.txt").getLines.toVector
+  val day: String = getClass.getName.filter(_.isDigit).mkString("")
 
   type Button = Char
+  type Pushes = Vector[Button]
 
   object Button:
     val enter: Button = 'A'
@@ -37,8 +37,6 @@ object Day21 extends App:
       N -> '^',
       S -> 'v'
     )
-
-  type Pushes = String
 
   extension (t: (Pos,Long))
     def pos: Pos    = t._1
@@ -77,12 +75,17 @@ object Day21 extends App:
               )
           .min
 
-    buttonPushes.map(pushes => pointerMovesFor(pushes.toVector, 0) * pushes.filter(_.isDigit).toLong).sum
+    buttonPushes
+      .map: pushes =>
+        pointerMovesFor(pushes, 0) * pushes.filter(_.isDigit).mkString("").toLong
+      .sum
+
+  val input: Grid[Char] = Grid.fromLines(Source.fromResource(s"input$day.txt").getLines)
 
   val start1: Long  = System.currentTimeMillis
-  val answer1: Long = solve(input, 2)
+  val answer1: Long = solve(input.matrix, 2)
   println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long  = System.currentTimeMillis
-  val answer2: Long = solve(input, 25)
+  val answer2: Long = solve(input.matrix, 25)
   println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
