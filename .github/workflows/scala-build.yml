@@ -18,7 +18,7 @@ jobs:
       with:
         java-version: '21'
         distribution: 'temurin'
-      cache: sbt
+        cache: sbt
     - uses: sbt/setup-sbt@v1
     - name: Build and test
       shell: bash
