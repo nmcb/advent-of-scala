@@ -13,13 +13,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: setup java and scala tooling
+    - name: Setup Java and Scala tooling
       uses: actions/setup-java@v4
       with:
         java-version: '21'
         distribution: 'temurin'
         cache: sbt
+    - name: Setup SBT tooling
     - uses: sbt/setup-sbt@v1
-    - name: Build and test
+    - name: Run tests
       shell: bash
       run: sbt -v +test
