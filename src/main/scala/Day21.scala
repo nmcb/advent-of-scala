@@ -54,10 +54,10 @@ object Day21 extends App:
         .foldLeft[(Pos,Long)](from -> 0L):
           case (moves, button) =>
             val to = keypadBy(robot).findOne(button)
-            to -> (moves.count + shortestPath(moves.pos, to, robot))
+            to -> (moves.count + shortestPathLength(moves.pos, to, robot))
         .count
 
-    def shortestPath(from: Pos, to: Pos, robot: Int): Long =
+    def shortestPathLength(from: Pos, to: Pos, robot: Int): Long =
       cache.memoize(from,to,robot):
         Dijkstra
           .breadthFirstSearch((from,Vector.empty[Button])):

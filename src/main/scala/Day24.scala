@@ -106,12 +106,12 @@ object Day24 extends App:
 
   def debugXOR(gates: Vector[Gate]): Vector[Wire] =
     gates
-      .filter: g =>
-        (g.lhs.startsWith("x") || g.rhs.startsWith("x")) && g.isXOR && g.lhs.filter(_.isDigit) != "00"
-      .flatMap: g0 =>
-        gates.find(g1 => (g1.lhs == g0.out || g1.rhs == g0.out) && g1.isXOR) match
-          case Some(xor) => if xor.out == s"z${g0.lhs.asNumber}" then None else Some(xor.out)
-          case None      => Some(g0.out)
+      .filter: op =>
+        (op.lhs.startsWith("x") || op.rhs.startsWith("x")) && op.isXOR && op.lhs.asNumber != "00"
+      .flatMap: op =>
+        gates.find(g => (g.lhs == op.out || g.rhs == op.out) && g.isXOR) match
+          case Some(xor) => if xor.out == s"z${op.lhs.asNumber}" then None else Some(xor.out)
+          case None      => Some(op.out)
 
   val lines: Vector[String] =
     Source.fromResource(s"input$day.txt").getLines.toVector

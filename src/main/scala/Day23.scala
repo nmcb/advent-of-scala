@@ -23,11 +23,11 @@ object Day23 extends App:
     edges.groupMap(_._1)(_._2)
 
   lazy val solve1 =
-    for {
+    for
       (a,b) <- edges
       c     <- neighbours(a) intersect neighbours(b)
       if a.startsWith("t") || b.startsWith("t") || c.startsWith("t")
-    } yield
+    yield
       Set(a,b,c)
 
   val start1: Long  = System.currentTimeMillis
