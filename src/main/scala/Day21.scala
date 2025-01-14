@@ -49,15 +49,15 @@ object Day21 extends App:
       if robot == 0 then numericKeypad else directionKeypad
 
     def pointerMovesFor(outputs: Vector[Button], robot: Int): Long =
-      val from = keypadBy(robot).findOne(Button.enter)
+      val start = keypadBy(robot).findOne(Button.enter)
       outputs
-        .foldLeft[(Pos,Long)](from -> 0L):
+        .foldLeft[(Pos,Long)](start -> 0L):
           case (moves, button) =>
             val to = keypadBy(robot).findOne(button)
-            to -> (moves.count + shortestPathLength(moves.pos, to, robot))
+            to -> (moves.count + shortestPathMoves(moves.pos, to, robot))
         .count
 
-    def shortestPathLength(from: Pos, to: Pos, robot: Int): Long =
+    def shortestPathMoves(from: Pos, to: Pos, robot: Int): Long =
       cache.memoize(from,to,robot):
         Dijkstra
           .breadthFirstSearch((from,Vector.empty[Button])):
