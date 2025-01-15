@@ -26,7 +26,7 @@ object Day10 extends App:
     def trailsFrom(head: Pos): TrailHead =
 
       def step(trail: Vector[Pos]): TrailHead =
-        trail.last.adj
+        trail.last.adjoint
           .filter(n => g.within(n) && g.peek(n) == g.peek(trail.last) + 1)
           .map(p => trail :+ p)
 

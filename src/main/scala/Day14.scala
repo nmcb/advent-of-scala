@@ -65,7 +65,7 @@ object Day14 extends App:
             found
           case p :: rest =>
             if inside.contains(p) then
-              cluster(rest ++ p.adj, inside - p, found + p)
+              cluster(rest ++ p.adjoint, inside - p, found + p)
             else
               cluster(rest, inside - p, found)
 

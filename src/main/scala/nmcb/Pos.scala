@@ -14,19 +14,19 @@ case class Pos(x: Int, y: Int):
       case S => copy(y = y + 1)
       case W => copy(x = x - 1)
 
-  def adj: Set[Pos] =
+  def adjoint: Set[Pos] =
     Dir.values.map(step).toSet
 
-  def dirTo(n: Pos): Vector[Dir] =
-    val ew = if x != n.x then Vector(if n.x < x then W else E) else Vector.empty
-    val ns = if y != n.y then Vector(if n.y < y then N else S) else Vector.empty
+  def directionTo(neighbour: Pos): Vector[Dir] =
+    val ew = if x != neighbour.x then Vector(if neighbour.x < x then W else E) else Vector.empty
+    val ns = if y != neighbour.y then Vector(if neighbour.y < y then N else S) else Vector.empty
     ew ++ ns
 
-  def adjWithinBounds(min: Pos, max: Pos): Set[Pos] =
-    adj.filter(_.withinBounds(min, max))
+  def adjointWithinBounds(min: Pos, max: Pos): Set[Pos] =
+    adjoint.filter(_.withinBounds(min, max))
 
   def adjWithinGrid[A](g: Grid[A], filter: ((Pos,A)) => Boolean): Set[Pos] =
-    adjWithinBounds(g.minPos, g.maxPos).filter(p => filter(p, g.peek(p)))
+    adjointWithinBounds(g.minPos, g.maxPos).filter(p => filter(p, g.peek(p)))
 
   def withinBounds(min: Pos, max: Pos): Boolean =
     x >= min.x & x <= max.x & y >= min.y & y <= max.y
