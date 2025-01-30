@@ -1,4 +1,4 @@
-name: Scala Build
+name: build
 
 on:
   push:
@@ -8,18 +8,18 @@ on:
 
 jobs:
   build:
-
+    name: scala-build
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
-    - name: Setup java and scala tooling
+    - name: setup-java
       uses: actions/setup-java@v4
       with:
         java-version: '21'
         distribution: 'temurin'
         cache: sbt
     - uses: sbt/setup-sbt@v1
-    - name: Build and test
+    - name: sbt-test
       shell: bash
       run: sbt -v +test
