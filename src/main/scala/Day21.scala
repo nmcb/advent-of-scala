@@ -65,7 +65,6 @@ object Day21 extends App:
                 if robot < robots then
                   pointerMovesFor(pushes :+ Button.enter, robot + 1)
                 else
-                  println(s"from=$from, to=$to, length=${pushes.length + 1L}, manhattan=${from manhattan to}")
                   pushes.length + 1L
               )
             case (p,code) => Left(
