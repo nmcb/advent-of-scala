@@ -1,70 +1,108 @@
+import scala.annotation.targetName
+
 object Day03 extends App:
 
-  enum Dir:
-    case N, E, S, W
+  case class Pos(x: Int, y: Int):
 
-  import Dir.*
-
-  case class Pos(x: Int, y: Int, n: Int):
-
-    def step(d: Dir): Pos =
-      d match
-        case N => copy(y = y - 1, n = n + 1)
-        case E => copy(x = x + 1, n = n + 1)
-        case S => copy(y = y + 1, n = n + 1)
-        case W => copy(x = x - 1, n = n + 1)
+    @targetName("plus")
+    infix def +(p: Pos): Pos =
+      Pos(x + p.x, y + p.y)
 
     infix def manhattan(p: Pos): Int =
       (x - p.x).abs + (y - p.y).abs
 
-  case class Spiral(positions: Vector[Pos]):
+    def neighbours: Seq[Pos] =
+      Pos.adjacent.map(_ + this)
+  
+  object Pos:
 
-    val minX: Int = positions.map(_.x).min
-    val maxX: Int = positions.map(_.x).max
-    val minY: Int = positions.map(_.y).min
-    val maxY: Int = positions.map(_.y).max
+    val zero: Pos =
+      Pos(0, 0)
 
-    def growInclude(i: Int): Spiral =
-      def loop(s: Spiral): Spiral =
+    val adjacent: Seq[Pos] =
+      for
+        y <- -1 to 1
+        x <- -1 to 1
+        if !(x == 0 && y == 0)
+      yield
+        Pos(x, y)
 
-        def eborder(c: Pos, a: Vector[Pos] = Vector.empty): Vector[Pos] =
-          if c.y <= s.minY - 1 then a :+ c else eborder(c.step(N), a :+ c)
+  def position(input: Int): Pos =
+    val n    = Iterator.iterate(1)(_ + 2).dropWhile(n => n * n < input).next()
+    val base = input - (n - 2) * (n - 2) - 1
+    val size = n - 1
+    val half = size / 2
+    val quadrant = base / size
+    val offset = base % size
+    quadrant match
+      case 0 => Pos(half, offset + 1 - half)
+      case 1 => Pos(half - 1 - offset, half)
+      case 2 => Pos(-half, half - 1 - offset)
+      case 3 => Pos(offset + 1 - half, -half)
 
-        def nborder(c: Pos, a: Vector[Pos] = Vector.empty): Vector[Pos] =
-          if c.x <= s.minX - 1 then a :+ c else nborder(c.step(W), a :+ c)
-
-        def wborder(c: Pos, a: Vector[Pos] = Vector.empty): Vector[Pos] =
-          if c.y >= s.maxY + 1 then a :+ c else wborder(c.step(S), a :+ c)
-
-        def sborder(c: Pos, a: Vector[Pos] = Vector.empty): Vector[Pos] =
-          if c.x >= s.maxX + 1 then a :+ c else sborder(c.step(E), a :+ c)
-
-        if s.positions.last.n >= i then
-          s
-        else
-          val eb = eborder(s.positions.last.step(E))
-          val nb = nborder(eb.last.step(W))
-          val wb = wborder(nb.last.step(S))
-          val sb = sborder(wb.last.step(E))
-          loop(Spiral(s.positions :++ eb :++ nb :++ wb :++ sb))
-
-      loop(this)
-
-    def carry(i: Int): Int =
-      val square = growInclude(i).positions.find(_.n == i).get
-      val access = positions.find(_.n == 1).get
-      square manhattan access
-
-  object Spiral:
-    def make: Spiral =
-      Spiral(Vector(Pos(0,0,1)))
-
-  val day: String = this.getClass.getName.filter(_.isDigit).mkString("")
+  val day: String =
+    this.getClass.getName.filter(_.isDigit).mkString("")
 
   val start1: Long = System.currentTimeMillis
-  val answer1: Int = Spiral.make.carry(277678)
+  val answer1: Int = Pos.zero manhattan position(277678)
   println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
+  def spiralSquares(to: Int):Int =
+    def loop(n: Int, squares: Map[Pos,Int] = Map(Pos(0,0) -> 1)): Int =
+      val point  = position(n)
+      val result = point.neighbours.flatMap(squares.get).sum
+      if result > to then
+        result
+      else
+        loop(n + 1, squares.updated(point, result))
+    loop(2)
+
   val start2: Long = System.currentTimeMillis
-  val answer2: Int = 666
+  val answer2: Int = spiralSquares(277678)
+
   println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+
+
+/*
+
+object Day03:
+  val adjacent = for y <- -1 to 1; x <- -1 to 1 if !(x == 0 && y == 0) yield (x, y)
+
+  case class Point(x: Int, y: Int):
+    def delta(dx: Int, dy: Int): Point = Point(x + dx, y + dy)
+    def neighbours: Seq[Point] = adjacent.map(delta)
+
+  def position(input: Int): Point =
+    val n = Iterator.iterate(1)(_ + 2).dropWhile(n => n * n < input).next()
+    val base = input - (n - 2) * (n - 2) - 1
+    val size = n - 1
+    val half = size / 2
+    val quadrant = base / size
+    val offset = base % size
+    quadrant match
+      case 0 => Point(half, offset + 1 - half)
+      case 1 => Point(half - 1 - offset, half)
+      case 2 => Point(-half, half - 1 - offset)
+      case 3 => Point(offset + 1 - half, -half)
+  end position
+
+  def part1(input: Int): Int =
+    val point = position(input)
+    point.x.abs + point.y.abs
+
+  def part2(input: Int): Int =
+    def helper(n: Int, squares: Map[Point, Int]): Int =
+      val point = position(n)
+      val result = point.neighbours.flatMap(squares.get).sum
+      if result > input then result
+      else helper(n + 1, squares.updated(point, result))
+
+    helper(2, Map(Point(0, 0) -> 1))
+  end part2
+
+  def main(args: Array[String]): Unit =
+    val data = 312051
+    println(part1(data))
+    println(part2(data))
+
+*/
