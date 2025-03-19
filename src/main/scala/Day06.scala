@@ -31,7 +31,7 @@ object Day06 extends App:
           amount      = amount - 1
         )
 
-    def redistibute: Vector[Area] =
+    def redistribute: Vector[Area] =
       @tailrec
       def loop(current: Area, seen: Vector[Area] = Vector.empty): Vector[Area] =
         if seen.contains(current) then
@@ -48,7 +48,7 @@ object Day06 extends App:
     System.currentTimeMillis
 
   val answer1: Int =
-    Area(banks).redistibute.size - 1
+    Area(banks).redistribute.size - 1
 
   println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
@@ -56,7 +56,7 @@ object Day06 extends App:
     System.currentTimeMillis
 
   val answer2: Int =
-    val seen = Area(banks).redistibute
+    val seen = Area(banks).redistribute
     val last = seen.last
     seen.dropWhile(_ != last).size - 1
 
