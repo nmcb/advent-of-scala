@@ -1,29 +1,44 @@
+import scala.annotation.tailrec
 import scala.io.Source
 
 object Day10 extends App:
 
   val day: String = getClass.getName.filter(_.isDigit).mkString("")
 
-  case class Circle(underlying: Vector[Int], index: Int, skipSize: Int):
+  case class Circle(sparseHash: Vector[Int], current: Int, skipSize: Int):
 
-    extension (i: Int) private inline def toIndex =
-      i % underlying.size
+    private inline def indexPlus(addition: Int) =
+      (current + addition) % sparseHash.size
 
     infix def reverse(length: Int): Circle =
-      val buffer = underlying.toBuffer
+      val buffer = sparseHash.toBuffer
       for
         i <- 0 until length
       do
-        val swap     = (index + i).toIndex
-        val pointer  = (index + length - i - 1).toIndex
-        buffer(swap) = underlying(pointer)
+        val swap = indexPlus(i)
+        val by   = indexPlus(length - i - 1)
+        buffer(swap) = sparseHash(by)
 
-      val nextIndex    = (index + length + skipSize).toIndex
-      val nextSkipSize = skipSize + 1
-      Circle(buffer.toVector, nextIndex, nextSkipSize)
+      val nextSparseHash = buffer.toVector
+      val nextCurrent    = indexPlus(length + skipSize)
+      val nextSkipSize   = skipSize + 1
+      Circle(nextSparseHash, nextCurrent, nextSkipSize)
+
+    @tailrec
+    final def calculate(runs: Int, lengths: Vector[Int]): Circle =
+      if runs <= 0 then
+        this
+      else
+        lengths.foldLeft(this)(_ reverse _).calculate(runs - 1, lengths)
 
     def productOfFirstTwo: Int =
-      underlying.take(2).product
+      sparseHash.take(2).product
+
+    def denseHash: Vector[Int] =
+      sparseHash.grouped(16).map(_.reduce(_ ^ _)).toVector
+
+    def hash: String =
+      denseHash.map(_.toHexString).mkString("")
 
   object Circle:
     def init: Circle =
@@ -39,9 +54,17 @@ object Day10 extends App:
       .toVector
 
   val start1: Long = System.currentTimeMillis
-  val answer1: Int = lengths.foldLeft(Circle.init)(_ reverse _).productOfFirstTwo
+  val answer1: Int = Circle.init.calculate(1, lengths).productOfFirstTwo
   println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
+  val input: Vector[Int] =
+    Source
+      .fromResource(s"input$day.txt")
+      .mkString
+      .trim
+      .map(_.toInt)
+      .toVector ++ Vector(17, 31, 73, 47, 23)
+
   val start2: Long = System.currentTimeMillis
-  val answer2: Int = 666
+  val answer2: String = Circle.init.calculate(64, input).hash
   println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
