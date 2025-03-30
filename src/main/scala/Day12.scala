@@ -5,9 +5,9 @@ object Day12 extends App:
   val day: String =
     getClass.getName.filter(_.isDigit).mkString("")
 
-  type Graph = Map[Int,Set[Int]]
+  type Graph[N] = Map[N,Set[N]]
 
-  val graph: Graph =
+  val graph: Graph[Int] =
     Source
       .fromResource(s"input$day.txt")
       .getLines
@@ -17,34 +17,32 @@ object Day12 extends App:
       .toMap
 
   val start1: Long = System.currentTimeMillis
-  val answer1: Int = Dijkstra.reachable(0, graph.apply).size
+  val answer1: Int = Dijkstra.reachable(0, graph).size
   println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
-  def groups(graph: Graph, result: Int = 0): Int =
-    if graph.keys.isEmpty then
-      result
-    else
-      val node      = graph.keys.head
-      val reachable = Dijkstra.reachable(node, graph.apply)
-      groups(graph.removedAll(reachable), result + 1)
+  extension [N](graph: Graph[N]) def groups: Int =
+    def loop(todo: Graph[N] = graph, result: Int = 0): Int =
+      if todo.isEmpty then
+        result
+      else
+        val node      = todo.keys.head
+        val reachable = Dijkstra.reachable(node, todo)
+        loop(todo.removedAll(reachable), result + 1)
+    loop()
 
   val start2: Long = System.currentTimeMillis
-  val answer2: Int = groups(graph)
+  val answer2: Int = graph.groups
   println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
 
   object Dijkstra:
     import scala.collection.*
-    def reachable[N](from: N, edges: N => Set[N]): Set[N] =
-      val found = mutable.Map.empty[N,Int]
-      val todo  = mutable.Queue.empty[(Int,N)]
-      todo.enqueue((0, from))
+    def reachable[N](from: N, graph: Graph[N]): Set[N] =
+      val found = mutable.Set.empty[N]
+      val todo  = mutable.Queue.empty[N]
+      todo.enqueue(from)
       while todo.nonEmpty do
-        val (dist, node) = todo.dequeue()
+        val node = todo.dequeue
         if !found.contains(node) then
-          found(node) = dist
-          def process(newNode: N): Unit =
-            if !found.contains(newNode) then
-              val newDist = dist + 1
-              todo.enqueue((newDist, newNode))
-          edges(node).iterator.foreach(process)
-      found.keys.toSet
+          found += node
+          graph(node).iterator.foreach(todo.enqueue)
+      found
