@@ -9,19 +9,15 @@ object Day15 extends App:
   def same(a: Long, b: Long): Boolean =
     (a & 0xffff) == (b & 0xffff)
 
-  val generatorA1 = Iterator.iterate(591L)(next(16807)).drop(1)
-  val generatorB1 = Iterator.iterate(393L)(next(48271)).drop(1)
-  val pairs1     = generatorA1.zip(generatorB1)
+  def generatorA = Iterator.iterate(591L)(next(16807)).drop(1)
+  def generatorB = Iterator.iterate(393L)(next(48271)).drop(1)
+  val generator1 = generatorA zip generatorB
+  val generator2 = generatorA.filter(_ % 4 == 0) zip generatorB.filter(_ % 8 == 0)
 
   val start1: Long  = System.currentTimeMillis
-  val answer1: Long = pairs1.take(40000000).count(same)
+  val answer1: Long = generator1.take(40000000).count(same)
   println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
-
-  val generatorA2 = Iterator.iterate(591L)(next(16807)).drop(1)
-  val generatorB2 = Iterator.iterate(393L)(next(48271)).drop(1)
-  val pairs2 = generatorA2.filter(_ % 4 == 0).zip(generatorB2.filter(_ % 8 == 0))
-
   val start2: Long  = System.currentTimeMillis
-  val answer2: Long = pairs2.take(5000000).count(same)
+  val answer2: Long = generator2.take(5000000).count(same)
   println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
