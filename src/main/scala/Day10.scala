@@ -50,10 +50,7 @@ object Day10 extends App:
     def compute(input: String, runs: Int): KnotHash =
       val salted = input.map(_.toInt).toVector ++ Vector(17, 31, 73, 47, 23)
       compute(salted, runs)
-
-
-
-
+  
   val lengths: Vector[Int] =
     Source
       .fromResource(s"input$day.txt")
