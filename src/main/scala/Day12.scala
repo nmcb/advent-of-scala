@@ -36,7 +36,7 @@ object Day12 extends App:
 
   object Dijkstra:
     import scala.collection.*
-    def reachable[N](from: N, graph: Graph[N]): Set[N] =
+    def reachable[N](from: N, graph: Graph[N]): immutable.Set[N] =
       val found = mutable.Set.empty[N]
       val todo  = mutable.Queue.empty[N]
       todo.enqueue(from)
@@ -45,4 +45,4 @@ object Day12 extends App:
         if !found.contains(node) then
           found += node
           graph(node).iterator.foreach(todo.enqueue)
-      found
+      found.toSet
