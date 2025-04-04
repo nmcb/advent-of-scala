@@ -30,7 +30,7 @@ object Day10 extends App:
     def denseHash: Vector[Int] =
       sparseHash.grouped(16).map(_.reduce(_ ^ _)).toVector
 
-    def hash: String =
+    override def toString: String =
       denseHash.map(_.toHexString).mkString("")
 
   object KnotHash:
@@ -50,12 +50,12 @@ object Day10 extends App:
     def compute(input: String, runs: Int): KnotHash =
       val salted = input.map(_.toInt).toVector ++ Vector(17, 31, 73, 47, 23)
       compute(salted, runs)
-  
+
+  val input: String =
+    Source.fromResource(s"input$day.txt").mkString.trim
+
   val lengths: Vector[Int] =
-    Source
-      .fromResource(s"input$day.txt")
-      .mkString
-      .trim
+    input
       .split(",")
       .map(_.toInt)
       .toVector
@@ -64,9 +64,6 @@ object Day10 extends App:
   val answer1: Int = KnotHash.compute(lengths, runs = 1).productOfFirstTwo
   println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
-  val input: String =
-    Source.fromResource(s"input$day.txt").mkString.trim
-
   val start2: Long = System.currentTimeMillis
-  val answer2: String = KnotHash.compute(input, runs = 64).hash
+  val answer2: String = KnotHash.compute(input, runs = 64).toString
   println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
