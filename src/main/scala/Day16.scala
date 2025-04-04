@@ -1,5 +1,3 @@
-import Day13.{Layers, day}
-
 import scala.io.Source
 
 object Day16 extends App:
