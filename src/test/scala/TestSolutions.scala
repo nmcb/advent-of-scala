@@ -1,7 +1,6 @@
 import org.scalatest.funsuite.AnyFunSuite
 
 class TestSolutions extends AnyFunSuite:
-
   test("Day01") {
     assertResult(1069)(actual = Day01.answer1)
     assertResult(1268)(actual = Day01.answer2)
@@ -68,4 +67,9 @@ class TestSolutions extends AnyFunSuite:
   }
   test("Day17") {
     assertResult(1244)(actual = Day17.answer1)
+    assertResult(11162912)(actual = Day17.answer2)
+  }
+  test("Day18") {
+    assertResult(1187)(actual = Day18.answer1)
+    assertResult(5969)(actual = Day18.answer2)
   }
