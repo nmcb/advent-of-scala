@@ -13,10 +13,13 @@ object Day20 extends App:
     infix def distance: Int =
       x.abs + y.abs + z.abs
 
-  case class Particle(p: Vec, v: Vec, a: Vec):
+  case class Particle(position: Vec, velocity: Vec, acceleration: Vec):
 
     def update: Particle =
-      copy(p = p + v + a, v = v + a)
+      copy(
+        position = position + velocity + acceleration,
+        velocity = velocity + acceleration
+      )
 
   extension [A](t: (A,Int))
     def element: A = t._1
@@ -30,13 +33,13 @@ object Day20 extends App:
     def minDistanceParticleIndex: Int =
       particles
         .zipWithIndex
-        .minBy((particle,_) => particle.p.distance)
+        .minBy((particle,_) => particle.position.distance)
         .index
 
     def tickWithCollisions: Vector[Particle] =
       particles
         .map(_.update)
-        .groupBy(_.p)
+        .groupBy(_.position)
         .filter((_, collided) => collided.size == 1)
         .values
         .flatten
