@@ -104,7 +104,7 @@ object Day22 extends App:
 
   private val carrier: Carrier =
 
-    val lines =
+    val lines: Vector[String] =
       Source
         .fromResource(s"input$day.txt")
         .getLines
@@ -116,19 +116,19 @@ object Day22 extends App:
     val nodes: Map[Pos,Status] =
       lines
         .zipWithIndex
-        .flatMap: (row, y) =>
+        .flatMap: (row,y) =>
           row
             .zipWithIndex
             .map:
-              case ('#', x) => Pos(x,y) -> Infected
-              case ('.', x) => Pos(x,y) -> Clean
+              case ('#',x) => Pos(x,y) -> Infected
+              case ('.',x) => Pos(x,y) -> Clean
         .toMap
         .withDefaultValue(Clean)
 
     Carrier(nodes, current, Dir.N)
 
   def solve(init: Carrier, iterations: Int)(next: Carrier => Carrier): Int =
-    Iterator.iterate(carrier)(next).drop(iterations).next.infected
+    Iterator.iterate(init)(next).drop(iterations).next.infected
 
   val start1: Long = System.currentTimeMillis
   val answer1: Int = solve(carrier, 10000)(_.wake1)
