@@ -1,3 +1,5 @@
+import Day22.Status.Clean
+
 import scala.io.Source
 
 object Day22 extends App:
@@ -43,53 +45,59 @@ object Day22 extends App:
         case E => copy(x = x + 1)
         case W => copy(x = x - 1)
 
-  /** clean nodes are removed and modeled via default value '.' */
-  case class Carrier(nodes: Map[Pos,Char], current: Pos, dir: Dir, infected: Int = 0):
+  enum Status:
+    case Clean, Infected, Weakened, Flagged
+
+  import Status.*
+
+  case class Carrier(nodes: Map[Pos,Status], current: Pos, dir: Dir, infected: Int = 0):
 
     def wake1: Carrier =
       nodes(current) match
-        case '.' =>
+        case Clean =>
           val turn = dir.turnLeft
           copy(
-            nodes    = nodes + (current -> '#'),
+            nodes    = nodes + (current -> Infected),
             current  = current.step(turn),
             dir      = turn,
             infected = infected + 1
           )
-        case '#' =>
+        case Infected =>
           val turn = dir.turnRight
           copy(
-            nodes   = nodes - current,
+            nodes   = nodes + (current -> Clean),
             current = current.step(turn),
             dir     = turn
           )
+        case _ =>
+          sys.error(s"invalid state: $current -> ${nodes(current)}")
 
     def wake2: Carrier =
       nodes(current) match
-        case '.' =>
+        case Clean =>
           val turn = dir.turnLeft
           copy(
-            nodes   = nodes + (current -> 'W'),
+            nodes   = nodes + (current -> Weakened),
             current = current.step(turn),
             dir     = turn
           )
-        case 'W' =>
+        case Weakened =>
           copy(
-            nodes    = nodes + (current -> '#'),
+            nodes    = nodes + (current -> Infected),
             current = current.step(dir),
             infected = infected + 1
           )
-        case '#' =>
+        case Infected =>
           val turn = dir.turnRight
           copy(
-            nodes   = nodes + (current -> 'F'),
+            nodes   = nodes + (current -> Flagged),
             current = current.step(turn),
             dir     = turn
           )
-        case 'F' =>
+        case Flagged =>
           val turn = dir.reverse
           copy(
-            nodes   = nodes - current,
+            nodes   = nodes + (current -> Clean),
             current = current.step(turn),
             dir     = turn
           )
@@ -103,19 +111,19 @@ object Day22 extends App:
         .toVector
 
     val current: Pos =
-      Pos(lines(0).size / 2, lines.size / 2)
+      Pos(lines(0).length / 2, lines.length / 2)
 
-    val nodes: Map[Pos,Char] =
+    val nodes: Map[Pos,Status] =
       lines
         .zipWithIndex
         .flatMap: (row, y) =>
           row
             .zipWithIndex
-            .flatMap:
-              case ('#', x) => Some(Pos(x,y) -> '#')
-              case ('.', _) => None
+            .map:
+              case ('#', x) => Pos(x,y) -> Infected
+              case ('.', x) => Pos(x,y) -> Clean
         .toMap
-        .withDefaultValue('.')
+        .withDefaultValue(Clean)
 
     Carrier(nodes, current, Dir.N)
 
