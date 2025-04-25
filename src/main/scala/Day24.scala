@@ -1,5 +1,4 @@
 import scala.io.Source
-import scala.util.Try
 
 object Day24 extends App:
 
@@ -31,7 +30,7 @@ object Day24 extends App:
       yield
         component :: bridge
     go(components, 0)
-  
+
   val components: Set[Component] =
     Source
       .fromResource(s"input$day.txt")
