@@ -26,6 +26,7 @@ object Day02 extends App:
       case ('C','X') => 1 + 6
       case ('C','Y') => 2 + 0
       case ('C','Z') => 3 + 3
+      case _ => sys.error(s"illegal chars: ($p1,$p2)")
 
   val answer1: Int =
     input.map(score1).sum
@@ -47,6 +48,7 @@ object Day02 extends App:
       case ('C','X') => 2 + 0
       case ('C','Y') => 3 + 3
       case ('C','Z') => 1 + 6
+      case _ => sys.error(s"illegal chars: ($p1,$p2)")
 
   val answer2: Int =
     input.map(score2).sum
