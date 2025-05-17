@@ -82,7 +82,7 @@ object Day17 extends App:
      * @return The target node and associated traversal weight if reachable.
      */
     def traverse[A](start: A, target: A => Boolean, reachable: A => List[(A, Int)]): Option[(A, Int)] =
-      val todo    = mutable.PriorityQueue.empty(Ordering.Int.on[(Int, A)](_._1).reverse)
+      val todo    = mutable.PriorityQueue.empty(using Ordering.Int.on[(Int, A)](_._1).reverse)
       val weights = mutable.Map.empty[A, Int]
 
       def enqueue(node: A, weight: Int): Unit =

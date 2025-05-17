@@ -41,6 +41,7 @@ object Day18 extends App:
         case Op('D', length) => Vector.tabulate(length)(dy => Pos(x, y + dy + 1))
         case Op('L', length) => Vector.tabulate(length)(dx => Pos(x - dx - 1, y))
         case Op('R', length) => Vector.tabulate(length)(dx => Pos(x + dx + 1, y))
+        case Op(dir, length) => sys.error(s"invalid dir=$dir, length=$length")
 
     infix def move2(op: Op): Pos =
       op match
@@ -48,6 +49,7 @@ object Day18 extends App:
         case Op('D', length) => Pos(x, y + length)
         case Op('L', length) => Pos(x - length, y)
         case Op('R', length) => Pos(x + length, y)
+        case Op(dir, length) => sys.error(s"invalid dir=$dir, length=$length")
 
 
     def neighbours: Set[Pos] =

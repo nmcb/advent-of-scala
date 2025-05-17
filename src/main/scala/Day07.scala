@@ -138,7 +138,7 @@ object Day07 extends App:
     given Ordering[Card] = orderBy(Game.sortedSet)
     input
       .map(Hand.fromString)
-      .sorted(orderBy(_.strength1))
+      .sorted(using orderBy(_.strength1))
       .zipWithIndex
       .map((h,i) => h.bid * (i + 1))
       .sum
@@ -152,7 +152,7 @@ object Day07 extends App:
     given Ordering[Card] = orderBy(Game.sortedJokerSet)
     input
       .map(Hand.fromString)
-      .sorted(orderBy(_.strength2))
+      .sorted(using orderBy(_.strength2))
       .zipWithIndex
       .map((h,i) => h.bid * (i + 1))
       .sum
