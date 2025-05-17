@@ -46,7 +46,7 @@ object SecurityExercise extends App:
       loop(clusters, routes)
 
   given Random = Random(1)
-  private val (clusters: Set[Cluster], cuts: Set[Route]) = routes.minCut(3)
+  private val (clusters: Set[Cluster], cuts: Vector[Route]) = routes.minCut(3)
   val cluster0 = clusters.head.size
   val cluster1 = clusters.last.size
 
