@@ -60,7 +60,7 @@ object Dijkstra:
 
     distTo += from -> 0
     val sourceEdge = from -> distTo(from)
-    val queue = mutable.PriorityQueue[(A,Int)](sourceEdge)(Ordering.by[(A,Int),Int](_._2).reverse)
+    val queue = mutable.PriorityQueue[(A,Int)](sourceEdge)(using Ordering.by[(A,Int),Int](_._2).reverse)
 
     while (queue.nonEmpty)
       val (minDistNode, _) = queue.dequeue()

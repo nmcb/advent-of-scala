@@ -52,7 +52,7 @@ object Day09 extends App:
 
   val start1: Long  = System.currentTimeMillis
   val answer1: Long = checksum(compact1(disk))
-  println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Day $day answer part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   case class Chunk(id: Int, size: Int):
     def isFileChunk: Boolean    = id != -1
@@ -116,7 +116,7 @@ object Day09 extends App:
 
   val start2: Long  = System.currentTimeMillis
   val answer2: Long = checksum(compact2(disk))
-  println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  println(s"Day $day answer part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
 
   /**
    * class Mem():
@@ -171,7 +171,7 @@ object Day09 extends App:
       .map(_ value _)
       .sum
 
-  println(s"Answer day $day part 2: $answer2Mutable [${System.currentTimeMillis - start2Mutable}ms] (Mutable)")
+  println(s"Day $day answer part 2: $answer2Mutable [${System.currentTimeMillis - start2Mutable}ms] (Mutable)")
 
   def checksumJP(result: Vector[Int]): Long =
     result.zipWithIndex.foldLeft(0L):
@@ -208,5 +208,5 @@ object Day09 extends App:
     case _ => ???
   }
 
-  println(s"Answer day $day part 2: ${checksumJP(answer2JP._1)} [${System.currentTimeMillis - startJP}ms] (JP)")
+  println(s"Day $day answer part 2: ${checksumJP(answer2JP._1)} [${System.currentTimeMillis - startJP}ms] (JP)")
 

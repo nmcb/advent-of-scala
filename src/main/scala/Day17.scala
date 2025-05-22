@@ -74,7 +74,7 @@ object Day17 extends App:
 
   val start1: Long    = System.currentTimeMillis
   val answer1: String = cpu.run.displayOut.mkString(",")
-  println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Day $day answer part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   def quineA(cpu: CPU): Long =
     @tailrec
@@ -92,4 +92,4 @@ object Day17 extends App:
 
   val start2: Long  = System.currentTimeMillis
   val answer2: Long = quineA(cpu)
-  println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  println(s"Day $day answer part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
