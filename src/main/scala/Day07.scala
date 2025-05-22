@@ -71,11 +71,11 @@ object Day07 extends App:
 
   val start1: Long  = System.currentTimeMillis
   val answer1: Long = input.filter(_.valid(OperatorsPart1)).map(_.result).sum
-  println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Day $day answer part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long  = System.currentTimeMillis
   val answer2: Long = input.filter(_.valid(OperatorsPart2)).map(_.result).sum
-  println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  println(s"Day $day answer part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
 
 
   /** https://github.com/stewSquared/advent-of-code/blob/master/src/main/scala/2024/Day07.worksheet.sc */
@@ -96,4 +96,4 @@ object Day07 extends App:
 
   val start2Stewart: Long  = System.currentTimeMillis
   val answer2Stewart: Long = input.filter(solvable).map(_.result).sum
-  println(s"Answer day $day part 2: $answer2Stewart [${System.currentTimeMillis - start2Stewart}ms] (Stewart)")
+  println(s"Day $day answer part 2: $answer2Stewart [${System.currentTimeMillis - start2Stewart}ms] (Stewart)")

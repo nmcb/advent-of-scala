@@ -132,8 +132,8 @@ object Day24 extends App:
 
   val start1: Long  = System.currentTimeMillis
   val answer1: Long = solve(sort(gates, initial), initial).output
-  println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Day $day answer part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long    = System.currentTimeMillis
   val answer2: String = (debugOUT(gates) ++ debugAND(gates) ++ debugXOR(gates)).toVector.sorted.mkString(",")
-  println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  println(s"Day $day answer part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
