@@ -59,7 +59,7 @@ object Day25 extends App:
       require(doors.contains(door))
       run(door)
 
-    def take(item: String): Droid =
+    infix def take(item: String): Droid =
       require(items.contains(item))
       run(s"take $item")
 
@@ -69,8 +69,8 @@ object Day25 extends App:
 
   object Droid:
 
-    def apply(programState: CPU): Droid =
-      val outputs   = programState.outputStates
+    def apply(cpu: CPU): Droid =
+      val outputs   = cpu.outputStates
       val stdout    = outputs.map((_,value) => value.toChar).mkString
       val (next, _) = outputs.last
 
@@ -100,21 +100,19 @@ object Day25 extends App:
   private val securityRoom =
     "Security Checkpoint"
 
-  def collectItems(droidState: Droid, excludeDoor: Option[String] = None): Droid =
-    val droidStateItems = droidState.items.filterNot(badItems).foldLeft(droidState)(_.take(_))
-    val droidStateMoves =
-      if droidState.room == securityRoom then
-        droidStateItems
-      else
-        droidStateItems
-          .doors
-          .filterNot(excludeDoor.contains)
-          .foldLeft(droidStateItems): (droidState, door) =>
-            val oppositeDoor = opposite(door)
-            collectItems(droidState.move(door), Some(oppositeDoor)).move(oppositeDoor)
-    droidStateMoves
+  def collectItems(droid: Droid, excludeDoor: Option[String] = None): Droid =
+    val collected = droid.items.filterNot(badItems).foldLeft(droid)(_ take _)
+    if droid.room == securityRoom then
+      collected
+    else
+      collected
+        .doors
+        .filterNot(excludeDoor.contains)
+        .foldLeft(collected): (collect, door) =>
+          val back = opposite(door)
+          collectItems(collect.move(door), Some(back)).move(back)
 
-  def goToSecurityRoom(droidState: Droid): Droid =
+  def goToSecurityRoom(droid: Droid): Droid =
 
     def bfs(start: Droid): Option[Droid] =
       val todo  = collection.mutable.Queue(start)
@@ -134,7 +132,7 @@ object Day25 extends App:
 
       found
 
-    bfs(droidState).get
+    bfs(droid).get
 
 
   def findPressureSensitiveFloorDoor(droidState: Droid): String =
