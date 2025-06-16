@@ -1,6 +1,6 @@
-import scala.annotation.tailrec
 import scala.io.Source
 
+/** @see Credits - https://github.com/sim642/adventofcode */
 object Day25 extends App:
 
   import cpu.*
@@ -8,41 +8,156 @@ object Day25 extends App:
   def day: String  = getClass.getSimpleName.filter(_.isDigit).mkString
   def program: Mem = Mem.parse(Source.fromResource(s"input$day.txt").mkString.trim)
 
-  def description(cpu: CPU): CPU =
-    @tailrec
-    def go(cpu: CPU, message: String): CPU =
-      if message.endsWith("Command?\n") || message.endsWith("!\n\n") || message.endsWith("\"\n") then
-        print(message)
-        cpu
+  def runInteractive(program: Mem): Unit =
+
+    val reader: java.io.BufferedReader =
+      Console.in
+
+    val inputs: LazyList[Value] =
+      LazyList.unfold(()): _ =>
+        val c = reader.read()
+        if c < 0 then None else Some((c.toLong, ()))
+
+    val outputs = CPU(program, stdin = inputs).outputs
+    outputs.foreach(c => print(c.toChar))
+
+  private val Room =
+    """== (.+) ==
+      |.*
+      |
+      |Doors here lead:
+      |((?:- \w+
+      |)+)(?:
+      |Items here:
+      |((?:- [\w ]+
+      |)+))?
+      |(?:Command\?|(?:.|\n)*?(\d+))""".stripMargin.r.unanchored
+
+  private val ListItem = """- ([\w ]+)""".r
+  private val Take     = """You take the ([\w ]+)\.""".r.unanchored
+  private val Drop     = """You drop the ([\w ]+)\.""".r.unanchored
+
+  case class Droid(room: String, doors: Set[String], items: Set[String], inventory: Set[String], password: Option[Int])(val cpu: CPU):
+
+    def run(command: String): Droid =
+      val inputs    = (command + "\n").map(_.toLong).to(LazyList)
+      val outputs   = cpu.copy(stdin = inputs).outputStates
+      val stdout    = outputs.map((_,value) => value.toChar).mkString
+      val (next, _) = outputs.last
+
+      stdout match
+        case Room(room, doors, items, pwd) =>
+          val nextDoors = ListItem.findAllMatchIn(doors).map(_.group(1)).toSet
+          val nextItems = if items == null then Set.empty[String] else ListItem.findAllMatchIn(items).map(_.group(1)).toSet
+          Droid(room, nextDoors, nextItems, inventory, password.orElse(Option(pwd).map(_.toInt)))(next)
+        case Take(item) =>
+          Droid(room, doors, items - item, inventory + item, password)(next)
+        case Drop(item) =>
+          Droid(room, doors, items + item, inventory - item, password)(next)
+
+    def move(door: String): Droid =
+      require(doors.contains(door))
+      run(door)
+
+    def take(item: String): Droid =
+      require(items.contains(item))
+      run(s"take $item")
+
+    infix def drop(item: String): Droid =
+      require(inventory.contains(item))
+      run(s"drop $item")
+
+  object Droid:
+
+    def apply(programState: CPU): Droid =
+      val outputs   = programState.outputStates
+      val stdout    = outputs.map((_,value) => value.toChar).mkString
+      val (next, _) = outputs.last
+
+      stdout match
+        case Room(room, doors, items, password2) =>
+          val doorsSet = ListItem.findAllMatchIn(doors).map(_.group(1)).toSet
+          val itemsSet = if items == null then Set.empty[String] else ListItem.findAllMatchIn(items).map(_.group(1)).toSet
+          Droid(room, doorsSet, itemsSet, Set.empty, Option(password2).map(_.toInt))(next)
+
+  private val badItems =
+    Set(
+      "escape pod",
+      "infinite loop",
+      "giant electromagnet",
+      "photons",
+      "molten lava",
+    )
+
+  private val opposite =
+    Map(
+      "north" -> "south",
+      "south" -> "north",
+      "east"  -> "west",
+      "west"  -> "east",
+    )
+
+  private val securityRoom =
+    "Security Checkpoint"
+
+  def collectItems(droidState: Droid, excludeDoor: Option[String] = None): Droid =
+    val droidStateItems = droidState.items.filterNot(badItems).foldLeft(droidState)(_.take(_))
+    val droidStateMoves =
+      if droidState.room == securityRoom then
+        droidStateItems
       else
-        cpu.executeOne match
-          case Some(next, Some(output)) => go(next, message :+ output.toChar)
-          case Some(next, None)         => go(next, message)
-          case None                     => sys.error(s"unexpected halt")
-    go(cpu, "")
+        droidStateItems
+          .doors
+          .filterNot(excludeDoor.contains)
+          .foldLeft(droidStateItems): (droidState, door) =>
+            val oppositeDoor = opposite(door)
+            collectItems(droidState.move(door), Some(oppositeDoor)).move(oppositeDoor)
+    droidStateMoves
 
-  def solve1(cpu: CPU, recorded: Seq[String]): Unit =
-    @tailrec
-    def go(computer: CPU, command: String, recorded: Seq[String]): Unit =
-      println(command)
-      if command == "exit" then
-        ()
-      else
-        val input = command.map(_.toLong) :+ 10L
-        val next  = description(computer.withInput(input *))
+  def goToSecurityRoom(droidState: Droid): Droid =
 
-        val (fetched, record) =
-          recorded match
-            case first +: tail => (first, tail)
-            case _             => (Console.in.readLine(), Seq())
+    def bfs(start: Droid): Option[Droid] =
+      val todo  = collection.mutable.Queue(start)
+      var found = Option.empty[Droid]
 
-        go(next, fetched, record)
+      while todo.nonEmpty && found.isEmpty do
+        val current = todo.dequeue
+        current
+          .doors
+          .iterator
+          .map(current.move)
+          .foreach: next =>
+            if next.room == securityRoom then
+              found = Some(next)
+            else
+              todo.enqueue(next)
 
-    go(CPU(program), "", recorded)
+      found
 
-  val solution = "d2VzdAp3ZXN0CnRha2UgYm93bCBvZiByaWNlCmVhc3QKbm9ydGgKZWFzdApzb3V0aAp0YWtlIGRhcmsgbWF0dGVyCm5vcnRoCndlc3QKbm9ydGgKdGFrZSBjYW5keSBjYW5lCndlc3QKd2VzdApub3J0aAp0YWtlIGRlaHlkcmF0ZWQgd2F0ZXIKd2VzdApzb3V0aA=="
-  val recorded = Seq.empty // String(java.util.Base64.getDecoder.decode(solution)).split("\n").toSeq
+    bfs(droidState).get
+
+
+  def findPressureSensitiveFloorDoor(droidState: Droid): String =
+    droidState.doors.find(droidState.move(_).room == securityRoom).get
+
+  def findPassword(program: Mem): Int =
+
+    val initial  = Droid(CPU(program))
+    val items    = collectItems(initial)
+    val security = goToSecurityRoom(items)
+    val pressure = findPressureSensitiveFloorDoor(security)
+
+    val password =
+      security
+        .inventory
+        .subsets
+        .map: dropped =>
+          dropped.foldLeft(security)(_ drop _).move(pressure)
+        .flatMap(_.password)
+        .next
+
+    password
 
   val start1  = System.currentTimeMillis
-  val answer1 = solve1(CPU(program), recorded)
+  val answer1 = findPassword(program)
   println(s"Day $day answer part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
