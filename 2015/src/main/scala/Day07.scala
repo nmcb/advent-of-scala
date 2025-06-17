@@ -78,7 +78,7 @@ object Day07 extends App:
           => Op1(identity, List(rhs), ret)
 
     Source
-      .fromResource(s"input$day.txt", getClass.getClassLoader)
+      .fromResource(s"input$day.txt")
       .getLines
       .map(parser)
       .toIndexedSeq

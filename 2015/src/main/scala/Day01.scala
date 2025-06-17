@@ -10,7 +10,7 @@ object Day01 extends App:
 
   val commands: List[Char] =
     Source
-      .fromResource(s"input$day.txt", getClass.getClassLoader)
+      .fromResource(s"input$day.txt")
       .mkString
       .trim
       .toList
