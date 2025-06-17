@@ -39,8 +39,8 @@ object Day02 extends App:
 
   val start1: Long = System.currentTimeMillis
   val answer1: Int = reports.count(_.isSafe)
-  println(s"Day $day answer part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2024 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long = System.currentTimeMillis
   val answer2: Int = reports.count(r => r.isSafe || r.isSafeWithOneLevelRemoved)
-  println(s"Day $day answer part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2024 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

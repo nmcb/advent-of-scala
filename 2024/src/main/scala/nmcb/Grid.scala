@@ -1,9 +1,8 @@
 package nmcb
 
-import predef.*
-
-import Pos.*
-import Dijkstra.*
+import nmcb.Dijkstra.*
+import nmcb.Pos.*
+import nmcb.predef.*
 
 case class Grid[+A](matrix: Vector[Vector[A]]):
   val sizeY: Int = matrix.size

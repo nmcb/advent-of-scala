@@ -1,6 +1,6 @@
 package nmcb
 
-import Dir.*
+import nmcb.Dir.*
 
 case class Pos(x: Int, y: Int):
   infix inline def +(p: Pos): Pos = copy(x = x + p.x, y = y + p.y)

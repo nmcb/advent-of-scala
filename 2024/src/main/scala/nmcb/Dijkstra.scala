@@ -1,7 +1,7 @@
 package nmcb
 
-import predef.*
-import Pos.*
+import nmcb.Pos.*
+import nmcb.predef.*
 
 import scala.annotation.*
 
