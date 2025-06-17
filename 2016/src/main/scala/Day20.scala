@@ -64,8 +64,8 @@ object Day20 extends App:
 
   val start1  = System.currentTimeMillis
   val answer1 = remaining(blacklist).minBy(_.min).min
-  println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2016 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2  = System.currentTimeMillis
   val answer2 = remaining(blacklist).foldLeft(0L)(_ + _.size)
-  println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2016 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

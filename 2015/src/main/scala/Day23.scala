@@ -67,8 +67,8 @@ object Day23 extends App:
 
   val start1: Long = System.currentTimeMillis
   val answer1: Int = CPU(instructions).run.registers.valueOf("b")
-  println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2015 day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long = System.currentTimeMillis
   val answer2: Int = CPU(instructions, registers = Map("a" -> 1).withDefaultValue(0)).run.registers.valueOf("b")
-  println(s"Answer day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2015 day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")

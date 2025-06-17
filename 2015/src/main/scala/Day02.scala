@@ -31,7 +31,7 @@ object Day02 extends App:
   val answer1: Int =
     boxes.map(b => b.area + b.slack).sum
   
-  println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2015 day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long =
     System.currentTimeMillis
@@ -39,4 +39,4 @@ object Day02 extends App:
   val answer2: Int =
     boxes.map(b => b.volume + b.wrap).sum
   
-  println(s"Answer day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2015 day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")

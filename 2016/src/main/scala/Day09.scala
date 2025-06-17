@@ -24,7 +24,7 @@ object Day09 extends App:
 
   val start1: Long  = System.currentTimeMillis
   val answer1: Long = solve1(input)
-  println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2016 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   def solve2(str: String): Long =
     marker.findFirstMatchIn(str) match
@@ -39,4 +39,4 @@ object Day09 extends App:
 
   val start2: Long  = System.currentTimeMillis
   val answer2: Long = solve2(input)
-  println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2016 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

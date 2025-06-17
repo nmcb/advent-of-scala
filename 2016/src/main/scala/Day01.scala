@@ -53,7 +53,7 @@ object Day01 extends App:
 
   val start1: Long = System.currentTimeMillis
   val answer1: Int = commands.foldLeft(Vector(Ikke.airDrop))(_.last process _).last.manhattan
-  println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2016 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   @tailrec
   def solve(commands: Vector[Cmd], path: Vector[Ikke]): Ikke =
@@ -71,4 +71,4 @@ object Day01 extends App:
 
   val start2: Long = System.currentTimeMillis
   val answer2: Int = solve(commands, Vector(Ikke.airDrop)).manhattan
-  println(s"Answer day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2016 day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")

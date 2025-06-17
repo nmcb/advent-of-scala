@@ -68,8 +68,8 @@ object Day04 extends App:
 
   val start1  = System.currentTimeMillis
   val answer1 = rooms.filter(_.isValid).map(_.id).sum
-  println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2016 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2  = System.currentTimeMillis
   val answer2 = rooms.find(_.decrypt.trim == "northpole object storage").get.id
-  println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2016 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

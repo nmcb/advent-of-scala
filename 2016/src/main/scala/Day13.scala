@@ -40,7 +40,7 @@ object Day13 extends App:
 
   val start1  = System.currentTimeMillis
   val answer1 = solve1(start = Pos(1,1), target = Pos(31,39))
-  println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2016 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   /** breadth first search */
   def solve2(start: Pos): Map[Pos,Int] =
@@ -59,4 +59,4 @@ object Day13 extends App:
 
   val start2  = System.currentTimeMillis
   val answer2 = solve2(start = Pos(1,1)).size
-  println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2016 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

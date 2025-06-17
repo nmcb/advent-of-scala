@@ -65,7 +65,7 @@ object Day13 extends App:
       .map(setting => Table(setting, preferences).totalHappiness)
       .max
 
-  println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2015 day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
 
   /** Part 2 */
@@ -89,4 +89,4 @@ object Day13 extends App:
       .map(setting => Table(setting, preferences2).totalHappiness)
       .max
 
-  println(s"Answer day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2015 day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")

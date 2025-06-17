@@ -63,8 +63,8 @@ object Day08 extends App:
 
   val start1: Long = System.currentTimeMillis
   val answer1: Int = operations.foldLeft(Screen.empty)(_ process _).countLit
-  println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2016 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long    = System.currentTimeMillis
   val answer2: String = operations.foldLeft(Screen.empty)(_ process _).asString
-  println(s"Answer day $day part 2:\n$answer2 [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2016 day $day part 2:\n$answer2 [${System.currentTimeMillis - start2}ms]")
