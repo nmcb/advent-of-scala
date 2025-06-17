@@ -91,8 +91,9 @@ object Day18 extends App:
   /** Input */
 
   val grid: Grid =
-    import scala.io.*
     import Light.*
+
+    import scala.io.*
     val initial =
       Source
         .fromResource(s"input$day.txt")

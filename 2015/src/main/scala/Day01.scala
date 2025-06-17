@@ -1,4 +1,4 @@
-import scala.io._
+import scala.io.*
 
 object Day01 extends App:
 
@@ -10,7 +10,7 @@ object Day01 extends App:
 
   val commands: List[Char] =
     Source
-      .fromResource(s"input$day.txt")
+      .fromResource(s"input$day.txt", getClass.getClassLoader)
       .mkString
       .trim
       .toList

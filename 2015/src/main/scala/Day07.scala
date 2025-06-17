@@ -1,5 +1,5 @@
-import scala.io.*
 import scala.annotation.*
+import scala.io.*
 
 object Day07 extends App:
 
@@ -78,7 +78,7 @@ object Day07 extends App:
           => Op1(identity, List(rhs), ret)
 
     Source
-      .fromFile("src/main/resources/input07.txt")
+      .fromResource(s"input$day.txt", getClass.getClassLoader)
       .getLines
       .map(parser)
       .toIndexedSeq

@@ -1,6 +1,6 @@
-lazy val root =
+lazy val aoc2015 =
   project
-    .in(file("."))
+    .in(file("2015"))
     .settings( scalaVersion := "3.7.1"
              , name         := "aoc-2015"
              , version      := "0.1.0"
@@ -8,6 +8,9 @@ lazy val root =
                  "org.scalatest"  %% "scalatest"  % "3.2.19" % "test"
                )
              )
+
+lazy val root = (project in file("."))
+  .aggregate(aoc2015)
 
 scalacOptions ++= Seq(       
   "-encoding", "utf8",        
