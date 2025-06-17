@@ -17,9 +17,9 @@ object Day06 extends App:
     
   val start1  = System.currentTimeMillis
   val answer1 = answers.map(chars).map(_.size).sum
-  println(s"Day $day answer part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2020 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2  = System.currentTimeMillis
   val answer2 = answers.map(grp => grp.fold(chars(grp))(_ intersect _).size).sum
-  println(s"Day $day answer part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2020 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
 

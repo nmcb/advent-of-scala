@@ -55,7 +55,7 @@ object Day12 extends App:
 
   val start1 = System.currentTimeMillis
   val answer1: Int = actions.foldLeft(Ship())(_ perform _).manhattan
-  println(s"Day $day answer part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2020 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   case class WayPoint(x: Int, y: Int):
 
@@ -86,4 +86,4 @@ object Day12 extends App:
 
   val start2  = System.currentTimeMillis
   val answer2 = actions.foldLeft(WayPointedShip())(_ perform _).manhattan
-  println(s"Day $day answer part 2: $answer2 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2020 day $day part 2: $answer2 [${System.currentTimeMillis - start1}ms]")

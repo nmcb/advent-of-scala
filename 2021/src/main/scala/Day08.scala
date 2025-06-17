@@ -1,0 +1,113 @@
+import scala.annotation.tailrec
+import scala.io.Source
+
+object Day08 extends App:
+
+  val day = getClass.getSimpleName.filter(_.isDigit).mkString
+
+  val lines =
+    Source
+      .fromResource(s"input$day.txt")
+      .getLines
+      .map(line =>
+        val input  = line.split("\\|")(0).trim.split(" ").toList
+        val output = line.split("\\|")(1).trim.split(" ").toList
+        (input, output))
+      .toList
+
+
+  val start1  = System.currentTimeMillis
+
+  val answer1 =
+    lines
+      .map: (_,output) =>
+        output.count: digit =>
+          val is1 = digit.length == 2
+          val is7 = digit.length == 3
+          val is4 = digit.length == 4
+          val is8 = digit.length == 7
+          is1 || is4 || is7 || is8
+      .sum
+
+
+  println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+
+  val leds0 = Set(0,1,2,4,5,6)
+  val leds1 = Set(2,5)
+  val leds2 = Set(0,2,3,4,6)
+  val leds3 = Set(0,2,3,5,6)
+  val leds4 = Set(1,2,3,5)
+  val leds5 = Set(0,1,3,5,6)
+  val leds6 = Set(0,1,3,4,5,6)
+  val leds7 = Set(0,2,5)
+  val leds8 = Set(0,1,2,3,4,5,6)
+  val leds9 = Set(0,1,2,3,5,6)
+
+  type Wiring = String
+
+  def decode(wiring: Wiring)(digit: String): Option[Int] =
+    val leds = digit.map(code => wiring.indexOf(code)).toSet
+    if      (leds == leds0) Some(0)
+    else if (leds == leds1) Some(1)
+    else if (leds == leds2) Some(2)
+    else if (leds == leds3) Some(3)
+    else if (leds == leds4) Some(4)
+    else if (leds == leds5) Some(5)
+    else if (leds == leds6) Some(6)
+    else if (leds == leds7) Some(7)
+    else if (leds == leds8) Some(8)
+    else if (leds == leds9) Some(9)
+    else None
+
+  def valid(wiring: Wiring)(input: List[String]): Boolean =
+
+    @tailrec
+    def loop(todo: List[String], digitsFound: Set[Int] = Set.empty): Boolean =
+
+      val allDigits: Set[Int] = Set(0,1,2,3,4,5,6,7,8,9)
+
+      def inDigitsFound(digit: Int): Boolean =
+        digitsFound.contains(digit)
+
+      def notInDigitsLeftToValidate(digit: Int): Boolean =
+        !(allDigits -- digitsFound).contains(digit)
+
+      todo match
+        case Nil => digitsFound == allDigits
+        case encoding :: encodings => decode(wiring)(encoding) match
+          case None => false
+          case Some(digit) if inDigitsFound(digit) => false
+          case Some(digit) if notInDigitsLeftToValidate(digit) => false
+          case Some(digit) => loop(encodings, digitsFound + digit)
+
+    loop(input)
+
+
+  val start2  = System.currentTimeMillis
+  val answer2 =
+
+    def search(wirings: List[String])(input: List[String]): String =
+      val wiring = wirings.head
+      if valid(wiring)(input) then
+        wiring
+      else 
+        search(wirings.tail)(input)
+
+    val init: List[Wiring] =
+      "abcdefg".permutations.toList
+
+    val numbers: List[Int] =
+      lines.zipWithIndex.map:
+        case ((input,output),idx) =>
+          val wiring: Wiring =
+            search(init)(input)
+          val number: Int =
+            output
+              .foldLeft(""): (num,digit) =>
+                num + decode(wiring)(digit).get
+              .toInt
+          number
+
+    numbers.sum
+
+  println(s"Answer AOC 2021 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

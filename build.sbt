@@ -30,6 +30,7 @@ lazy val aoc2017 = project.in(file("2017"))
 lazy val aoc2018 = project.in(file("2018"))
 lazy val aoc2019 = project.in(file("2019"))
 lazy val aoc2020 = project.in(file("2020"))
+lazy val aoc2021 = project.in(file("2021"))
 
 lazy val root    = (project in file(".")).aggregate(
   aoc2015,
@@ -37,5 +38,6 @@ lazy val root    = (project in file(".")).aggregate(
   aoc2017,
   aoc2018,
   aoc2019,
-  aoc2020
+  aoc2020,
+  aoc2021
 )

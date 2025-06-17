@@ -32,7 +32,7 @@ object Day17 extends App:
 
   val start1 = System.currentTimeMillis
   val answer1 = solve1(points)
-  println(s"Day $day answer part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2020 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   def solve2(points: Set[Cube]): Int =
     val directions = Seq.tabulate(3,3,3,3)((x,y,z,w) => Cube(x - 1, y - 1, z - 1, w - 1)).flatten.flatten.flatten.toSet
@@ -40,4 +40,4 @@ object Day17 extends App:
 
   val start2 = System.currentTimeMillis
   val answer2 = solve2(points)
-  println(s"Day $day answer part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2020 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
