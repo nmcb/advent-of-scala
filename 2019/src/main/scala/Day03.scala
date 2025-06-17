@@ -39,7 +39,7 @@ object Day03 extends App:
 
   val start1 = System.currentTimeMillis
   val answer1 = distances(description1, description2).head.manhattan
-  println(s"Day $day answer part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2019 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
 
   type Crossing = (Pos,Int)
@@ -65,4 +65,4 @@ object Day03 extends App:
 
   val start2 = System.currentTimeMillis
   val answer2 = solve2(description1, description2)
-  println(s"Day $day answer part 2: $answer2 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2019 day $day part 2: $answer2 [${System.currentTimeMillis - start1}ms]")

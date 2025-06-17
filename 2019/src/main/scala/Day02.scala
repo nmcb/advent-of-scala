@@ -9,7 +9,7 @@ object Day02 extends App:
 
   val start1 = System.currentTimeMillis
   val answer1 = CPU(program.updated(1,12).updated(2,2)).execFinal.mem(0)
-  println(s"Day $day answer part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2019 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
 
   def experiment(program: Mem): Int =
@@ -31,4 +31,4 @@ object Day02 extends App:
 
   val start2 = System.currentTimeMillis
   val answer2 = experiment(program)
-  println(s"Day $day answer part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2019 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

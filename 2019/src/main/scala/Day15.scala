@@ -49,8 +49,8 @@ object Day15 extends App:
 
   val start1  = System.currentTimeMillis
   val answer1 = solve1(program)
-  println(s"Day $day answer part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2019 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2  = System.currentTimeMillis
   val answer2 = solve2(program)
-  println(s"Day $day answer part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2019 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

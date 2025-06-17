@@ -31,7 +31,7 @@ object Day13 extends App:
   val program = Mem.parse(Source.fromResource(s"input$day.txt").mkString.trim)
   val start1  = System.currentTimeMillis
   val answer1 = CPU(program).outputs.render.values.count(_ == Block)
-  println(s"Day $day answer part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2019 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
 
   type Pixel = (Pos, Tile)
@@ -109,4 +109,4 @@ object Day13 extends App:
 
   val start2  = System.currentTimeMillis
   val answer2 = play(program, onScreen = false)
-  println(s"Day $day answer part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2019 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

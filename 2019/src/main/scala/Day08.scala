@@ -53,7 +53,7 @@ object Day08 extends App:
 
   val start1  = System.currentTimeMillis
   val answer1 = image.sortWith(_.count0 < _.count0).headOption.map(l => l.count1 * l.count2).get
-  println(s"Day $day answer part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2019 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
 
   // Part 2
@@ -94,4 +94,4 @@ object Day08 extends App:
 
   val start2  = System.currentTimeMillis
   val answer2 = render(image.map(l => l.map(_.digitToPix)).foldRight(Layer.fill(Trans))(stack))
-  println(s"Day $day answer part 2:\n$answer2 [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2019 day $day part 2:\n$answer2 [${System.currentTimeMillis - start2}ms]")
