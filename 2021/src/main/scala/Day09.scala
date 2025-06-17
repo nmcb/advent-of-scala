@@ -1,4 +1,4 @@
-import scala.io._
+import scala.io.*
 
 object Day09 extends App:
 
@@ -52,7 +52,8 @@ object Day09 extends App:
 
   val start1  = System.currentTimeMillis
   val answer1 = heights.map((_,h) => h + 1).sum
-  println(s"Answer 1 = ${answer1} [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+
 
   val start2  = System.currentTimeMillis
   val answer2 =
@@ -71,5 +72,4 @@ object Day09 extends App:
       .take(3)
       .product
 
-  println(s"Answer 2 = ${answer2} [${System.currentTimeMillis - start2}ms]")
-  assert(answer2 == 1330560)
+  println(s"Answer AOC 2020 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

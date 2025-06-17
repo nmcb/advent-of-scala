@@ -1,5 +1,5 @@
 import scala.annotation.tailrec
-import scala.io._
+import scala.io.*
 
 object Day22 extends App:
 
@@ -17,7 +17,7 @@ object Day22 extends App:
       .getLines
       .map:
         case StepLit(set, x0, x1, y0, y1, z0, z1) =>
-          import math._
+          import math.*
           val xr = min(x0.toInt, x1.toInt) to max(x0.toInt, x1.toInt)
           val yr = min(y0.toInt, y1.toInt) to max(y0.toInt, y1.toInt)
           val zr = min(z0.toInt, z1.toInt) to max(z0.toInt, z1.toInt)
@@ -142,6 +142,7 @@ object Day22 extends App:
           CubeStep(set, Cube(min, max))
       .toVector
 
+  
   val start2  = System.currentTimeMillis
   val answer2 = Cube.reboot(cubeSteps)
   println(s"answer 2: $answer2 [${System.currentTimeMillis - start2}ms]")

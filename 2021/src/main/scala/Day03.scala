@@ -36,7 +36,7 @@ object Day03 extends App:
   val epsilon = diagnostics.transpose.map(_.leastCommon).toInt
   val answer1 = gamma * epsilon
   
-  println(s"Day$day answer 1 = ${answer1} [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2020 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
 
   def rating(bits: List[Bits], commonOf: Bits => Char): Int =
@@ -56,4 +56,4 @@ object Day03 extends App:
   val co2SchrubberRating = rating(diagnostics, _.leastCommon)
   val answer2            = oxygenRating * co2SchrubberRating
 
-  println(s"Day$day answer 2 = ${answer2} [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2020 day $day part 1: $answer2 [${System.currentTimeMillis - start2}ms]")

@@ -1,4 +1,4 @@
-import scala.io._
+import scala.io.*
 
 object Day07 extends App:
 
@@ -27,8 +27,8 @@ object Day07 extends App:
 
   val start1 = System.currentTimeMillis
   val answer1 = positions.solve(_.fuelConsumptionTo1)
-  println(s"Day $day answer = ${answer1} [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2 = System.currentTimeMillis
   val answer2 = positions.solve(_.fuelConsumptionTo2)
-  println(s"Day $day answer = ${answer2} [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2021 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

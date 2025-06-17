@@ -91,8 +91,7 @@ object Day18 extends App:
   import Num.*
 
   def parse(s: String): Num =
-    import parsing.*
-    import P.*    
+    import P.*
     def vp: P[Num] = digits.map(Lit.apply)
     def pp: P[Num] = for { _ <- char('[') ; l <- np ; _ <- char(',') ; r <- np ; _ <- char(']') } yield Pair(l, r)
     def np: P[Num] = vp | pp
@@ -107,8 +106,9 @@ object Day18 extends App:
 
   val start1  = System.currentTimeMillis
   val answer1 = numbers.reduceLeft(_ + _).magnitude
-  println(s"Day $day answer 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
+  
   val start2  = System.currentTimeMillis
   val answer2 = numbers.combinations(2).flatMap(ns => List(ns(0) + ns(1), ns(1) + ns(0))).map(_.magnitude).max
-  println(s"Day $day answer 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2021 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

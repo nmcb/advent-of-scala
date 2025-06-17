@@ -141,8 +141,8 @@ object Day16 extends App:
 
   val start1  = System.currentTimeMillis
   val answer1 = Packet(input).versionSum
-  println(s"Day $day answer 1 = $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2  = System.currentTimeMillis
   val answer2 = Packet(input).value
-  println(s"Day $day answer 2 = ${Packet(input).value} [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2021 day $day part 2 = ${Packet(input).value} [${System.currentTimeMillis - start2}ms]")

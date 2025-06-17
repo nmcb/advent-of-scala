@@ -1,4 +1,4 @@
-import scala.io._
+import scala.io.*
 
 object Day02 extends App:
 
@@ -51,9 +51,9 @@ object Day02 extends App:
 
   val start1  = System.currentTimeMillis
   val answer1 = Sub.init.run(instructions).solution
-  println(s"Day$day answer part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2021 day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
   val start2  = System.currentTimeMillis
   val answer2 = Sub.init.run(instructions, part2 = true).solution
-  println(s"Day$day answer part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2021 day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
 

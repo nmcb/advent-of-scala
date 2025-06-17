@@ -1,4 +1,4 @@
-import scala.io._
+import scala.io.*
 
 object Day01 extends App:
 
@@ -17,8 +17,8 @@ object Day01 extends App:
 
   val start1 = System.currentTimeMillis
   val answer1: Int = solve(depths)
-  println(s"Day$day answer part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2021 day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
   val start2 = System.currentTimeMillis
   val answer2: Int = solve(depths.sliding(3).map(_.sum).toList)
-  println(s"Day$day answer part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2021 day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")

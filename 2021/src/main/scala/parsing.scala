@@ -1,8 +1,7 @@
-package parsing
 
 case class P[A](parse: String => Option[(A,String)]) {
 
-  import P._
+  import P.*
 
   def flatMap[B](f: A => P[B]): P[B] =
     P(s => parse(s) match {

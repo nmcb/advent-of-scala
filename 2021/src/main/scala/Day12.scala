@@ -1,4 +1,4 @@
-import scala.io._
+import scala.io.*
 
 
 object Day12 extends App:
@@ -34,7 +34,7 @@ object Day12 extends App:
 
   val start1  = System.currentTimeMillis
   val answer1 = decend(caves)((next, path) => path.contains(next))
-  println(s"Day $day answer 1 = $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   def solve2(caves: Caves): Int =
     decend(caves) { (next, path) =>
@@ -44,4 +44,4 @@ object Day12 extends App:
 
   val start2  = System.currentTimeMillis
   val answer2 = solve2(caves)
-  println(s"Day $day answer 2 = $answer2 [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2021 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

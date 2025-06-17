@@ -1,5 +1,5 @@
-import scala.io._
 import scala.collection.*
+import scala.io.*
 import scala.util.*
 
 object Day24 extends App:
@@ -131,8 +131,9 @@ object Day24 extends App:
 
   val start1  = System.currentTimeMillis
   val answer1 = solve(constraints).map(_.max).mkString
-  println(s"Day $day answer 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
+  
   val start2  = System.currentTimeMillis
   val answer2 = solve(constraints).map(_.min).mkString
-  println(s"Day $day answer 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2021 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

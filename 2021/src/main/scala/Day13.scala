@@ -1,4 +1,4 @@
-import scala.io._
+import scala.io.*
 
 object Day13 extends App:
 
@@ -47,7 +47,7 @@ object Day13 extends App:
 
   val start1  = System.currentTimeMillis
   val answer1 = origami(dots, folds.take(1)).size
-  println(s"Day $day answer 1 [${System.currentTimeMillis - start1}ms] = $answer1")
+  println(s"Answer AOC 2021 day $day part 1 [${System.currentTimeMillis - start1}ms]: $answer1")
 
   extension (dots: Dots) def asString: String =
     val buffer = StringBuffer()
@@ -62,4 +62,4 @@ object Day13 extends App:
 
   val start2  = System.currentTimeMillis
   val answer2 = origami(dots, folds).asString
-  println(s"Day $day answer 2 [${System.currentTimeMillis - start1}ms] = $answer2")
+  println(s"Answer AOC 2021 day $day part 2 [${System.currentTimeMillis - start1}ms]: $answer2")

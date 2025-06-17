@@ -1,6 +1,4 @@
-package vector
-
-  import scala.util.*
+import scala.util.*
 
   case class Vec(x: Int, y: Int):
     import Vec.*

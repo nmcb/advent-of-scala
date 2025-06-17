@@ -1,4 +1,4 @@
-import scala.io._
+import scala.io.*
 
 object Day06 extends App:
   val start = System.currentTimeMillis
@@ -30,8 +30,8 @@ object Day06 extends App:
 
   val start1  = System.currentTimeMillis
   val answer1 = solve(ages, 80)
-  println(s"Day $day answer = ${answer1} [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2 = System.currentTimeMillis
   val answer2 = solve(ages, 256)
-  println(s"Day $day answer = ${answer2} [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2021 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

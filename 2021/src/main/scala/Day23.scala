@@ -122,8 +122,9 @@ object Day23 extends App:
 
   val start1: Long = System.currentTimeMillis
   val answer1: Int = shuffle(parsePart1(input)).get
-  println(s"Day $day answer 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
+  
   val start2: Long = System.currentTimeMillis
   val answer2: Int = shuffle(parsePart2(input)).get
-  println(s"Day $day answer 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2021 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

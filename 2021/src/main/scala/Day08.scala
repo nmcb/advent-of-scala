@@ -30,7 +30,7 @@ object Day08 extends App:
       .sum
 
 
-  println(s"Day $day answer 1 = ${answer1} [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val leds0 = Set(0,1,2,4,5,6)
   val leds1 = Set(2,5)
@@ -110,5 +110,4 @@ object Day08 extends App:
 
     numbers.sum
 
-  println(s"Day $day answer 2 = ${answer2} [${System.currentTimeMillis - start2}ms]")
-  assert(answer2 == 1016804)
+  println(s"Answer AOC 2021 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

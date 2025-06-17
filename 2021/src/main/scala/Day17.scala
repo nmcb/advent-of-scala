@@ -25,8 +25,9 @@ object Day17 extends App:
 
   val start1  = System.currentTimeMillis
   val answer1 = (0 to 50).flatMap(vx => (0 to 200).flatMap(vy => go(0, 0, vx, vy))).max
-  println(s"Day $day answer 1 = $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
+  
   val start2  = System.currentTimeMillis
   val answer2 = (0 to 200).flatMap(vx => (-200 to 200).flatMap(vy => go(0, 0, vx, vy))).size
-  println(s"Day $day answer 2 = $answer2 [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2021 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

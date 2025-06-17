@@ -6,8 +6,6 @@ object Day19 extends App:
   val day: String =
     getClass.getSimpleName.filter(_.isDigit).mkString
 
-  import vector.*
-
   case class Scanner(idx: Int, report: Set[Vec3])
 
   val scanners: Vector[Scanner] =
@@ -78,6 +76,7 @@ object Day19 extends App:
   val answer1 = beacons.size
   println(s"answer 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
+  
   val start2  = System.currentTimeMillis
   val answer2 = (for a <- positions ; b <- positions yield Vec3.distance(b, a)).max
   println(s"answer 2: $answer2 [${System.currentTimeMillis - start2}ms]")
