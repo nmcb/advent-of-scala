@@ -21,8 +21,8 @@ object Day10 extends App:
 
   val start1: Long = System.currentTimeMillis
   val answer1: Int = solve(input, 40)
-  println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2015 day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long = System.currentTimeMillis
   val answer2: Int = solve(input, 50)
-  println(s"Answer day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2015 day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")

@@ -73,7 +73,7 @@ object Day15 extends App:
   val answer1: Int =
     recipes.map(_.score).max
 
-  println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2015 day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
 
   /** Part 2 */
@@ -84,4 +84,4 @@ object Day15 extends App:
   val answer2: Int =
     recipes.filter(_.calories == 500).map(_.score).max
 
-  println(s"Answer day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2015 day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")

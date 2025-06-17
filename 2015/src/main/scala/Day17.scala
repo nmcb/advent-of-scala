@@ -31,7 +31,7 @@ object Day17 extends App:
   val answer1: Int =
       fits.size
 
-  println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2015 day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
 
   /** Part 2 */
@@ -43,4 +43,4 @@ object Day17 extends App:
     val min = fits.map(_.size).min
     fits.count(_.size == min)
 
-  println(s"Answer day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2015 day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")

@@ -122,11 +122,11 @@ object Day09 extends App:
 
   val start1: Long = System.currentTimeMillis
   val answer1: Int = answer.min
-  println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2015 day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
 
   /** Part 2 */
 
   val start2: Long = System.currentTimeMillis
   val answer2: Int = answer.max
-  println(s"Answer day $day part 1: ${answer2} [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2015 day $day part 1: ${answer2} [${System.currentTimeMillis - start2}ms]")

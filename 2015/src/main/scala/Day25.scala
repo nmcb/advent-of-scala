@@ -16,4 +16,4 @@ object Day25 extends App:
   val exponent = indexOf(row = 2947, column = 3029) - 1
   val answer1  = initial * base.modPow(exponent, modulo) % modulo
 
-  println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2015 day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")

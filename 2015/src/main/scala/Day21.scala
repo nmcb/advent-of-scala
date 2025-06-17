@@ -83,7 +83,7 @@ object Day21 extends App:
   val answer1: Int =
     equipped.filter(Game.make(_).play == Outcome.Won).map(_.gold).min
 
-  println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2015 day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
 
   /** Part 2 */
@@ -94,4 +94,4 @@ object Day21 extends App:
   val answer2: Int =
     equipped.filter(Game.make(_).play == Outcome.Lost).map(_.gold).max
 
-  println(s"Answer day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2015 day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")

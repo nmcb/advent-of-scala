@@ -10,7 +10,7 @@ object Day01 extends App:
 
   val commands: List[Char] =
     Source
-      .fromResource(s"input$day.txt", getClass.getClassLoader)
+      .fromResource(s"input$day.txt")
       .mkString
       .trim
       .toList
@@ -25,7 +25,7 @@ object Day01 extends App:
         else
           sys.error(s"unknown command: '$c'")
   
-  println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2015 day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long =
     System.currentTimeMillis
@@ -44,4 +44,4 @@ object Day01 extends App:
       .getOrElse(sys.error("not found"))
       ._2
   
-  println(s"Answer day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2015 day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
