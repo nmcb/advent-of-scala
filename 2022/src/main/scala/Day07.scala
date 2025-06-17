@@ -69,7 +69,7 @@ object Day07 extends App:
   lazy val answer1: Long =
     fileSystem.sizes.filter(_ <= 100000L).sum
 
-  println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2022 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   lazy val free: Long =
     70000000L - fileSystem.sizeOf("/")
@@ -83,4 +83,4 @@ object Day07 extends App:
   lazy val answer2 =
     fileSystem.sizes.filter(_ >= clean).min
 
-  println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2022 day $day part 2: $answer2 [${System.currentTimeMillis - start1}ms]")

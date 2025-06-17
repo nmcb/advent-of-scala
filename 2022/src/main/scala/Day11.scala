@@ -98,7 +98,7 @@ object Day11 extends App:
     val ms = monkeys.map(_.copy(lowerWorry = _ / 3))
     solve(20, ms)
 
-  println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2022 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long =
     System.currentTimeMillis
@@ -108,4 +108,4 @@ object Day11 extends App:
     val ms = monkeys.map(_.copy(lowerWorry = _ % productOfDivisibles))
     solve(10000, ms)
 
-  println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2022 day $day part 2: $answer2 [${System.currentTimeMillis - start1}ms]")

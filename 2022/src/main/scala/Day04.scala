@@ -17,11 +17,11 @@ object Day04 extends App:
 
   val start1: Long = System.currentTimeMillis
   val answer1: Int = sections.count(contained1)
-  println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2022 day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
   def contained2(r1: Range, r2: Range): Boolean =
     r1.exists(i => r2.contains(i))
 
   val start2: Long = System.currentTimeMillis
   val answer2: Int = sections.count(contained2)
-  println(s"Answer day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2022 day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")

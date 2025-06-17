@@ -42,7 +42,7 @@ object Day15 extends App:
       if covers.exists(c => c.min <= x && c.max >= x) then count + 1 else count
     )
 
-  println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2022 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long =
     System.currentTimeMillis
@@ -57,4 +57,4 @@ object Day15 extends App:
       )
     answer
 
-  println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2022 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

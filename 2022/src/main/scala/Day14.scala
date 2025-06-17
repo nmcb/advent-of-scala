@@ -117,8 +117,8 @@ object Day14 extends App:
 
   val start1: Long = System.currentTimeMillis
   val answer1: Int = Cave.from1(rocks).solve1
-  println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2022 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long = System.currentTimeMillis
   val answer2: Int = Cave.from2(rocks).solve2
-  println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2022 day $day part 2: $answer2 [${System.currentTimeMillis - start1}ms]")

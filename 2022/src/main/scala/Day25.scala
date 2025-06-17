@@ -68,4 +68,4 @@ object Day25 extends App:
 
   val start1: Long = System.currentTimeMillis
   val answer1: String = Number.fromLong(snafus.map(_.toLong).sum).toString
-  println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2022 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")

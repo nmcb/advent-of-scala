@@ -194,7 +194,7 @@ object Day22 extends App:
     while (pos.hasNext) pos = pos.next1
     pos.value
 
-  println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2022 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
 
   val start2: Long =
@@ -205,4 +205,4 @@ object Day22 extends App:
     while (pos.hasNext) pos = pos.next2
     pos.value
 
-  println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2022 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

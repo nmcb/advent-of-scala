@@ -65,7 +65,7 @@ object Day05 extends App:
   val answer1: String =
     run(moves, stack, _.reverse)
 
-  println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2022 day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
 
   val start2: Long =
@@ -74,4 +74,4 @@ object Day05 extends App:
   val answer2: String =
     run(moves, stack, identity)
 
-  println(s"Answer day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2022 day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")

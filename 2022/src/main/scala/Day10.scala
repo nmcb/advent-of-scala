@@ -50,7 +50,7 @@ object Day10 extends App:
 
   val start1: Long = System.currentTimeMillis
   val answer1: Int = solve1(CPU(instructions))
-  println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2022 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   def solve2(cpu: CPU, pixels: String = ""): String =
     if cpu.is.isEmpty then
@@ -60,4 +60,4 @@ object Day10 extends App:
 
   val start2: Long = System.currentTimeMillis
   val answer2: String = solve2(CPU(instructions))
-  println(s"Answer day $day part 2: \n$answer2 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2022 day $day part 2: \n$answer2 [${System.currentTimeMillis - start1}ms]")

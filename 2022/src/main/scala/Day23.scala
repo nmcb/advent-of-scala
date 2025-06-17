@@ -107,7 +107,7 @@ object Day23 extends App:
   val answer1: Int =
     (1 to 10).foldLeft(Mat(input))((m,_) => m.next).countEmpty
 
-  println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2022 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
 
   val start2: Long =
@@ -118,4 +118,4 @@ object Day23 extends App:
       if m.stopped then c else solve2(m.next, c + 1)
     solve2(Mat(input))
 
-  println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2022 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

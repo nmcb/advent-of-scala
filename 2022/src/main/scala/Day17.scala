@@ -112,7 +112,7 @@ object Day17 extends App:
   val answer1: Int =
     Iterator.iterate(Chamber.empty)(_.next).drop(2022).next.height
 
-  println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2022 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
 
   val start2: Long =
@@ -137,7 +137,7 @@ object Day17 extends App:
 
     stemHeight + cycleNr * cycleHeight + tailHeight
 
-  println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2022 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
 
 
   /** Utilities */

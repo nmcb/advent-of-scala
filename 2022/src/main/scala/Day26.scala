@@ -20,4 +20,4 @@ object Day26 extends App:
 
   val start1: Long = System.currentTimeMillis
   val answer10 = Iterator.iterate(Vector('1'))(successor).take(10).toList.last.size
-  println(s"Answer day $day part 2: ${answer10} [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2022 day $day part 2: ${answer10} [${System.currentTimeMillis - start1}ms]")

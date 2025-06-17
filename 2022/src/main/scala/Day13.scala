@@ -62,7 +62,7 @@ object Day13 extends App:
       .map((es,idx) => if es(0) <= es(1) then idx + 1 else 0)
       .sum
 
-  println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2022 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
 
   val start2: Long =
@@ -77,7 +77,7 @@ object Day13 extends App:
     val idx2 = ordered.indexWhere(_ == divider2) + 1
     idx1 * idx2
 
-  println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2022 day $day part 2: $answer2 [${System.currentTimeMillis - start1}ms]")
 
 
   /** Utilities */
