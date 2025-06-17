@@ -1,5 +1,5 @@
-import scala.io.*
 import scala.annotation.tailrec
+import scala.io.*
 
 object Day07 extends App:
 

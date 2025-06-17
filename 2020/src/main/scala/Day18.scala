@@ -22,9 +22,8 @@ object Day18 extends App:
         case Mul(lhs, rhs) => lhs.eval * rhs.eval
         case Val(v) => v
 
-  import parsing._
-  import P._
-  import Expr._
+  import Expr.*
+  import P.*
 
   def braced(expr: => P[Expr]): P[Expr] =
     for

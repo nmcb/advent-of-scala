@@ -6,7 +6,7 @@ object Day05 extends App:
 
   type Id = Int
 
-  import Integer._
+  import Integer.*
 
   def seatId(s: String): Id =
     val row = parseInt(s.substring(0, 7).replaceAll("F","0").replaceAll("B","1"), 2)

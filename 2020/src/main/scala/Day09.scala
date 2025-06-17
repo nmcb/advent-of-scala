@@ -1,5 +1,5 @@
-import scala.io.*
 import scala.annotation.tailrec
+import scala.io.*
 import scala.util.control.Breaks.*
 
 object Day09 extends App:

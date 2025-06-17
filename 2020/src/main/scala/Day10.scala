@@ -1,6 +1,6 @@
+import scala.collection.*
 import scala.io.*
 import scala.util.control.Breaks.*
-import scala.collection.*
 
 object Day10 extends App:
 

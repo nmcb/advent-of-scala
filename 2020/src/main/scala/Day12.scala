@@ -1,5 +1,5 @@
-import scala.io.*
 import scala.annotation.*
+import scala.io.*
 
 object Day12 extends App:
 
