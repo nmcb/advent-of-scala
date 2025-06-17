@@ -1,6 +1,6 @@
 import scala.*
-import io.*
-import math.*
+import scala.io.*
+import scala.math.*
 
 object Day06 extends App:
 
@@ -60,8 +60,8 @@ object Day06 extends App:
 
   val start1: Long = System.currentTimeMillis
   val answer1: Int = Grid(coordinates).largestAreaSize
-  println(s"Day $day answer part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2018 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long = System.currentTimeMillis
   val answer2: Int = Grid(coordinates).withinManhattanSumLimit(10000).size
-  println(s"Day $day answer part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2018 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

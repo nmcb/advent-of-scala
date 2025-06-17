@@ -121,7 +121,7 @@ object Day21 extends App:
    */
   val start1  = System.currentTimeMillis
   val answer1 = cpu.nextAfterEQRR.mem.valueOf(5)
-  println(s"Day $day answer part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2018 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   /**
    * For part 2, we check when the value in register 5 repeats. When it does,
@@ -130,4 +130,4 @@ object Day21 extends App:
    */
   val start2  = System.currentTimeMillis
   val answer2 = 5876609 // Day18.Cycle.find(cpu)(_.nextAfterEQRR, _.mem.valueOf(5)).cycleLast.mem.valueOf(5)
-  println(s"Day $day answer part 2: $answer2 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2018 day $day part 2: $answer2 [${System.currentTimeMillis - start1}ms]")
