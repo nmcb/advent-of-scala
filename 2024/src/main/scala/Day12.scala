@@ -1,8 +1,8 @@
+import nmcb.*
+import nmcb.Dir.*
+
 import scala.annotation.*
 import scala.io.*
-
-import nmcb.*
-import Dir.*
 
 object Day12 extends App:
 
@@ -120,8 +120,8 @@ object Day12 extends App:
 
   val start1: Long  = System.currentTimeMillis
   val answer1: Long = garden.regions.map(_.fencePrize).sum
-  println(s"Day $day answer part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2024 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long  = System.currentTimeMillis
   val answer2: Long = garden.regions.map(_.fencePrizeWithBulkDiscount).sum
-  println(s"Day $day answer part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2024 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

@@ -5,8 +5,8 @@ import scala.io.*
 
 object Day18 extends App:
 
-  import Pos.*
   import Dijkstra.*
+  import Pos.*
 
   val day: String =
     getClass.getName.drop(3).init
@@ -21,7 +21,7 @@ object Day18 extends App:
     val result = Dijkstra.run(graph, fallen.minPos)
     result.distanceTo(fallen.maxPos).get
 
-  println(s"Day $day answer part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2024 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   @tailrec
   def loop(todo: Vector[Pos], grid: Grid[Char]): Pos =
@@ -32,4 +32,4 @@ object Day18 extends App:
 
   val start2: Long = System.currentTimeMillis
   val answer2: Pos = loop(bytes.reverse, bytes.foldLeft(memory)(_.updated(_, '#')))
-  println(s"Day $day answer part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2024 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

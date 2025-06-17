@@ -34,8 +34,8 @@ object Day13 extends App:
 
   val start1: Long  = System.currentTimeMillis
   val answer1: Long = machines.flatMap(_.solve(offset = 0L)).sum
-  println(s"Day $day answer part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2024 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long  = System.currentTimeMillis
   val answer2: Long = machines.flatMap(_.solve(offset = 10000000000000L)).sum
-  println(s"Day $day answer part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2024 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

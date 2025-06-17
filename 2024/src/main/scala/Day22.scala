@@ -32,7 +32,7 @@ object Day22 extends App:
 
   val start1: Long  = System.currentTimeMillis
   val answer1: Long = input.map(initial => Iterator.iterate(initial, 2001)(_.nextSecret).drain).sum
-  println(s"Day $day answer part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2024 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   extension (p: (Seq[Long],Long))
     def sequence: Seq[Long] = p._1
@@ -58,4 +58,4 @@ object Day22 extends App:
 
   val start2: Long  = System.currentTimeMillis
   val answer2: Long = solve(input)
-  println(s"Day $day answer part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2024 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

@@ -1,5 +1,6 @@
-import scala.io.*
 import nmcb.*
+
+import scala.io.*
 
 object Day06 extends App:
 
@@ -36,10 +37,10 @@ object Day06 extends App:
   val start: Pos   = grid.findOne('^')
   val time1: Long = System.currentTimeMillis
   val answer1: Int = grid.walkGuard(start, N).size
-  println(s"Day $day answer part 1: $answer1 [${System.currentTimeMillis - time1}ms]")
+  println(s"Answer AOC 2024 day $day part 1: $answer1 [${System.currentTimeMillis - time1}ms]")
 
 
   val obstructions: Set[Pos] = grid.walkGuard(start, N) - start
   val time2: Long  = System.currentTimeMillis
   val answer2: Int = obstructions.count(o => grid.walkCircular(start, N, o))
-  println(s"Day $day answer part 2: $answer2 [${System.currentTimeMillis - time2}ms]")
+  println(s"Answer AOC 2024 day $day part 2: $answer2 [${System.currentTimeMillis - time2}ms]")
