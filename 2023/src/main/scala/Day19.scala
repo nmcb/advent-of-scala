@@ -98,7 +98,7 @@ object Day19 extends App:
       .map(p => p.x + p.m + p.a + p.s)
       .sum
 
-  println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2023 day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
   def process2(searches: List[Search], workflows: Workflows, found: List[Search]): List[Search] =
     if searches.isEmpty then
@@ -156,4 +156,4 @@ object Day19 extends App:
     val start = Search(Range(1, 4000), Range(1, 4000), Range(1, 4000), Range(1, 4000), "in")
     val ranges = process2(List(start), workflows, List.empty)
     ranges.map(_.size).sum
-  println(s"Answer day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2023 day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")

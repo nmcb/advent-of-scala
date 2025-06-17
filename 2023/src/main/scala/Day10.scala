@@ -1,4 +1,4 @@
-import  scala.annotation.tailrec
+import scala.annotation.tailrec
 import scala.io.*
 import scala.math.Ordered.orderingToOrdered
 
@@ -110,7 +110,7 @@ object Day10 extends App:
   val answer1: Int =
     path.length / 2
 
-  println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2023 day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
 
   def area(path: Vector[(Pos,Dir)]): Set[Pos] =
@@ -159,4 +159,4 @@ object Day10 extends App:
   val answer2: Int =
     area(path).size
 
-  println(s"Answer day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2023 day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")

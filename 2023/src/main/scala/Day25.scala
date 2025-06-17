@@ -1,6 +1,6 @@
 import scala.annotation.tailrec
-import scala.io.Source
 import scala.collection.mutable
+import scala.io.Source
 import scala.util.*
 
 object Day25 extends App:
@@ -48,11 +48,11 @@ object Day25 extends App:
 
   val start1: Long = System.currentTimeMillis
   val answer1: Int = group0.size * group1.size
-  println(s"Answer day $day part 1: ${group0.size} * ${group1.size} = ${answer1} [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2023 day $day part 1: ${group0.size} * ${group1.size} = ${answer1} [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long = System.currentTimeMillis
   val totalStars2023: Int = 50
-  println(s"Answer day $day part 2: ${totalStars2023} [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2023 day $day part 2: ${totalStars2023} [${System.currentTimeMillis - start2}ms]")
 
   object Dijkstra:
     def reachable[N](from: N, edges: N => Set[N]): Set[N] =
@@ -72,7 +72,7 @@ object Day25 extends App:
 
 
   /**
-   * Thanks JP <3<3<3
+   * Thanks, JP <3<3<3
    *
    * Usage: neato -Tpdf graph.dot -o graph.pdf
    */
@@ -82,7 +82,6 @@ object Day25 extends App:
     import scalax.collection.edges.labeled.WUnDiEdge
     import scalax.collection.immutable.Graph
     import scalax.collection.io.dot.*
-    import implicits.*
 
     val prefix = "graph"
 

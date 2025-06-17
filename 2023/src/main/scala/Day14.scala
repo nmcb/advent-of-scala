@@ -59,7 +59,7 @@ object Day14 extends App:
 
   val start1: Long  = System.currentTimeMillis
   val answer1: Long = grid.tiltN.load
-  println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2023 day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
   lazy val cycle = Cycle.find(grid, _.cycle)(_.cycleInvariant)
   lazy val tail  = (1_000_000_000L - cycle.stemSize) % cycle.cycleSize
@@ -68,7 +68,7 @@ object Day14 extends App:
 
   val start2: Long  = System.currentTimeMillis
   val answer2: Long = end.load
-  println(s"Answer day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2023 day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
 
   /** Utilities */
 
@@ -76,7 +76,7 @@ object Day14 extends App:
 
   object Cycle:
 
-    import scala.collection._
+    import scala.collection.*
 
     extension[A] (i: Iterator[A]) def zipWithPrev: Iterator[(Option[A], A)] =
       new AbstractIterator[(Option[A], A)]:

@@ -1,6 +1,6 @@
-import scala.util.*
 import scala.annotation.*
 import scala.io.*
+import scala.util.*
 
 /** @see https://en.wikipedia.org/wiki/Karger%27s_algorithm */
 object SecurityExercise extends App:

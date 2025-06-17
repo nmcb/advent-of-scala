@@ -1,4 +1,4 @@
-import scala.io._
+import scala.io.*
 
 object Day01 extends App:
 
@@ -37,7 +37,7 @@ object Day01 extends App:
   val answer1: Int =
     values.map(recover(digits)).sum
 
-  println(s"Answer day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2023 day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
 
   val start2: Long =
@@ -60,4 +60,4 @@ object Day01 extends App:
   val answer2: Int =
     values.map(recover(digits ++ names)).sum
 
-  println(s"Answer day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2023 day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
