@@ -45,13 +45,13 @@ object Day16 extends App:
 
   val start1: Long    = System.currentTimeMillis
   val answer1: String = Programs.init.dance(moves)
-  println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2017 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   case class Cycle[A](stemSize: Int, cycleSize: Int, cycleHead: A, cycleLast: A, cycleHeadRepeat: A)
 
   object Cycle:
 
-    import scala.collection._
+    import scala.collection.*
 
     extension [A](i: Iterator[A]) def zipWithPrev: Iterator[(Option[A], A)] =
       new AbstractIterator[(Option[A], A)]:
@@ -100,4 +100,4 @@ object Day16 extends App:
 
   val start2: Long    = System.currentTimeMillis
   val answer2: String = remainingDance
-  println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2017 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

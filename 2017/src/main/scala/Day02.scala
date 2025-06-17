@@ -14,7 +14,7 @@ object Day02 extends App:
 
   val start1: Long = System.currentTimeMillis
   val answer1: Int = input.map(ns => ns.max - ns.min).sum
-  println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2017 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   def process(ns: Seq[Int]): Int =
     val Seq(denominator, nominator) = ns.combinations(2).map(_.sorted).find(n => n(1) % n(0) == 0).get
@@ -22,4 +22,4 @@ object Day02 extends App:
 
   val start2: Long = System.currentTimeMillis
   val answer2: Int = input.map(process).sum
-  println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2017 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

@@ -42,7 +42,7 @@ object Day07 extends App:
 
   val start1: Long    = System.currentTimeMillis
   val answer1: String = nodes.root
-  println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2017 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   def sequence[K,A,B](map: Map[K,Either[A,B]]): Either[A,Map[K,B]] =
     map.foldLeft(Right(Map.empty): Either[A,Map[K,B]]):
@@ -80,4 +80,4 @@ object Day07 extends App:
 
   val start2: Long = System.currentTimeMillis
   val answer2: Int = nodes.correctBalanceWeight
-  println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2017 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

@@ -122,6 +122,7 @@ object Day22 extends App:
             .map:
               case ('#',x) => Pos(x,y) -> Infected
               case ('.',x) => Pos(x,y) -> Clean
+              case ( c ,_) => sys.error(s"unexpected char=$c")
         .toMap
         .withDefaultValue(Clean)
 
@@ -132,8 +133,8 @@ object Day22 extends App:
 
   val start1: Long = System.currentTimeMillis
   val answer1: Int = solve(carrier, 10000)(_.wake1)
-  println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2017 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long = System.currentTimeMillis
   val answer2: Int = solve(carrier, 10000000)(_.wake2)
-  println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2017 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

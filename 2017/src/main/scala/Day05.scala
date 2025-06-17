@@ -28,7 +28,7 @@ object Day05 extends App:
   val answer1: Int =
     CPU(jumps, offset => offset + 1).run.steps
 
-  println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2017 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long =
     System.currentTimeMillis
@@ -36,4 +36,4 @@ object Day05 extends App:
   val answer2: Int =
     CPU(jumps, offset => if offset >= 3 then offset - 1 else offset + 1).run.steps
 
-  println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2017 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

@@ -88,7 +88,7 @@ object Day18 extends App:
 
   val start1: Long  = System.currentTimeMillis
   val answer1: Long = Assembly.load(0, instructions).solve1.in.last
-  println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2017 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long = System.currentTimeMillis
   val answer2: Int =
@@ -102,4 +102,4 @@ object Day18 extends App:
       assembly0 = next0.copy(out = List.empty, in = next1.out ++ next0.in)
       assembly1 = next1.copy(out = List.empty, in = next0.out ++ next1.in)
     count
-  println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2017 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

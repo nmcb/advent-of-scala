@@ -45,7 +45,7 @@ object Day03 extends App:
 
   val start1: Long = System.currentTimeMillis
   val answer1: Int = Pos.zero manhattan position(277678)
-  println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2017 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   def spiralSquares(to: Int):Int =
     def loop(n: Int, squares: Map[Pos,Int] = Map(Pos(0,0) -> 1)): Int =
@@ -60,7 +60,7 @@ object Day03 extends App:
   val start2: Long = System.currentTimeMillis
   val answer2: Int = spiralSquares(277678)
 
-  println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2017 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
 
 
 /*

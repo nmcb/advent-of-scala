@@ -18,7 +18,7 @@ object Day12 extends App:
 
   val start1: Long = System.currentTimeMillis
   val answer1: Int = Dijkstra.reachable(0, graph).size
-  println(s"Answer day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2017 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   extension [N](graph: Graph[N]) def groups: Int =
     def loop(todo: Graph[N] = graph, result: Int = 0): Int =
@@ -32,7 +32,7 @@ object Day12 extends App:
 
   val start2: Long = System.currentTimeMillis
   val answer2: Int = graph.groups
-  println(s"Answer day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2017 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
 
   object Dijkstra:
     import scala.collection.*
