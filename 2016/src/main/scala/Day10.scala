@@ -1,5 +1,5 @@
-import scala.io.Source
 import scala.collection.mutable
+import scala.io.Source
 
 object Day10 extends App:
 

@@ -1,18 +1,11 @@
-lazy val aoc2015 = project.in(file("2015"))
-lazy val aoc2016 = project.in(file("2016"))
+ThisBuild / scalaVersion := "3.7.1"
+ThisBuild / version      := "0.1.0"
 
-lazy val root = (project in file("."))
-  .aggregate(aoc2015, aoc2016)
-  .settings(
-    scalaVersion := "3.7.1",
-    name         := "advent-of-scala",
-    version      := "0.1.0",
-    libraryDependencies ++= Seq(
-      "org.scalatest"  %% "scalatest"  % "3.2.19" % "test"
-    )
-  )
+ThisBuild / libraryDependencies ++= Seq(
+  "org.scalatest"  %% "scalatest"  % "3.2.19" % "test"
+)
 
-scalacOptions ++= Seq(
+ThisBuild / scalacOptions ++= Seq(
   "-encoding", "utf8",        
   "-feature",                 
   "-language:implicitConversions",
@@ -22,8 +15,17 @@ scalacOptions ++= Seq(
   "-deprecation"
 )
 
-Compile / run / fork := true
-Compile / run / javaOptions ++= Seq("-Xmx8G", "-Xss1G", "-XX:+UseG1GC")
+ThisBuild / Compile / run / fork := true
+ThisBuild / Compile / run / javaOptions ++= Seq("-Xmx8G", "-Xss1G", "-XX:+UseG1GC")
 
-Test / fork := true
-Test / javaOptions ++= Seq("-Xmx8G", "-Xss1G", "-XX:+UseG1GC")
+ThisBuild / Test / fork := true
+ThisBuild / Test / javaOptions ++= Seq("-Xmx8G", "-Xss1G", "-XX:+UseG1GC")
+
+
+lazy val aoc2015 = project.in(file("2015"))
+lazy val aoc2016 = project.in(file("2016"))
+lazy val root    = (project in file(".")).aggregate(
+  aoc2015,
+  aoc2016
+)
+

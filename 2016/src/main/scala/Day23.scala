@@ -1,5 +1,3 @@
-import Day23.Instruction.CPY
-
 import scala.annotation.tailrec
 import scala.io.Source
 import scala.util.Try

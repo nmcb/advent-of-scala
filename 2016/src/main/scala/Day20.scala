@@ -1,5 +1,4 @@
 import scala.io.Source
-import scala.collection.immutable.NumericRange
 
 object Day20 extends App:
 
