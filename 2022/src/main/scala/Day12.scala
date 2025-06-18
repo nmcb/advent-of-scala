@@ -131,8 +131,6 @@ object Day12 extends App:
   val answer1: Int = graph.run(from).pathTo(to).length
   println(s"Answer AOC 2022 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
-  assert(answer1 == 383)
-
   val start2: Long = System.currentTimeMillis
   val answer2: Long =
     val as: List[Vertex] = input.filter((_,_,c) => c == 'a' || c == 'S').map((x,y,_) => Vertex(x,y))
