@@ -5,8 +5,8 @@ object Day19 extends App:
   val day: String =
     this.getClass.getName.drop(3).init
 
-  val input: List[Blueprint] =
-    Source.fromResource(s"input$day.txt").getLines.map(Blueprint.fromString).toList
+  val input: Vector[Blueprint] =
+    Source.fromResource(s"input$day.txt").getLines.map(Blueprint.fromString).toVector
 
   case class Blueprint(
     index:                  Int,
@@ -18,7 +18,7 @@ object Day19 extends App:
     geodeRobotCostObsidian: Int
   ):
     val maxRobotCostOre: Int =
-      List(oreRobotCost, clayRobotCost, obsidianRobotCostOre, geodeRobotCostOre).max
+      Vector(oreRobotCost, clayRobotCost, obsidianRobotCostOre, geodeRobotCostOre).max
 
   object Blueprint:
     def fromString(s: String): Blueprint =
@@ -47,7 +47,7 @@ object Day19 extends App:
 
   import Build.*
 
-  def buildActions(print: Blueprint, material: MaterialStash, robots: List[Robot]): List[Build] =
+  def buildActions(print: Blueprint, material: MaterialStash, robots: Vector[Robot]): Vector[Build] =
     import print.*
     import material.*
 
@@ -61,11 +61,11 @@ object Day19 extends App:
     val buildObsidian = when(ore >= obsidianRobotCostOre && clay             >= obsidianRobotCostClay)(ObsidianRobot)
     val buildGeode    = when(ore >= geodeRobotCostOre    && obsidian         >= geodeRobotCostObsidian)(GeodeRobot)
 
-    val actions: List[Option[Build]] =
-      if      obsidian >= geodeRobotCostObsidian then List(buildGeode, Some(Nothing))
-      else if clay     >= obsidianRobotCostClay  then List(buildGeode, buildObsidian, Some(Nothing))
-      else if ore      >= maxRobotCostOre        then List(buildOre, buildClay, buildObsidian, buildGeode)
-      else                                            List(buildOre, buildClay, buildObsidian, buildGeode, Some(Nothing))
+    val actions: Vector[Option[Build]] =
+      if      obsidian >= geodeRobotCostObsidian then Vector(buildGeode, Some(Nothing))
+      else if clay     >= obsidianRobotCostClay  then Vector(buildGeode, buildObsidian, Some(Nothing))
+      else if ore      >= maxRobotCostOre        then Vector(buildOre, buildClay, buildObsidian, buildGeode)
+      else                                            Vector(buildOre, buildClay, buildObsidian, buildGeode, Some(Nothing))
 
     actions.flatten
 
@@ -77,15 +77,19 @@ object Day19 extends App:
       case GeodeRobot    => Robot(Geode)
       case Nothing       => sys.error("boom robot!")
 
-  def produce(robots: List[Robot], stash: MaterialStash): MaterialStash =
+  def produce(robots: Vector[Robot], stash: MaterialStash): MaterialStash =
     import stash.*
     robots match
-      case h :: t => h match
-        case Robot(Ore)      => produce(t, stash.copy(ore = ore + 1))
-        case Robot(Clay)     => produce(t, stash.copy(clay = clay + 1))
-        case Robot(Obsidian) => produce(t, stash.copy(obsidian = obsidian + 1))
-        case Robot(Geode)    => produce(t, stash.copy(geode = geode + 1))
-      case Nil => stash
+      case h +: t =>
+        h match
+          case Robot(Ore)      => produce(t, stash.copy(ore = ore + 1))
+          case Robot(Clay)     => produce(t, stash.copy(clay = clay + 1))
+          case Robot(Obsidian) => produce(t, stash.copy(obsidian = obsidian + 1))
+          case Robot(Geode)    => produce(t, stash.copy(geode = geode + 1))
+      case Vector() =>
+        stash
+      case _ =>
+        sys.error(s"invalid state robots=$robots")
 
   def consume(build: Build, print: Blueprint, stash: MaterialStash): MaterialStash =
     import print.*
@@ -101,7 +105,7 @@ object Day19 extends App:
     blueprint: Blueprint,
     timeLimit: Int,
     material: MaterialStash = MaterialStash(),
-    robots: List[Robot]     = List(Robot(Ore)),
+    robots: Vector[Robot]   = Vector(Robot(Ore)),
     max: Int                = 0,
     time: Int               = 1
   ): Int =
@@ -110,7 +114,7 @@ object Day19 extends App:
     val next: Int = if time == timeLimit && updated > max then updated else max
 
     if time == timeLimit then updated else
-      buildActions(blueprint, material, robots).foldLeft(next)((score,action) =>
+      buildActions(blueprint, material, robots).foldLeft(next): (score,action) =>
         action match
           case Nothing =>
             val produced = produce(robots, material)
@@ -119,9 +123,8 @@ object Day19 extends App:
           case _ =>
             val builds   = build(action)
             val consumed = consume(action, blueprint, produce(robots, material))
-            val scored   = simulate(blueprint,timeLimit, consumed, builds :: robots, next, time + 1)
+            val scored   = simulate(blueprint,timeLimit, consumed, builds +: robots, next, time + 1)
             if scored > score then scored else score
-      )
 
   val start1: Long = System.currentTimeMillis
   val answer1: Int = input.map(print => simulate(print, 24) * print.index).sum
