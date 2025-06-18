@@ -78,12 +78,10 @@ object Day23 extends App:
           case S => f + Pos( 0, 1)
           case W => f + Pos(-1, 0)
           case E => f + Pos( 1, 0)
-      ds.find(d => valid(f, d)).map(proposal)
+      ds.find(d => valid(f,d)).map(proposal)
 
     val proposals: Map[Pos,Option[Pos]] =
-      elves
-        .map(e => if neighbours(e) == 0 then e -> None else e -> propose(e, dirs))
-        .toMap
+      elves.map(e => if neighbours(e) == 0 then e -> None else e -> propose(e, dirs)).toMap
 
     val moves: Set[Pos] =
       val counts = proposals.view.values.flatten.groupMapReduce(identity)(_ => 1)(_ + _)
@@ -105,27 +103,19 @@ object Day23 extends App:
       yield 1
       size.sum
 
-  val start1: Long =
-    System.currentTimeMillis
-
-  val answer1: Int =
-    (1 to 10).foldLeft(Mat(input))((m,_) => m.next).countEmpty
-
+  val start1: Long = System.currentTimeMillis
+  val answer1: Int = (1 to 10).foldLeft(Mat(input))((m,_) => m.next).countEmpty
   println(s"Answer AOC 2022 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
 
-  val start2: Long =
-    System.currentTimeMillis
+  @tailrec
+  def solve2(m: Mat, c: Int = 1): Int =
+    val next = m.next
+    if next.elves == m.elves then
+      c
+    else
+      solve2(next, c + 1)
 
-  val answer2: Long =
-    @tailrec
-    def solve2(m: Mat, c: Int = 1): Int =
-      val next = m.next
-      if next.elves == m.elves then
-        c
-      else
-        solve2(next, c + 1)
-
-    solve2(Mat(input))
-
+  val start2: Long  = System.currentTimeMillis
+  val answer2: Long = solve2(Mat(input))
   println(s"Answer AOC 2022 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
