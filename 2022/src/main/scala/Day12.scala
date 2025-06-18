@@ -21,10 +21,10 @@ object Day12 extends App:
     val maxX: Int = input.maxBy(_._1)._1
     val maxY: Int = input.maxBy(_._2)._2
 
-    def neighbours(x: Int, y: Int): Seq[(Int, Int)] =
-      Seq((-1, 0),(1, 0), (0, -1),(0, 1))
-        .map((dx, dy) => (x + dx, y + dy))
-        .filterNot((nx, ny) => nx < 0 || nx > maxX || ny < 0 || ny > maxY)
+    def neighbours(x: Int, y: Int): Seq[(Int,Int)] =
+      Seq((-1,0),(1,0),(0,-1),(0,1))
+        .map((dx,dy) => (x + dx, y + dy))
+        .filterNot((nx,ny) => nx < 0 || nx > maxX || ny < 0 || ny > maxY)
 
     def addOrInit(t: Vertex, f: Vertex, w: Int)(m: Map[Vertex,Seq[Edge]]): Map[Vertex,Seq[Edge]] =
       val e = Edge(t, f, w)
@@ -51,13 +51,13 @@ object Day12 extends App:
 
     val g: Graph =
       val adjacent: Map[Vertex,Seq[Edge]] =
-        input.foldLeft(Map.empty[Vertex,Seq[Edge]]){ case (a,(x,y,_)) =>
-          val f = Vertex(x, y)
-          neighbours(x, y).foldLeft(a) { case (aa, (nx, ny)) =>
-            val t = Vertex(nx, ny)
-            weight(f, t).map(w => addOrInit(f, t, w)(aa)).getOrElse(aa)
-          }
-        }
+        input.foldLeft(Map.empty[Vertex,Seq[Edge]]):
+          case (a,(x,y,_)) =>
+            val f = Vertex(x, y)
+            neighbours(x, y).foldLeft(a):
+              case (aa, (nx, ny)) =>
+                val t = Vertex(nx, ny)
+                weight(f, t).map(w => addOrInit(f, t, w)(aa)).getOrElse(aa)
       Graph(adjacent)
 
     val f: Vertex =
@@ -74,15 +74,15 @@ object Day12 extends App:
 
   case class Edge(from: Vertex, to: Vertex, weight: Int)
 
-  case class Calc(edgeTo: Map[Vertex, Edge], weightTo: Map[Vertex, Int]):
+  case class Calc(edgeTo: Map[Vertex,Edge], weightTo: Map[Vertex,Int]):
+
     def pathTo(to: Vertex): Seq[Edge] =
       @scala.annotation.tailrec
       def loop(v: Vertex, edges: Seq[Edge] = Seq.empty): Seq[Edge] =
-        edgeTo.get(v) match {
+        edgeTo.get(v) match
           case Some(e) => loop(e.from, e +: edges)
           case None => edges
-        }
-      if (!hasPath(to)) Seq.empty else loop(to)
+      if !hasPath(to) then Seq.empty else loop(to)
 
     def hasPath(to: Vertex): Boolean =
       weightTo.contains(to)
@@ -90,7 +90,7 @@ object Day12 extends App:
     def weightToV(to: Vertex): Int =
       weightTo(to)
 
-  case class Graph(adjacent: Map[Vertex, Seq[Edge]] = Map.empty):
+  case class Graph(adjacent: Map[Vertex,Seq[Edge]] = Map.empty):
 
     def add(e: Edge): Graph =
       Graph(adjacent.updatedWith(e.from)(_.map(_ :+ e).orElse(Some(List(e)))))
@@ -127,21 +127,15 @@ object Day12 extends App:
       Calc(edgeTo.toMap, distTo.toMap)
 
 
-  val start1: Long =
-    System.currentTimeMillis
-
-  val answer1: Int =
-    graph.run(from).pathTo(to).length
-
+  val start1: Long = System.currentTimeMillis
+  val answer1: Int = graph.run(from).pathTo(to).length
   println(s"Answer AOC 2022 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   assert(answer1 == 383)
 
-  val start2: Long =
-    System.currentTimeMillis
-
+  val start2: Long = System.currentTimeMillis
   val answer2: Long =
-    val as: List[Vertex] = input.filter((_,_,c) => c == 'a' || c == 'S').map((x,y,_) => Vertex(x, y))
+    val as: List[Vertex] = input.filter((_,_,c) => c == 'a' || c == 'S').map((x,y,_) => Vertex(x,y))
     as.map(f => graph.run(f).pathTo(to).length).filterNot(_ == 0).min
 
   println(s"Answer AOC 2022 day $day part 2: $answer2 [${System.currentTimeMillis - start1}ms]")
