@@ -2,7 +2,7 @@ import scala.annotation.*
 import scala.collection.mutable
 import scala.io.Source
 
-/** credits https://github.com/sanraith */
+/** @see Credits - https://github.com/sanraith */
 object Day23 extends App:
 
   val day: String =

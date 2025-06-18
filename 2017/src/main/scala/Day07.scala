@@ -1,9 +1,6 @@
 import scala.io.Source
 
-/**
- * credits to sim642
- * @see https://github.com/sim642/adventofcode/blob/master/src/main/scala/eu/sim642/adventofcode2017/Day7.scala
- */
+/** @see Credits - https://github.com/sim642 */
 object Day07 extends App:
 
   val day: String =
