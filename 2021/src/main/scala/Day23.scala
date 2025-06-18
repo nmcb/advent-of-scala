@@ -1,6 +1,6 @@
 import scala.io.Source
 
-/** credits: https://github.com/maneatingape/advent-of-code-scala */
+/** @see Credits - https://github.com/maneatingape */
 object Day23 extends App:
 
   val day = getClass.getSimpleName.filter(_.isDigit).mkString

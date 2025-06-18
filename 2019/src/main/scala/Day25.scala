@@ -1,6 +1,6 @@
 import scala.io.Source
 
-/** @see Credits - https://github.com/sim642/adventofcode */
+/** @see Credits - https://github.com/sim642 */
 object Day25 extends App:
 
   import cpu.*

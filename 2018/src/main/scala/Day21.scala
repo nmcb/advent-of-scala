@@ -110,7 +110,7 @@ object Day21 extends App:
     CPU(pragma, program)
 
   /**
-   * @see https://www.reddit.com/r/adventofcode/comments/a86jgt/comment/ec8fnq8
+   * @see Credits - https://www.reddit.com/r/adventofcode/comments/a86jgt/comment/ec8fnq8
    *
    * Realizing that the only time register 0 was being used was on line 28, in:
    *

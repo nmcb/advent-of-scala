@@ -36,7 +36,7 @@ object Day17 extends App:
   println(s"Answer AOC 2019 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
 
-  /** @see Credits https://github.com/sim642/adventofcode */
+  /** @see Credits - https://github.com/sim642 */
 
   enum Move(override val toString: String):
     case Left            extends Move("L")

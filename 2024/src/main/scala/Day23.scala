@@ -3,7 +3,7 @@ import nmcb.predef.*
 
 import scala.io.*
 
-/** credits simon saan - https://sim642.eu/ */
+/** @see Credits - https://github.com/sim642 */
 object Day23 extends App:
 
   val day: String =

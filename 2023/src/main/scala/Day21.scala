@@ -1,7 +1,7 @@
 import scala.annotation.tailrec
 import scala.io.Source
 
-/** credits for part 2 go to https://github.com/merlinorg */
+/** @see Credits for part 2 - https://github.com/merlinorg */
 object Day21 extends App:
 
   val day: String =

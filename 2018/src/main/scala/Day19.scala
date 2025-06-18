@@ -112,7 +112,7 @@ object Day19 extends App:
   println(s"Answer AOC 2018 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   /**
-   * @see https://www.reddit.com/r/adventofcode/comments/a7j9zc/comment/ec45g4d/
+   * @see Credits - https://www.reddit.com/r/adventofcode/comments/a7j9zc/comment/ec45g4d/
    *
    * lines = open("day19.txt", "r").readlines()
    * a, b  = int(lines[22].split()[2]), int(lines[24].split()[2])

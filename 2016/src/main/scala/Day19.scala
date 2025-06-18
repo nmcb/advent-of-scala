@@ -4,7 +4,7 @@ object Day19 extends App:
 
   val input = 3017957
 
-  /** @see [[https://youtu.be/uCsD3ZGzMgE]] */
+  /** @see Credits - https://youtu.be/uCsD3ZGzMgE */
   def solve1(input: Int): Int =
     val l = input - Integer.highestOneBit(input)
     l * 2 + 1
@@ -14,7 +14,7 @@ object Day19 extends App:
   println(s"Answer AOC 2016 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
 
-  /** @see [[https://www.reddit.com/r/adventofcode/comments/5j4lp1/comment/dbdf50n/]] */
+  /** @see Credits - https://www.reddit.com/r/adventofcode/comments/5j4lp1/comment/dbdf50n/ */
   def solve2(input: Int): Int =
     var i = 1
     while i * 3 < input do i *= 3
