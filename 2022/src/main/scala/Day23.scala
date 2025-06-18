@@ -86,7 +86,8 @@ object Day23 extends App:
         .toMap
 
     val moves: Set[Pos] =
-      proposals.map((e,op) => if proposals.view.values.count(_ == op) == 1 then op.get else e).toSet
+      val counts = proposals.view.values.flatten.groupMapReduce(identity)(_ => 1)(_ + _)
+      proposals.map((e,maybe) => maybe.map(move => if counts(move) == 1 then move else e).getOrElse(e)).toSet
 
     def next: Mat =
       Mat(moves, dirs.tail :+ dirs.head)
