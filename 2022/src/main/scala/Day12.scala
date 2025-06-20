@@ -1,5 +1,4 @@
 import scala.io.Source
-import scala.util.Try
 
 object Day12 extends App:
 
@@ -105,7 +104,7 @@ object Day12 extends App:
       distTo(from) = 0
       val sourceDist = (from, distTo(from))
       val sortByDist: Ordering[(Vertex, Int)] = (a, b) => a._2.compareTo(b._2)
-      val queue = mutable.PriorityQueue[(Vertex, Int)](sourceDist)(using sortByDist)
+      val queue = mutable.PriorityQueue[(Vertex, Int)](sourceDist)(using sortByDist.reverse)
 
       while (queue.nonEmpty) {
         val (minDestV, _) = queue.dequeue()
