@@ -74,12 +74,12 @@ object Day19 extends App:
   val start1   = System.currentTimeMillis
   val (beacons, positions) = solve(scanners)
   val answer1 = beacons.size
-  println(s"answer 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   
   val start2  = System.currentTimeMillis
   val answer2 = (for a <- positions ; b <- positions yield Vec3.distance(b, a)).max
-  println(s"answer 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2021 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
 
 
   

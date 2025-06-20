@@ -72,4 +72,4 @@ object Day09 extends App:
       .take(3)
       .product
 
-  println(s"Answer AOC 2020 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2021 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
