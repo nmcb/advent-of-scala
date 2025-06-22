@@ -45,7 +45,7 @@ object Day10 extends App:
       .values
       .sum
 
-  println(s"Answer AOC 2020 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   def incompletes(s: String): List[Char] =
     def loop(todo: List[Char], stack: List[Char] = List.empty[Char]): List[Char] =
@@ -83,4 +83,4 @@ object Day10 extends App:
 
     scores(scores.length / 2)
 
-  println(s"Answer AOC 2020 day $day part 1: $answer2 [${System.currentTimeMillis - start2}ms]")
+  println(s"Answer AOC 2021 day $day part 1: $answer2 [${System.currentTimeMillis - start2}ms]")
