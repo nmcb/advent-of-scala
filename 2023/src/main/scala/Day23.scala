@@ -5,8 +5,7 @@ import scala.io.Source
 /** @see Credits - https://github.com/sanraith */
 object Day23 extends App:
 
-  val day: String =
-    this.getClass.getName.drop(3).init
+  val day = getClass.getSimpleName.filter(_.isDigit).mkString
 
   def part1(input: String): Int =
     val (start, end, maze) = parseMaze(input)

@@ -1,7 +1,6 @@
 object Day22 extends App:
 
-  val day: String =
-    this.getClass.getName.drop(3).init
+  val day = getClass.getSimpleName.filter(_.isDigit).mkString
 
   enum Spell(val cost: Int, val duration: Int):
     case MagicMissile extends Spell(53, 1)

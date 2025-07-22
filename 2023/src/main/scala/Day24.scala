@@ -5,8 +5,7 @@ import scala.math
 
 object Day24 extends App:
 
-  val day: String =
-    this.getClass.getName.drop(3).init
+  val day = getClass.getSimpleName.filter(_.isDigit).mkString
 
   val stones: Vector[Stone] =
     Source

@@ -2,8 +2,7 @@ import scala.io.*
 
 object Day01 extends App:
 
-  private val day: String =
-    this.getClass.getName.drop(3).init
+  private val day = getClass.getSimpleName.filter(_.isDigit).mkString
 
   private val input: Seq[Int] =
     Source

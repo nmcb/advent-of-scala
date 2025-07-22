@@ -4,8 +4,7 @@ import scala.math.Ordered.orderingToOrdered
 
 object Day08 extends App:
 
-  val day: String =
-    this.getClass.getName.drop(3).init
+  val day = getClass.getSimpleName.filter(_.isDigit).mkString
 
   case class Directions(cycle: String):
     def next: (Char, Directions) =

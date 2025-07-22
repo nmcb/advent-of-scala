@@ -4,8 +4,7 @@ import scala.io.Source
 /** @see Credits for part 2 - https://github.com/merlinorg */
 object Day21 extends App:
 
-  val day: String =
-    this.getClass.getName.drop(3).init
+  val day = getClass.getSimpleName.filter(_.isDigit).mkString
 
   case class Pos(x: Int, y: Int):
     def +(b: Pos): Pos =
