@@ -4,8 +4,7 @@ import scala.io.*
 
 object Day18 extends App:
 
-  val day: String =
-    this.getClass.getName.drop(3).init
+  val day = getClass.getSimpleName.filter(_.isDigit).mkString
 
   case class Op(direction: Char, length: Int)
 

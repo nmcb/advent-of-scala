@@ -2,8 +2,7 @@ import scala.io.*
 
 object Day19 extends App:
 
-  val day: String =
-    this.getClass.getName.drop(3).init
+  val day = getClass.getSimpleName.filter(_.isDigit).mkString
 
   val input: Vector[Blueprint] =
     Source.fromResource(s"input$day.txt").getLines.map(Blueprint.fromString).toVector

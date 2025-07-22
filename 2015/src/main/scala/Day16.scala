@@ -2,8 +2,7 @@ import Day15.{Ingredient, day}
 
 object Day16 extends App:
 
-  val day: String =
-    this.getClass.getName.drop(3).init
+  val day = getClass.getSimpleName.filter(_.isDigit).mkString
 
 
   /** Modeling */

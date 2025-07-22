@@ -5,8 +5,7 @@ import scala.io.*
 
 object Day07 extends App:
 
-  val day: String =
-    this.getClass.getName.drop(3).init
+  val day = getClass.getSimpleName.filter(_.isDigit).mkString
 
   type Operator     = Long => Long => Long
   type Operators    = List[Operator]

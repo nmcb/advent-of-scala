@@ -3,8 +3,7 @@ import scala.math.*
 
 object Day06 extends App:
 
-  val day: String =
-    this.getClass.getName.drop(3).init
+  val day = getClass.getSimpleName.filter(_.isDigit).mkString
 
   case class Race(time: Int, distance: Long):
 

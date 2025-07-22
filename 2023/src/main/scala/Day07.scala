@@ -4,8 +4,7 @@ import scala.math.Ordered.orderingToOrdered
 
 object Day07 extends App:
 
-  val day: String =
-    this.getClass.getName.drop(3).init
+  val day = getClass.getSimpleName.filter(_.isDigit).mkString
 
   case class Card(symbol: Char):
     def isJoker: Boolean = symbol == 'J'

@@ -5,8 +5,7 @@ import scala.util.*
 
 object Day06 extends App:
 
-  val day: String =
-    this.getClass.getName.drop(3).init
+  val day = getClass.getSimpleName.filter(_.isDigit).mkString
 
   val start1: Long =
     System.currentTimeMillis

@@ -4,8 +4,7 @@ object Day21 extends App:
 
   import scala.io.*
 
-  val day: String =
-    this.getClass.getName.drop(3).init
+  val day = getClass.getSimpleName.filter(_.isDigit).mkString
 
   /** Modeling */
 

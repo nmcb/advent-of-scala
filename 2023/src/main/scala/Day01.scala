@@ -2,8 +2,7 @@ import scala.io.*
 
 object Day01 extends App:
 
-  val day: String =
-    this.getClass.getName.drop(3).init
+  val day = getClass.getSimpleName.filter(_.isDigit).mkString
 
   val values: List[String] =
     Source

@@ -3,8 +3,7 @@ import scala.io.Source
 
 object Day23 extends App:
 
-  val day: String =
-    this.getClass.getName.drop(3).init
+  val day = getClass.getSimpleName.filter(_.isDigit).mkString
 
   type Register  = String
   type Registers = Map[Register,Int]

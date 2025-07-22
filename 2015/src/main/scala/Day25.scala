@@ -1,7 +1,6 @@
 object Day25 extends App:
 
-  val day: String =
-    this.getClass.getName.drop(3).init
+  val day = getClass.getSimpleName.filter(_.isDigit).mkString
 
   def indexOf(row: Int, column: Int): Int =
     val diagonal = row + column - 2

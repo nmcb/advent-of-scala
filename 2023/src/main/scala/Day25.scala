@@ -5,8 +5,7 @@ import scala.util.*
 
 object Day25 extends App:
 
-  val day: String =
-    this.getClass.getName.drop(3).init
+  val day = getClass.getSimpleName.filter(_.isDigit).mkString
 
   type Component = String
 

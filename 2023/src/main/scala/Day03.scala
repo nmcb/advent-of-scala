@@ -3,8 +3,7 @@ import scala.io.*
 
 object Day03 extends App:
 
-  val day: String =
-    this.getClass.getName.drop(3).init
+  val day = getClass.getSimpleName.filter(_.isDigit).mkString
 
   case class Pos(x: Int, y: Int):
     def +(p: Pos): Pos =

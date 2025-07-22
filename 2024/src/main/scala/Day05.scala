@@ -2,8 +2,7 @@ import scala.io.*
 
 object Day05 extends App:
 
-  val day: String =
-    this.getClass.getName.drop(3).init
+  val day = getClass.getSimpleName.filter(_.isDigit).mkString
 
   case class Rule(before: Int, after: Int):
 
