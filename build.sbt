@@ -1,4 +1,4 @@
-ThisBuild / scalaVersion := "3.7.1"
+ThisBuild / scalaVersion := "3.7.2"
 ThisBuild / version      := "0.1.0"
 
 ThisBuild / libraryDependencies ++= Seq(
