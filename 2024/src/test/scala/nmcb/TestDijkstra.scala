@@ -32,7 +32,7 @@ class TestDijkstra extends AnyFunSuite:
     val result = Dijkstra.run[Pos](graph, grid.minPos)
     val output = result.pathTo(grid.maxPos).toTrail.foldLeft(grid)(_.updated(_, 'O')).asString
 
-    assertResult(expected = shortest)(actual = output)
+    assertResult(expected = shortest)(output)
   }
 
   test("Dijkstra.reachable") {
@@ -40,5 +40,5 @@ class TestDijkstra extends AnyFunSuite:
     val cluster   = grid.findAll('.')
     val reachable = Dijkstra.reachable[Pos](grid.minPos, _.adjWithinGrid(grid, _.element == '.'))
 
-    assertResult(expected = cluster)(actual = reachable)
+    assertResult(expected = cluster)(reachable)
   }
