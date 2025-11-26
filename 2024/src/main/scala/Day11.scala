@@ -11,18 +11,25 @@ object Day11 extends App:
     val dropped = s.dropWhile(_ == '0')
     if dropped.isEmpty then "0" else dropped
 
-  def update(stone: Stone, count: Long): Vector[(Stone,Long)] =
-    (stone match
+  type SameStones = (String, Long)
+
+  extension (ss: SameStones)
+    def stone: Stone = ss._1
+    def count: Long  = ss._2
+
+  def update(ss: SameStones): Vector[SameStones] =
+    val handle = ss.stone match
       case "0" =>
         Vector("1")
       case s if s.length % 2 == 0 =>
         val (l, r) = s.splitAt(s.length / 2)
         Vector(l.dropLeadingZeros, r.dropLeadingZeros)
       case n =>
-        Vector((n.toLong * 2024).toString))
-      .map(_ -> count) :+ (stone -> -count)
+        Vector((n.toLong * 2024).toString)
+
+    handle.map(_ -> ss.count) :+ (ss.stone -> -ss.count)
     
-  val stones: Vector[(Stone,Long)] =
+  val stones: Vector[SameStones] =
     Source
       .fromResource(s"input$day.txt")
       .mkString
@@ -31,23 +38,22 @@ object Day11 extends App:
       .toVector
       .map(_ -> 1L)
 
-  def blink(n: Int, stones: Vector[(Stone,Long)]): Long =
+  def blink(n: Int, stones: Vector[SameStones]): Long =
     @tailrec
-    def loop(result: Vector[(Stone,Long)], blinked: Int = 0): Long =
+    def loop(result: Vector[SameStones], blinked: Int = 0): Long =
       if blinked >= n then
-        result.map(_._2).sum
+        result.map(_.count).sum
       else
         loop(
           result
-            .foldLeft(Vector.empty[(Stone, Long)]):
-              case (updates, (stone, count)) => updates ++ update(stone, count)
-            .groupMapReduce(_._1)(_._2)(_ + _)
-            .foldLeft(result.toMap):
-              case (next, (update, delta)) =>
-                next.updatedWith(update):
-                  case Some(count) if count == (-delta) => None
-                  case Some(count)                      => Some(count + delta)
-                  case None                             => Some(delta)
+            .foldLeft(Vector.empty[SameStones]): (updates, ss) =>
+              updates ++ update(ss)
+            .groupMapReduce(_.stone)(_.count)(_ + _)
+            .foldLeft(result.toMap): (next, ss) =>
+                next.updatedWith(ss.stone):
+                  case Some(count) if count == (-ss.count) => None
+                  case Some(count)                         => Some(count + ss.count)
+                  case None                                => Some(ss.count)
             .toVector,
           blinked + 1
         )
