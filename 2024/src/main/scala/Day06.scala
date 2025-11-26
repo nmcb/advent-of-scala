@@ -1,5 +1,6 @@
 import nmcb.*
 
+import scala.annotation.*
 import scala.io.*
 
 object Day06 extends App:
@@ -12,6 +13,7 @@ object Day06 extends App:
 
   extension (g: Grid[Char])
 
+    @tailrec
     def walkGuard(pos: Pos, dir: Dir, result: Set[Pos] = Set.empty): Set[Pos] =
       val next = pos step dir
       g.peekOrElse(next, ' ') match
@@ -22,6 +24,7 @@ object Day06 extends App:
     def peekWithObstruction(p: Pos, obstruct: Pos): Char =
         if p == obstruct then '#' else g.peekOrElse(p, ' ')
 
+    @tailrec
     def walkCircular(pos: Pos, dir: Dir, obstruct: Pos, visited: Set[(Pos,Dir)] = Set.empty): Boolean =
       if visited.contains((pos, dir)) then
         true
@@ -29,7 +32,7 @@ object Day06 extends App:
         val next = pos step dir
         g.peekWithObstruction(next, obstruct) match
           case ' '       => false
-          case '.' | '^' => walkCircular(next, dir, obstruct, visited + ((pos, dir)))
+          case '.' | '^' => walkCircular(next, dir, obstruct, visited + (pos -> dir))
           case '#'       => walkCircular(pos, dir.cw, obstruct, visited)
 
 
