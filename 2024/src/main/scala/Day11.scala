@@ -11,13 +11,9 @@ object Day11 extends App:
     val dropped = s.dropWhile(_ == '0')
     if dropped.isEmpty then "0" else dropped
 
-  type SameStones = (String, Long)
+  type StoneCount  = (stone: Stone, count: Long)
 
-  extension (ss: SameStones)
-    def stone: Stone = ss._1
-    def count: Long  = ss._2
-
-  def update(ss: SameStones): Vector[SameStones] =
+  def update(ss: StoneCount): Vector[StoneCount] =
     val handle = ss.stone match
       case "0" =>
         Vector("1")
@@ -28,8 +24,8 @@ object Day11 extends App:
         Vector((n.toLong * 2024).toString)
 
     handle.map(_ -> ss.count) :+ (ss.stone -> -ss.count)
-    
-  val stones: Vector[SameStones] =
+
+  val stones: Vector[StoneCount] =
     Source
       .fromResource(s"input$day.txt")
       .mkString
@@ -38,18 +34,18 @@ object Day11 extends App:
       .toVector
       .map(_ -> 1L)
 
-  def blink(n: Int, stones: Vector[SameStones]): Long =
+  def blink(n: Int, stones: Vector[StoneCount]): Long =
     @tailrec
-    def loop(result: Vector[SameStones], blinked: Int = 0): Long =
+    def loop(result: Vector[StoneCount], blinked: Int = 0): Long =
       if blinked >= n then
         result.map(_.count).sum
       else
         loop(
           result
-            .foldLeft(Vector.empty[SameStones]): (updates, ss) =>
+            .foldLeft(Vector.empty[StoneCount]): (updates, ss: StoneCount) =>
               updates ++ update(ss)
             .groupMapReduce(_.stone)(_.count)(_ + _)
-            .foldLeft(result.toMap): (next, ss) =>
+            .foldLeft(result.map(_.toTuple).toMap): (next, ss: StoneCount) =>
                 next.updatedWith(ss.stone):
                   case Some(count) if count == (-ss.count) => None
                   case Some(count)                         => Some(count + ss.count)
