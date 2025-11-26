@@ -13,7 +13,6 @@ object Day11 extends App:
 
   type StoneCount  = (stone: Stone, count: Long)
 
-
   def update(ss: StoneCount): Vector[StoneCount] =
     val handle = ss.stone match
       case "0" =>
