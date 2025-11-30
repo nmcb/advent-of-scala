@@ -95,7 +95,7 @@ object  Day07 extends App:
             /* complement concatenation  */
             || (lhs > n && lhs.toString.endsWith(n.toString) && loop(lhs.toString.dropRight(n.toString.length).toLong, ns))
 
-    loop(equation.result, equation.arguments)
+    loop(equation.result, equation.arguments.reverse)
 
   val start2Stewart: Long  = System.currentTimeMillis
   val answer2Stewart: Long = input.filter(solvable).map(_.result).sum
