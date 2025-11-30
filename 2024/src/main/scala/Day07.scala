@@ -24,7 +24,7 @@ object  Day07 extends App:
         .combinations1(arguments.length - 1, operators)
         .exists: combination =>
           val (computation: Long, _) = combination.foldLeft((arguments.head, arguments.tail)):
-            case ((accumulator, remaining), operator) => (operator(accumulator)(remaining.head) , remaining.tail)
+            case ((accumulator, remaining), operator) => (operator(accumulator)(remaining.head), remaining.tail)
           computation == result
 
   val input: List[Equation] =
@@ -37,8 +37,10 @@ object  Day07 extends App:
   object Equation:
 
     val cache = memo[(Int, Operators), Combinations]()
+
     def combinations1(n: Int, operators: Operators): Combinations =
       cache.memoize(n, operators):
+
         def leftPad(todo: Operators, padTo: Combinations, result: Combinations = List.empty): Combinations =
           todo match
             case Nil => result
@@ -53,8 +55,11 @@ object  Day07 extends App:
       val m = elements.length
       val size = math.pow(m, n).toInt
       val divs = List.unfold(1)(i => Option.when(i * m <= size)(i, i * m)).reverse
+
       def generate(row: Int)(idx: Int): A = elements(row / divs(idx) % m)
+
       def combination(row: Int): List[A] = List.tabulate(n)(generate(row))
+
       Iterator.tabulate(size)(combination)
 
     def combinations3[A](n: Int, elements: List[A]): Iterator[List[A]] =
