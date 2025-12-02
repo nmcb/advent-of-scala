@@ -9,15 +9,7 @@ object Day01 extends App:
         .fromResource(s"input$day.txt")
         .getLines
         .toVector
-
-//  extension (current: Int)
-//    infix def next(step: Char): Int =
-//      step match
-//        case 'L' if current == 0 => 99
-//        case 'L' => current - 1
-//        case 'R' if current == 99 => 0
-//        case 'R' => current + 1
-
+  
   def solve1(input: Vector[String]) =
     input
       .scanLeft(50): (last, rotation) =>
