@@ -9,14 +9,6 @@ object Day01 extends App:
         .fromResource(s"input$day.txt")
         .getLines
         .toVector
-  
-  def solve1(input: Vector[String]) =
-    input
-      .scanLeft(50): (last, rotation) =>
-        rotation match
-          case s"R$count" => last + count.toInt
-          case s"L$count" => last - count.toInt
-      .count(step => step % 100 == 0)
 
   def solve1(input: Vector[String]) =
     input
