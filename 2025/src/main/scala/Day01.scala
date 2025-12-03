@@ -9,7 +9,7 @@ object Day01 extends App:
         .fromResource(s"input$day.txt")
         .getLines
         .toVector
-  
+
   def solve1(input: Vector[String]) =
     input
       .scanLeft(50): (last, rotation) =>
