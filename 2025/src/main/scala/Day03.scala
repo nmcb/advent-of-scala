@@ -14,33 +14,21 @@ object Day03 extends App:
   extension (bank: Bank)
 
     def maxJoltage(digits: Int): Long =
-      var result = ""
-      var startIndex  = 0
+      @annotation.tailrec
+      def loop(todo: String, remaining: Int, accumulator: Long): Long =
+        if remaining == 0 then
+          accumulator
+        else
+          val digit = todo.substring(0, todo.length - remaining + 1).max
+          val index = todo.indexOf(digit)
+          loop(todo.substring(index + 1), remaining - 1, accumulator * 10 + digit.asDigit)
 
-      for
-        remaining <- digits until 0 by -1
-      do
-        val endIndex = bank.length - remaining + 1
+      loop(bank, digits, 0)
 
-        var maxDigit = '0'
-        var maxIndex = startIndex
-
-        for
-          index <- startIndex until endIndex
-        do
-          if bank(index) > maxDigit then
-            maxDigit = bank(index)
-            maxIndex = index
-
-        result = result + maxDigit
-        startIndex = maxIndex + 1
-
-      result.toLong
-
-  val start1: Long       = System.currentTimeMillis
-  lazy val answer1: Long = input.map(_.maxJoltage(2)).sum
+  val start1 = System.currentTimeMillis
+  val answer1 = input.map(_.maxJoltage(2)).sum
   println(s"Answer AOC 2024 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
-  val start2: Long       = System.currentTimeMillis
-  lazy val answer2: Long = input.map(_.maxJoltage(12)).sum
+  val start2 = System.currentTimeMillis
+  val answer2 = input.map(_.maxJoltage(12)).sum
   println(s"Answer AOC 2024 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
