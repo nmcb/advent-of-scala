@@ -15,15 +15,16 @@ object Day03 extends App:
 
     def maxJoltage(digits: Int): Long =
       @annotation.tailrec
-      def loop(todo: String, remaining: Int, accumulator: Long): Long =
+      def loop(todo: String, remaining: Int, accumulator: Long = 0): Long =
         if remaining == 0 then
           accumulator
         else
-          val digit = todo.substring(0, todo.length - remaining + 1).max
+          val until = todo.length - remaining + 1
+          val digit = todo.substring(0, until).max
           val index = todo.indexOf(digit)
           loop(todo.substring(index + 1), remaining - 1, accumulator * 10 + digit.asDigit)
 
-      loop(bank, digits, 0)
+      loop(bank, digits)
 
   val start1 = System.currentTimeMillis
   val answer1 = input.map(_.maxJoltage(2)).sum
