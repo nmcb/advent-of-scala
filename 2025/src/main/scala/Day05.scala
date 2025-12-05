@@ -6,7 +6,7 @@ object Day05 extends App:
 
   type Range = (min: Long, max: Long)
 
-  val (ranges, ingredients) =
+  val (ranges: Vector[Range], ingredients: Vector[Long]) =
     val Array(top, bottom) = Source.fromResource(s"input$day.txt").mkString.split("\n\n")
 
     val rs = top.linesIterator
@@ -14,7 +14,7 @@ object Day05 extends App:
         case s"$min-$max" => (min = min.toLong, max = max.toLong)
       .toVector
 
-    val is = bottom.linesIterator.map(_.toLong).toSeq
+    val is = bottom.linesIterator.map(_.toLong).toVector
 
     (rs, is)
 
