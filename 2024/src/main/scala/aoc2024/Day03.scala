@@ -23,5 +23,5 @@ object Day03 extends AoC:
         solve(memory.tail, result, enabled, part2)
 
 
-  val answer1: Int = solve(memory = input, result = 0, enabled = true, part2 = false)
-  val answer2: Int = solve(memory = input, result = 0, enabled = true, part2 = true)
+  lazy val answer1: Int = solve(memory = input, result = 0, enabled = true, part2 = false)
+  lazy val answer2: Int = solve(memory = input, result = 0, enabled = true, part2 = true)

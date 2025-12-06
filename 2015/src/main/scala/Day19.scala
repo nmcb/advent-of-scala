@@ -26,7 +26,7 @@ object Day19 extends App:
   val start1: Long =
     System.currentTimeMillis
 
-  val answer1 =
+  lazy val answer1 =
     var generations = Set.empty[String]
     for from -> to <- replacements do
       for index <- 0 until molecules.length do
@@ -43,7 +43,7 @@ object Day19 extends App:
   val start2: Long   = System.currentTimeMillis
 
   /** Luck > Skill : replacements are already in the right order */
-  val answer2 =
+  lazy val answer2 =
     var target = molecules
     var count  = 0
     while target != "e" do

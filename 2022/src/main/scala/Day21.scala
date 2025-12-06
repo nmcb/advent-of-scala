@@ -104,7 +104,7 @@ object Day21 extends App:
       .toList
 
   val start1: Long  = System.currentTimeMillis
-  val answer1 = SAT(program).solve.getOrElse(sys.error(s"unsolved ${program.foldLeft("\n")(_ + _)}"))
+  lazy val answer1 = SAT(program).solve.getOrElse(sys.error(s"unsolved ${program.foldLeft("\n")(_ + _)}"))
   println(s"Answer AOC 2022 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val patch = program.flatMap {
@@ -114,6 +114,6 @@ object Day21 extends App:
   }
 
   val start2: Long  = System.currentTimeMillis
-  val answer2 = SAT(patch).solve.getOrElse(sys.error(s"unsolved ${program.foldLeft("\n")(_ + _)}"))
+  lazy val answer2 = SAT(patch).solve.getOrElse(sys.error(s"unsolved ${program.foldLeft("\n")(_ + _)}"))
   println(s"Answer AOC 2022 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
 

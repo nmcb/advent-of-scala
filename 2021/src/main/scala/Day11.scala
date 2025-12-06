@@ -58,10 +58,10 @@ object Day11 extends App:
   val octopuses: Octopuses = Octopuses.make(input)
 
   val start1  = System.currentTimeMillis
-  val answer1 = Iterator.iterate(octopuses)(_.step).take(101).map(_.flashed).sum
+  lazy val answer1 = Iterator.iterate(octopuses)(_.step).take(101).map(_.flashed).sum
   println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
 
   val start2 = System.currentTimeMillis
-  val answer2 = Iterator.iterate(octopuses)(_.step).takeWhile(_.flashed != 100).size
+  lazy val answer2 = Iterator.iterate(octopuses)(_.step).takeWhile(_.flashed != 100).size
   println(s"Answer AOC 2021 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

@@ -109,7 +109,7 @@ object Day16 extends App:
     Inst.values.filter(_.execute(codes)(before) == after).toSet
 
   val start1  = System.currentTimeMillis
-  val answer1 = tests.map(comply).count(_.size >= 3)
+  lazy val answer1 = tests.map(comply).count(_.size >= 3)
   println(s"Answer AOC 2018 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
 
@@ -140,5 +140,5 @@ object Day16 extends App:
     program.foldLeft(Map.empty[Int,Int])((mem,codes) => instructionOf(codes.opcode).execute(codes)(mem))(0)
 
   val start2  = System.currentTimeMillis
-  val answer2 = solve2(tests, program)
+  lazy val answer2 = solve2(tests, program)
   println(s"Answer AOC 2018 day $day part 2: $answer2 [${System.currentTimeMillis - start1}ms]")

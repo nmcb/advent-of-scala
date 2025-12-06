@@ -27,7 +27,7 @@ object Day02 extends App:
       .map{ case s"${l}x${h}x${w}" => Box(l.toInt, h.toInt, w.toInt) }
       .toList
 
-  val answer1: Int =
+  lazy val answer1: Int =
     boxes.map(b => b.area + b.slack).sum
   
   println(s"Answer AOC 2015 day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
@@ -35,7 +35,7 @@ object Day02 extends App:
   val start2: Long =
     System.currentTimeMillis
 
-  val answer2: Int =
+  lazy val answer2: Int =
     boxes.map(b => b.volume + b.wrap).sum
   
   println(s"Answer AOC 2015 day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")

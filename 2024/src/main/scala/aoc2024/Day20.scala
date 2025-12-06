@@ -25,5 +25,5 @@ object Day20 extends AoC:
 
   val path: Vector[Pos] = Grid.fromLines(input.linesIterator).extractPath('S', 'E', '.').shortest
 
-  val answer1: Long = cheats(path, 2)
-  val answer2: Long = cheats(path, 20)
+  lazy val answer1: Long = cheats(path, 2)
+  lazy val answer2: Long = cheats(path, 20)

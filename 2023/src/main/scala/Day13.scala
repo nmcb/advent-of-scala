@@ -40,9 +40,9 @@ object Day13 extends App:
       .toVector
 
   val start1: Long  = System.currentTimeMillis
-  val answer1: Long = images.map(_.summarize).sum
+  lazy val answer1: Long = images.map(_.summarize).sum
   println(s"Answer AOC 2023 day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long  = System.currentTimeMillis
-  val answer2: Long = images.map(_.smudgeCorrection(true).summarize).sum
+  lazy val answer2: Long = images.map(_.smudgeCorrection(true).summarize).sum
   println(s"Answer AOC 2023 day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")

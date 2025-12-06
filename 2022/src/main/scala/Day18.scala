@@ -31,7 +31,7 @@ object Day18 extends App:
       (xs ++ ys ++ zs).map(this + _)
 
   val start1: Long = System.currentTimeMillis
-  val answer1 = input.toList.map(p => 6 - (p.neighbours intersect input).size).sum
+  lazy val answer1 = input.toList.map(p => 6 - (p.neighbours intersect input).size).sum
   println(s"Answer AOC 2022 day $day part 2: $answer1 [${System.currentTimeMillis - start1}ms]")
 
 
@@ -57,5 +57,5 @@ object Day18 extends App:
     input.toSeq.map(_.neighbours.count(outer.contains)).sum
 
   val start2: Long = System.currentTimeMillis
-  val answer2 = solve2
+  lazy val answer2 = solve2
   println(s"Answer AOC 2022 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

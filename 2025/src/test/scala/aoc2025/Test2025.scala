@@ -2,7 +2,7 @@ package aoc2025
 
 import org.scalatest.funsuite.AnyFunSuite
 
-class Test2025Days extends AnyFunSuite:
+class Test2025 extends AnyFunSuite:
   test("Day 1: Secret Entrance"):
     assertResult(1055)(Day01.answer1)
     assertResult(6386)(Day01.answer2)

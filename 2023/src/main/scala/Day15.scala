@@ -65,9 +65,9 @@ object Day15 extends App:
       Boxes(Map.empty)
 
   val start1: Long  = System.currentTimeMillis
-  val answer1: Long = operations.map(op => hash(op.line)).sum
+  lazy val answer1: Long = operations.map(op => hash(op.line)).sum
   println(s"Answer AOC 2023 day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long  = System.currentTimeMillis
-  val answer2: Long = operations.foldLeft(Boxes.empty)(_ process _).power
+  lazy val answer2: Long = operations.foldLeft(Boxes.empty)(_ process _).power
   println(s"Answer AOC 2023 day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")

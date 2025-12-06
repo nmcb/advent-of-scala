@@ -63,9 +63,9 @@ object Day08 extends App:
     CPU(instructions, Map.empty.withDefaultValue(0))
 
   val start1: Long = System.currentTimeMillis
-  val answer1: Int = cpu.run.largestValue
+  lazy val answer1: Int = cpu.run.largestValue
   println(s"Answer AOC 2017 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long = System.currentTimeMillis
-  val answer2: Int = cpu.run.largestHeld
+  lazy val answer2: Int = cpu.run.largestHeld
   println(s"Answer AOC 2017 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

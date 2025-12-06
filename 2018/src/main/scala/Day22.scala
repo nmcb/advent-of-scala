@@ -49,7 +49,7 @@ object Day22 extends App:
 
 
   val start1  = System.currentTimeMillis
-  val answer1 = sumOfRiskLevels(Region.mouth, Region.target)
+  lazy val answer1 = sumOfRiskLevels(Region.mouth, Region.target)
   println(s"Answer AOC 2018 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
 
@@ -121,5 +121,5 @@ object Day22 extends App:
     -1
 
   val start2  = System.currentTimeMillis
-  val answer2 = travelTime(State.initial, State.target)
+  lazy val answer2 = travelTime(State.initial, State.target)
   println(s"Answer AOC 2018 day $day part 2: $answer2 [${System.currentTimeMillis - start1}ms]")

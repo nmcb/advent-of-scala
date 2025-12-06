@@ -140,9 +140,9 @@ object Day16 extends App:
       (int(bits.take(3)), int(bits.slice(3, 6)), bits.drop(6))
 
   val start1  = System.currentTimeMillis
-  val answer1 = Packet(input).versionSum
+  lazy val answer1 = Packet(input).versionSum
   println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2  = System.currentTimeMillis
-  val answer2 = Packet(input).value
+  lazy val answer2 = Packet(input).value
   println(s"Answer AOC 2021 day $day part 2 = ${Packet(input).value} [${System.currentTimeMillis - start2}ms]")

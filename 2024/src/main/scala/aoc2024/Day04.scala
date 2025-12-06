@@ -36,5 +36,5 @@ object Day04 extends AoC:
       (line1 == "MAS" | line1 == "SAM") && (line2 == "MAS" | line2 == "SAM")
 
 
-  val answer1: Int = grid.positions.foldLeft(0)((count, position) => count + grid.startsXMAS(position))
-  val answer2: Int = grid.positions.count(hasXMAS(grid))
+  lazy val answer1: Int = grid.positions.foldLeft(0)((count, position) => count + grid.startsXMAS(position))
+  lazy val answer2: Int = grid.positions.count(hasXMAS(grid))

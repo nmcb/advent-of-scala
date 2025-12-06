@@ -18,7 +18,7 @@ object Day08 extends App:
 
   val start1  = System.currentTimeMillis
 
-  val answer1 =
+  lazy val answer1 =
     lines
       .map: (_,output) =>
         output.count: digit =>
@@ -84,7 +84,7 @@ object Day08 extends App:
 
 
   val start2  = System.currentTimeMillis
-  val answer2 =
+  lazy val answer2 =
 
     def search(wirings: List[String])(input: List[String]): String =
       val wiring = wirings.head

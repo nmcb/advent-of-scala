@@ -48,9 +48,9 @@ object Day15 extends App:
   val program: Mem = Mem.parse(Source.fromResource(s"input$day.txt").mkString.trim)
 
   val start1  = System.currentTimeMillis
-  val answer1 = solve1(program)
+  lazy val answer1 = solve1(program)
   println(s"Answer AOC 2019 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2  = System.currentTimeMillis
-  val answer2 = solve2(program)
+  lazy val answer2 = solve2(program)
   println(s"Answer AOC 2019 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

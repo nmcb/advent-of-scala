@@ -84,9 +84,9 @@ object Day14 extends App:
       .toMap
 
   val start1  = System.currentTimeMillis
-  val answer1 = reactions.makeFuel(1)
+  lazy val answer1 = reactions.makeFuel(1)
   println(s"Answer AOC 2019 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2  = System.currentTimeMillis
-  val answer2 = reactions.makeMaxFuel(1000000000000L)
+  lazy val answer2 = reactions.makeMaxFuel(1000000000000L)
   println(s"Answer AOC 2019 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

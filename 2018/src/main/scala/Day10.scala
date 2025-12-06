@@ -102,9 +102,9 @@ object Day10 extends App:
     (points.map(_.step(fastest)), fastest)
 
   val start1  = System.currentTimeMillis
-  val answer1 = sky.asString
+  lazy val answer1 = sky.asString
   println(s"Answer AOC 2018 day $day part 1:\n$answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2  = System.currentTimeMillis
-  val answer2 = fastest
+  lazy val answer2 = fastest
   println(s"Answer AOC 2018 day $day part 2: $answer2 [${System.currentTimeMillis - start1}ms]")

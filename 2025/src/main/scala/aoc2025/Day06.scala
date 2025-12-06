@@ -6,7 +6,7 @@ import scala.io.*
 
 object Day06 extends AoC:
 
-  val lines = Source.fromResource(s"$day.txt").getLines.toVector
+  val lines: Vector[String] = Source.fromResource(s"$day.txt").getLines.toVector
 
   def calculate(operators: Vector[Char], operands: Vector[Vector[Long]]): Vector[Long] =
     operators.zip(operands).map:
@@ -38,5 +38,5 @@ object Day06 extends AoC:
 
     calculate(operators, operands)
 
-  val answer1: Long = solve1(lines).sum
-  val answer2: Long = solve2(lines).sum
+  lazy val answer1: Long = solve1(lines).sum
+  lazy val answer2: Long = solve2(lines).sum

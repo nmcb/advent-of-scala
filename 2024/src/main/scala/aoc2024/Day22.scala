@@ -55,5 +55,5 @@ object Day22 extends AoC:
       .values
       .max
 
-  val answer1: Long = input.map(initial => Iterator.iterate(initial, 2001)(_.nextSecret).drain).sum
-  val answer2: Long = solve(input)
+  lazy val answer1: Long = input.map(initial => Iterator.iterate(initial, 2001)(_.nextSecret).drain).sum
+  lazy val answer2: Long = solve(input)

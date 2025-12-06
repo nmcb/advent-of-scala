@@ -27,7 +27,7 @@ object Day17 extends App:
       .filter(_.sum == 150)
       .toList
 
-  val answer1: Int =
+  lazy val answer1: Int =
       fits.size
 
   println(s"Answer AOC 2015 day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
@@ -38,7 +38,7 @@ object Day17 extends App:
   val start2: Long =
     System.currentTimeMillis
 
-  val answer2: Int =
+  lazy val answer2: Int =
     val min = fits.map(_.size).min
     fits.count(_.size == min)
 

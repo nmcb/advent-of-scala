@@ -84,5 +84,5 @@ object Day17 extends AoC:
     val search = program.leftPadTo(program.length, '0')
     loop(search, 1, 0)
 
-  val answer1: String = cpu.run.displayOut.mkString(",")
-  val answer2: Long = quineA(cpu)
+  lazy val answer1: String = cpu.run.displayOut.mkString(",")
+  lazy val answer2: Long = quineA(cpu)

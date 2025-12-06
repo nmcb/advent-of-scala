@@ -65,7 +65,7 @@ object Day07 extends App:
   val start1: Long =
     System.currentTimeMillis
 
-  val answer1: Long =
+  lazy val answer1: Long =
     fileSystem.sizes.filter(_ <= 100000L).sum
 
   println(s"Answer AOC 2022 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
@@ -79,7 +79,7 @@ object Day07 extends App:
   val start2: Long =
     System.currentTimeMillis
 
-  val answer2 =
+  lazy val answer2 =
     fileSystem.sizes.filter(_ >= clean).min
 
   println(s"Answer AOC 2022 day $day part 2: $answer2 [${System.currentTimeMillis - start1}ms]")

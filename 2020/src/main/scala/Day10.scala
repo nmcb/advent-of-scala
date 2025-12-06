@@ -37,7 +37,7 @@ object Day10 extends App:
     diff1 * diff3
 
   val start1  = System.currentTimeMillis
-  val answer1 = solve1(ratings)
+  lazy val answer1 = solve1(ratings)
   println(s"Answer AOC 2020 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   
@@ -57,5 +57,5 @@ object Day10 extends App:
 
   // # of rating configurations is # paths to last rating
   val start2 = System.currentTimeMillis
-  val answer2: Long = paths(search.length - 1)
+  lazy val answer2: Long = paths(search.length - 1)
   println(s"Answer AOC 2020 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

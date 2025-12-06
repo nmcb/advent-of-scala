@@ -43,5 +43,5 @@ object Day25 extends AoC:
         (lock, key)
     fits.distinct.size
 
-  val answer1: Int = fit(schematics)
-  val answer2: Any = "<unimplemented>>"
+  lazy val answer1: Int = fit(schematics)
+  lazy val answer2: Any = "<unimplemented>>"

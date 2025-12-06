@@ -15,9 +15,9 @@ object Day15 extends App:
   def generator2 = generatorA.filter(_ % 4 == 0) zip generatorB.filter(_ % 8 == 0)
 
   val start1: Long  = System.currentTimeMillis
-  val answer1: Long = generator1.take(40000000).count(same)
+  lazy val answer1: Long = generator1.take(40000000).count(same)
   println(s"Answer AOC 2017 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long  = System.currentTimeMillis
-  val answer2: Long = generator2.take(5000000).count(same)
+  lazy val answer2: Long = generator2.take(5000000).count(same)
   println(s"Answer AOC 2017 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

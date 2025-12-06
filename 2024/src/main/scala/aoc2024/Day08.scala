@@ -31,5 +31,5 @@ object Day08 extends AoC:
 
   val grid: Grid[Char] = Grid.fromLines(Source.fromResource(s"$day.txt").getLines)
 
-  val answer1: Long = grid.pairs.flatMap((c,ps) => ps.flatMap(grid.createTwice)).size
-  val answer2: Long = grid.pairs.flatMap((c,ps) => ps.flatMap(grid.createInline)).size
+  lazy val answer1: Long = grid.pairs.flatMap((c,ps) => ps.flatMap(grid.createTwice)).size
+  lazy val answer2: Long = grid.pairs.flatMap((c,ps) => ps.flatMap(grid.createInline)).size

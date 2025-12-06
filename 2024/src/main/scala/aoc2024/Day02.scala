@@ -38,5 +38,5 @@ object Day02 extends AoC:
   private val reports: Seq[Report] =
     Source.fromResource(s"$day.txt").getLines.map(s => Report(s.split(' ').map(_.toInt).toSeq)).toSeq
 
-  val answer1: Int = reports.count(_.isSafe)
-  val answer2: Int = reports.count(r => r.isSafe || r.isSafeWithOneLevelRemoved)
+  lazy val answer1: Int = reports.count(_.isSafe)
+  lazy val answer2: Int = reports.count(r => r.isSafe || r.isSafeWithOneLevelRemoved)

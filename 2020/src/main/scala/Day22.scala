@@ -63,9 +63,9 @@ object Day22 extends App:
     Game(deck1, deck2)
 
   val start1  = System.currentTimeMillis
-  val answer1 = game.combat.score
+  lazy val answer1 = game.combat.score
   println(s"Answer AOC 2020 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2  = System.currentTimeMillis
-  val answer2 = game.recursiveCombat.score
+  lazy val answer2 = game.recursiveCombat.score
   println(s"Answer AOC 2020 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

@@ -17,7 +17,7 @@ object Day12 extends App:
       .toMap
 
   val start1: Long = System.currentTimeMillis
-  val answer1: Int = Dijkstra.reachable(0, graph).size
+  lazy val answer1: Int = Dijkstra.reachable(0, graph).size
   println(s"Answer AOC 2017 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   extension [N](graph: Graph[N]) def groups: Int =
@@ -31,7 +31,7 @@ object Day12 extends App:
     loop()
 
   val start2: Long = System.currentTimeMillis
-  val answer2: Int = graph.groups
+  lazy val answer2: Int = graph.groups
   println(s"Answer AOC 2017 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
 
   object Dijkstra:

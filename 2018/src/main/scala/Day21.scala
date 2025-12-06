@@ -120,7 +120,7 @@ object Day21 extends App:
    * we just check what register 5 contains the first time the line is executed.
    */
   val start1  = System.currentTimeMillis
-  val answer1 = cpu.nextAfterEQRR.mem.valueOf(5)
+  lazy val answer1 = cpu.nextAfterEQRR.mem.valueOf(5)
   println(s"Answer AOC 2018 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   /**
@@ -129,5 +129,5 @@ object Day21 extends App:
    * The solution takes about 2 minutes so the result is copied in.
    */
   val start2  = System.currentTimeMillis
-  val answer2 = 5876609 // Day18.Cycle.find(cpu)(_.nextAfterEQRR, _.mem.valueOf(5)).cycleLast.mem.valueOf(5)
+  lazy val answer2 = 5876609 // Day18.Cycle.find(cpu)(_.nextAfterEQRR, _.mem.valueOf(5)).cycleLast.mem.valueOf(5)
   println(s"Answer AOC 2018 day $day part 2: $answer2 [${System.currentTimeMillis - start1}ms]")

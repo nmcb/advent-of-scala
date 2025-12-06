@@ -61,7 +61,7 @@ object Day20 extends App:
     System.currentTimeMillis
 
   /** assume 500 simulation iterations to be enough */
-  val answer1: Int =
+  lazy val answer1: Int =
     Iterator
       .iterate(particles)(_.tick)
       .map(minDistanceParticleIndex)
@@ -75,7 +75,7 @@ object Day20 extends App:
     System.currentTimeMillis
 
   /** assume 100 simulation iterations to be enough */
-  val answer2: Int =
+  lazy val answer2: Int =
     Iterator
       .iterate(particles)(tickWithCollisions)
       .take(100)

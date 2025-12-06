@@ -33,7 +33,7 @@ object Day02 extends App:
     boxes.count(_.twoCharInId) * boxes.count(_.threeCharInId)
 
   val start1  = System.currentTimeMillis
-  val answer1 = solve1(boxes)
+  lazy val answer1 = solve1(boxes)
   println(s"Answer AOC 2018 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   def differByOneCharInPlace(id1: String, id2: String): Boolean =
@@ -50,5 +50,5 @@ object Day02 extends App:
     search.headOption.getOrElse(sys.error("unable to find"))
 
   val start2  = System.currentTimeMillis
-  val answer2 = solve2(boxes)
+  lazy val answer2 = solve2(boxes)
   println(s"Answer AOC 2018 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

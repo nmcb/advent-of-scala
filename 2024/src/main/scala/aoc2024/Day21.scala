@@ -82,5 +82,5 @@ object Day21 extends AoC:
 
   val input: Grid[Char] = Grid.fromLines(Source.fromResource(s"$day.txt").getLines)
 
-  val answer1: Long = solve(input.matrix, 2)
-  val answer2: Long = solve(input.matrix, 25)
+  lazy val answer1: Long = solve(input.matrix, 2)
+  lazy val answer2: Long = solve(input.matrix, 25)

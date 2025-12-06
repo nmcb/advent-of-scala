@@ -105,10 +105,10 @@ object Day18 extends App:
       .toList
 
   val start1  = System.currentTimeMillis
-  val answer1 = numbers.reduceLeft(_ + _).magnitude
+  lazy val answer1 = numbers.reduceLeft(_ + _).magnitude
   println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   
   val start2  = System.currentTimeMillis
-  val answer2 = numbers.combinations(2).flatMap(ns => List(ns(0) + ns(1), ns(1) + ns(0))).map(_.magnitude).max
+  lazy val answer2 = numbers.combinations(2).flatMap(ns => List(ns(0) + ns(1), ns(1) + ns(0))).map(_.magnitude).max
   println(s"Answer AOC 2021 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

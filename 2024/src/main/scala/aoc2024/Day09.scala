@@ -51,7 +51,7 @@ object Day09 extends AoC:
         loop(d.tail, position + 1, result + position * d.head.id)
     loop(disk)
 
-  val answer1: Long = checksum(compact1(disk))
+  lazy val answer1: Long = checksum(compact1(disk))
 
   case class Chunk(id: Int, size: Int):
     def isFileChunk: Boolean    = id != -1
@@ -113,7 +113,7 @@ object Day09 extends AoC:
     val start = converted.map(_.id).max
     loop(converted, start).flatMap(_.toBlocks)
 
-  val answer2: Long = checksum(compact2(disk))
+  lazy val answer2: Long = checksum(compact2(disk))
 
   /**
    * class Mem():
@@ -139,7 +139,7 @@ object Day09 extends AoC:
   val input: String =
     Source.fromResource(s"$day.txt").mkString.trim
 
-  val answer2Mutable: Long =
+  lazy val answer2Mutable: Long =
     class Mem(var pos: Int, var len: Int):
       infix def value(id: Int, pointer: Int = pos, result: Long = 0): Long =
         if pointer > pos + len - 1 then result else value(id, pointer + 1, result + pointer * id)
@@ -175,7 +175,7 @@ object Day09 extends AoC:
   val initFilesLeft: Vector[(Int, Int)] =
     inputJP.zipWithIndex.filter((c, i) => i % 2 == 0).map((c, i) => (c.asDigit, i))
     
-  val answer2JP =
+  lazy val answer2JP =
     input.zipWithIndex.foldLeft((Vector.empty[Int], initFilesLeft)) {
     case ((acc, filesLeft), (c, i)) if i % 2 == 1 || filesLeft.forall((d, j) => j != i) =>
       @annotation.tailrec

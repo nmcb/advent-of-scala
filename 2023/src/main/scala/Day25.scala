@@ -44,7 +44,7 @@ object Day25 extends App:
 
 
   val start1: Long = System.currentTimeMillis
-  val answer1: Int = group0.size * group1.size
+  lazy val answer1: Int = group0.size * group1.size
   println(s"Answer AOC 2023 day $day part 1: ${group0.size} * ${group1.size} = ${answer1} [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long = System.currentTimeMillis

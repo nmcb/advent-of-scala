@@ -133,5 +133,5 @@ object Day24 extends AoC:
 
     (initial, operations)
 
-  val answer1: Long = solve(sort(gates, initial), initial).output
-  val answer2: String = (debugOUT(gates) ++ debugAND(gates) ++ debugXOR(gates)).toVector.sorted.mkString(",")
+  lazy val answer1: Long = solve(sort(gates, initial), initial).output
+  lazy val answer2: String = (debugOUT(gates) ++ debugAND(gates) ++ debugXOR(gates)).toVector.sorted.mkString(",")

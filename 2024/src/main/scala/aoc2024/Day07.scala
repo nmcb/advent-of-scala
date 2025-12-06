@@ -73,8 +73,8 @@ object  Day07 extends AoC:
         Iterator.single(List.empty)
 
 
-  val answer1: Long = input.filter(_.valid(OperatorsPart1)).map(_.result).sum
-  val answer2: Long = input.filter(_.valid(OperatorsPart2)).map(_.result).sum
+  lazy val answer1: Long = input.filter(_.valid(OperatorsPart1)).map(_.result).sum
+  lazy val answer2: Long = input.filter(_.valid(OperatorsPart2)).map(_.result).sum
 
 
   /** https://github.com/stewSquared/advent-of-code/blob/master/src/main/scala/2024/Day07.worksheet.sc */
@@ -93,4 +93,4 @@ object  Day07 extends AoC:
 
     loop(equation.result, equation.arguments.reverse )
 
-  val answer2Stewart: Long = input.filter(solvable).map(_.result).sum
+  lazy val answer2Stewart: Long = input.filter(solvable).map(_.result).sum

@@ -133,7 +133,7 @@ object Day07 extends App:
       .getLines
       .toList
 
-  val answer1: Int =
+  lazy val answer1: Int =
     given Ordering[Card] = orderBy(Game.sortedSet)
     input
       .map(Hand.fromString)
@@ -147,7 +147,7 @@ object Day07 extends App:
   val start2: Long =
     System.currentTimeMillis
 
-  val answer2: Int =
+  lazy val answer2: Int =
     given Ordering[Card] = orderBy(Game.sortedJokerSet)
     input
       .map(Hand.fromString)

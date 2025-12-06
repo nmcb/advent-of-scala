@@ -53,7 +53,7 @@ object Day04 extends App:
     passports.filter(p => p.size == 8 || (p.size == 7 && !p.keys.exists(_  == "cid")))
 
   val start1  = System.currentTimeMillis
-  val answer1 = solve1(passports).size
+  lazy val answer1 = solve1(passports).size
   println(s"Answer AOC 2020 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   def solve2(passports: Vector[Passport]): Vector[Passport] =
@@ -67,5 +67,5 @@ object Day04 extends App:
       .filter(valPid)
 
   val start2  = System.currentTimeMillis
-  val answer2 = solve2(passports).size
+  lazy val answer2 = solve2(passports).size
   println(s"Answer AOC 2020 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

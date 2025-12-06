@@ -6,7 +6,7 @@ import scala.io.*
 
 object Day03 extends AoC:
 
-  type Bank    = String
+  type Bank = String
   val input: Vector[Bank] =
       Source
         .fromResource(s"$day.txt")
@@ -28,5 +28,5 @@ object Day03 extends AoC:
 
       loop(bank, digits)
 
-  val answer1: Long = input.map(_.maxJoltage(2)).sum
-  val answer2: Long = input.map(_.maxJoltage(12)).sum
+  lazy val answer1: Long = input.map(_.maxJoltage(2)).sum
+  lazy val answer2: Long = input.map(_.maxJoltage(12)).sum

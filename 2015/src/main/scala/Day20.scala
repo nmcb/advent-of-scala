@@ -14,7 +14,7 @@ object Day20 extends App:
   val start1: Long =
     System.currentTimeMillis
 
-  val answer1 =
+  lazy val answer1 =
     val presents: Array[Int] = Array.fill(input / 10 + 1)(0) ; for {
       e <- Range.inclusive(1, input / 10)
       h <- Range.inclusive(e, input / 10, e)
@@ -34,7 +34,7 @@ object Day20 extends App:
   val start2: Long =
     System.currentTimeMillis
 
-  val answer2: Int =
+  lazy val answer2: Int =
     val size = input / 10 + 1
     val presents: Array[Int] = Array.fill(size)(0) ; for {
       e <- Range.inclusive(1, size)

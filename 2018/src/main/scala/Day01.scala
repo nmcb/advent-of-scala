@@ -13,7 +13,7 @@ object Day01 extends App:
       .toList
 
   val start1  = System.currentTimeMillis
-  val answer1 = frequencies.sum
+  lazy val answer1 = frequencies.sum
   println(s"Answer AOC 2018 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   def firstFrequencyFoundTwice(frequencies: List[Int]): Int =
@@ -26,5 +26,5 @@ object Day01 extends App:
     go(frequencies)
 
   val start2  = System.currentTimeMillis
-  val answer2 = firstFrequencyFoundTwice(frequencies)
+  lazy val answer2 = firstFrequencyFoundTwice(frequencies)
   println(s"Answer AOC 2018 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

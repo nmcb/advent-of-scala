@@ -118,5 +118,5 @@ object Day12 extends AoC:
   val garden: Grid[Tree] =
     Grid.fromLines(Source.fromResource(s"$day.txt").getLines)
 
-  val answer1: Long = garden.regions.map(_.fencePrize).sum
-  val answer2: Long = garden.regions.map(_.fencePrizeWithBulkDiscount).sum
+  lazy val answer1: Long = garden.regions.map(_.fencePrize).sum
+  lazy val answer2: Long = garden.regions.map(_.fencePrizeWithBulkDiscount).sum

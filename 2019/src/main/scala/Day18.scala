@@ -90,7 +90,7 @@ object Day18 extends App:
   val (tunnels, keys, robots) = parse(lines)
 
   val start1  = System.currentTimeMillis
-  val answer1 = explore(tunnels, keys, robots)
+  lazy val answer1 = explore(tunnels, keys, robots)
   println(s"Answer AOC 2019 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
 
@@ -103,5 +103,5 @@ object Day18 extends App:
     explore(tunnels, keys, robots)
 
   val start2  = System.currentTimeMillis
-  val answer2 = solve2(lines)
+  lazy val answer2 = solve2(lines)
   println(s"Answer AOC 2019 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

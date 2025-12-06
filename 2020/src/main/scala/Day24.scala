@@ -45,7 +45,7 @@ object Day24 extends App:
   val flips = Source.fromResource(s"input$day.txt").getLines().toVector
 
   val start1 = System.currentTimeMillis
-  val answer1 = solve1(flips).size
+  lazy val answer1 = solve1(flips).size
   println(s"Answer AOC 2020 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   def solve2(flips: Vector[String]): Int =
@@ -60,5 +60,5 @@ object Day24 extends App:
     Iterator.iterate(solve1(flips))(step).drop(100).next.size
 
   val start2  = System.currentTimeMillis
-  val answer2 = solve2(flips)
+  lazy val answer2 = solve2(flips)
   println(s"Answer AOC 2020 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

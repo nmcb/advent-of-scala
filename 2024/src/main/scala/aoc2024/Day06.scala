@@ -37,7 +37,7 @@ object Day06 extends AoC:
 
 
   def start: Pos   = grid.findOne('^')
-  val answer1: Int = grid.walkGuard(start, N).size
+  lazy val answer1: Int = grid.walkGuard(start, N).size
 
   def obstructions: Set[Pos] = grid.walkGuard(start, N) - start
-  val answer2: Int = obstructions.count(o => grid.walkCircular(start, N, o))
+  lazy val answer2: Int = obstructions.count(o => grid.walkCircular(start, N, o))

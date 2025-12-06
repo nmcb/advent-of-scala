@@ -24,5 +24,5 @@ object Day25 extends App:
       .toVector
 
   val start1  = System.currentTimeMillis
-  val answer1 = solve(positions)
+  lazy val answer1 = solve(positions)
   println(s"Answer AOC 2018 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")

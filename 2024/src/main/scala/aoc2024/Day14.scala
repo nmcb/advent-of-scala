@@ -79,10 +79,10 @@ object Day14 extends AoC:
 
       loop(robotsByPos.keys.toList, robotsByPos.keySet)
 
-  val answer1: Long =
+  lazy val answer1: Long =
     (0 until 100).foldLeft(space)((s,_) => s.next).safetyFactor
 
-  val answer2: Int =
+  lazy val answer2: Int =
     val (_, iterations) = Iterator
       .iterate(space)(_.next)
       .zipWithIndex

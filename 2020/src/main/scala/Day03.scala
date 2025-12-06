@@ -32,7 +32,7 @@ object Day03 extends App:
     )
 
   val start1  = System.currentTimeMillis
-  val answer1 = forest.walk(3, 1)
+  lazy val answer1 = forest.walk(3, 1)
   println(s"Answer AOC 2020 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val walks: List[Long] =
@@ -45,5 +45,5 @@ object Day03 extends App:
     )
 
   val start2  = System.currentTimeMillis
-  val answer2 = walks.product
+  lazy val answer2 = walks.product
   println(s"Answer AOC 2020 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

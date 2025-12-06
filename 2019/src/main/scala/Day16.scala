@@ -26,7 +26,7 @@ object Day16 extends App:
       .toVector
 
   val start1  = System.currentTimeMillis
-  val answer1 = solve1(signal)
+  lazy val answer1 = solve1(signal)
   println(s"Answer AOC 2019 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   
@@ -39,5 +39,5 @@ object Day16 extends App:
     iterate(initial)(phase).drop(100).next.take(8).mkString
 
   val start2  = System.currentTimeMillis
-  val answer2 = solve2(signal.mkString * 10000)
+  lazy val answer2 = solve2(signal.mkString * 10000)
   println(s"Answer AOC 2019 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

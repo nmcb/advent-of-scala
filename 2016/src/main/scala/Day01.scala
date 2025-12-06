@@ -52,7 +52,7 @@ object Day01 extends App:
       .toVector
 
   val start1: Long = System.currentTimeMillis
-  val answer1: Int = commands.foldLeft(Vector(Ikke.airDrop))(_.last process _).last.manhattan
+  lazy val answer1: Int = commands.foldLeft(Vector(Ikke.airDrop))(_.last process _).last.manhattan
   println(s"Answer AOC 2016 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   @tailrec
@@ -70,5 +70,5 @@ object Day01 extends App:
     if twice(next, path).nonEmpty then twice(next, path).get else solve(commands.tail :+ commands.head, path :++ next)
 
   val start2: Long = System.currentTimeMillis
-  val answer2: Int = solve(commands, Vector(Ikke.airDrop)).manhattan
+  lazy val answer2: Int = solve(commands, Vector(Ikke.airDrop)).manhattan
   println(s"Answer AOC 2016 day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")

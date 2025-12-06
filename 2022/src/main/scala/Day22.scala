@@ -189,7 +189,7 @@ object Day22 extends App:
   val start1: Long =
     System.currentTimeMillis
 
-  val answer1: Long =
+  lazy val answer1: Long =
     var pos = Pos.start
     while (pos.hasNext) pos = pos.next1
     pos.value
@@ -200,7 +200,7 @@ object Day22 extends App:
   val start2: Long =
     System.currentTimeMillis
 
-  val answer2: Long =
+  lazy val answer2: Long =
     var pos = Pos.start
     while (pos.hasNext) pos = pos.next2
     pos.value

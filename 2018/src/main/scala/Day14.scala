@@ -29,7 +29,7 @@ object Day14 extends App:
       .toInt
 
   val start1  = System.currentTimeMillis
-  val answer1 = solve1(input)
+  lazy val answer1 = solve1(input)
   println(s"Answer AOC 2018 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   def solve2(input: Int): Int =
@@ -57,5 +57,5 @@ object Day14 extends App:
       .nrOfScoresLeftOfInput
 
   val start2  = System.currentTimeMillis
-  val answer2 = solve2(input)
+  lazy val answer2 = solve2(input)
   println(s"Answer AOC 2018 day $day part 2: $answer2 [${System.currentTimeMillis - start1}ms]")

@@ -33,5 +33,5 @@ object Day13 extends AoC:
     as.zip(bs).zip(ps).map:
       case ((a,b),p) => Machine(a, b, p)
 
-  val answer1: Long = machines.flatMap(_.solve(offset = 0L)).sum
-  val answer2: Long = machines.flatMap(_.solve(offset = 10000000000000L)).sum
+  lazy val answer1: Long = machines.flatMap(_.solve(offset = 0L)).sum
+  lazy val answer2: Long = machines.flatMap(_.solve(offset = 10000000000000L)).sum

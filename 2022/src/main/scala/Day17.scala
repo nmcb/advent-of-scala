@@ -109,7 +109,7 @@ object Day17 extends App:
   val start1: Long =
     System.currentTimeMillis
 
-  val answer1: Int =
+  lazy val answer1: Int =
     Iterator.iterate(Chamber.empty)(_.next).drop(2022).next.height
 
   println(s"Answer AOC 2022 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
@@ -118,7 +118,7 @@ object Day17 extends App:
   val start2: Long =
     System.currentTimeMillis
 
-  val answer2: Long =
+  lazy val answer2: Long =
 
     val cycle: Cycle[Chamber] =
       CycleFinder.find(Chamber.empty, _.next)(_.cycleInvariant)

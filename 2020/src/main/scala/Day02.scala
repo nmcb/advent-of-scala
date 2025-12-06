@@ -25,9 +25,9 @@ object Day02 extends App:
 
 
   val start1  = System.currentTimeMillis
-  val answer1 = answer(check1)
+  lazy val answer1 = answer(check1)
   println(s"Answer AOC 2020 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2  = System.currentTimeMillis
-  val answer2 = answer(check2)
+  lazy val answer2 = answer(check2)
   println(s"Answer AOC 2020 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

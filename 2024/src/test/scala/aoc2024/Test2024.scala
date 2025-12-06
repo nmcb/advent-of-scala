@@ -4,7 +4,7 @@ import nmcb.*
 
 import org.scalatest.funsuite.AnyFunSuite
 
-class Test2024Days extends AnyFunSuite:
+class Test2024 extends AnyFunSuite:
   test("Day 1: Historian Hysteria"):
     assertResult(2057374)(Day01.answer1)
     assertResult(23177084)(Day01.answer2)

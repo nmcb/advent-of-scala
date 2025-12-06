@@ -56,7 +56,7 @@ object Day16 extends App:
   val start1: Long =
     System.currentTimeMillis
 
-  val answer1: Int =
+  lazy val answer1: Int =
     val List(sue) = sues.filter(_.matches1)
     sue.nr
 
@@ -68,7 +68,7 @@ object Day16 extends App:
   val start2: Long =
     System.currentTimeMillis
 
-  val answer2: Int =
+  lazy val answer2: Int =
     val List(sue) = sues.filter(_.matches2)
     sue.nr
 

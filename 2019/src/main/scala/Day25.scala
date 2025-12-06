@@ -157,5 +157,5 @@ object Day25 extends App:
     password
 
   val start1  = System.currentTimeMillis
-  val answer1 = findPassword(program)
+  lazy val answer1 = findPassword(program)
   println(s"Answer AOC 2019 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")

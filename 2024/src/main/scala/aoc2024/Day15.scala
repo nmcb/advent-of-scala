@@ -102,5 +102,5 @@ object Day15 extends AoC:
     val moves = bottom.filterNot(_ == '\n').toList
     (Grid(positions.toMap), moves)
 
-  val answer1: Int = moves.foldLeft(grid)(_ push _).boxPositions.map(_.coordinate).sum
-  val answer2: Int = moves.foldLeft(grid.resize)(_ push _).boxPositions.map(_.coordinate).sum
+  lazy val answer1: Int = moves.foldLeft(grid)(_ push _).boxPositions.map(_.coordinate).sum
+  lazy val answer2: Int = moves.foldLeft(grid.resize)(_ push _).boxPositions.map(_.coordinate).sum

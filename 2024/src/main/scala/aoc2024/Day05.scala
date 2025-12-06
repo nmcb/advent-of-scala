@@ -50,5 +50,5 @@ object Day05 extends AoC:
         case None    => 0
         case Some(r) => if r.before == x && r.after == y then 1 else -1
 
-  val answer1: Int = updates.filter(_.validBy(rules)).map(_.middle).sum
-  val answer2: Int = updates.filterNot(_.validBy(rules)).map(_.sorted).map(_.middle).sum
+  lazy val answer1: Int = updates.filter(_.validBy(rules)).map(_.middle).sum
+  lazy val answer2: Int = updates.filterNot(_.validBy(rules)).map(_.sorted).map(_.middle).sum

@@ -4,8 +4,8 @@ abstract class AoC:
 
   val day: String = getClass.getName.replace('.', '/').init
 
-  val answer1: Any
-  val answer2: Any
+  lazy val answer1: Any
+  lazy val answer2: Any
 
   def main(args: Array[String]): Unit =
     val start1: Long = System.currentTimeMillis

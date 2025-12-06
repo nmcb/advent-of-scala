@@ -36,5 +36,5 @@ object Day02 extends AoC:
     val doubled = s + s
     doubled.substring(1, doubled.length - 1).contains(s)
 
-  val answer1: Long = filter(input, doubles).sum
-  val answer2: Long = filter(input, repeats).sum
+  lazy val answer1: Long = filter(input, doubles).sum
+  lazy val answer2: Long = filter(input, repeats).sum

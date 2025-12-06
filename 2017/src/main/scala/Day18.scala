@@ -87,11 +87,11 @@ object Day18 extends App:
       )
 
   val start1: Long  = System.currentTimeMillis
-  val answer1: Long = Assembly.load(0, instructions).solve1.in.last
+  lazy val answer1: Long = Assembly.load(0, instructions).solve1.in.last
   println(s"Answer AOC 2017 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long = System.currentTimeMillis
-  val answer2: Int =
+  lazy val answer2: Int =
     var assembly0 = Assembly.load(0, instructions)
     var assembly1 = Assembly.load(1, instructions)
     var count = 0
