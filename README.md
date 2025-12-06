@@ -1,4 +1,4 @@
-#### 10 years [Advent Of Code](https://adventofcode.com) in [Scala](https://github.com/scala/scala3)
+#### 10+ years [Advent Of Code](https://adventofcode.com) in [Scala](https://github.com/scala/scala3)
 
 ---
 
