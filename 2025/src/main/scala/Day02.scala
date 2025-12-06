@@ -30,7 +30,7 @@ object Day02 extends App:
       id
 
   val start1: Long       = System.currentTimeMillis
-  lazy val answer1: Long = filter(input, doubles).sum
+  def answer1: Long = filter(input, doubles).sum
   println(s"Answer AOC 2024 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
 
@@ -40,5 +40,5 @@ object Day02 extends App:
     doubled.substring(1, doubled.length - 1).contains(s)
 
   val start2: Long       = System.currentTimeMillis
-  lazy val answer2: Long = filter(input, repeats).sum
+  def answer2: Long = filter(input, repeats).sum
   println(s"Answer AOC 2024 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
