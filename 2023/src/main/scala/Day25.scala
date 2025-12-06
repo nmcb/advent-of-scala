@@ -1,7 +1,5 @@
-import scala.annotation.tailrec
 import scala.collection.mutable
 import scala.io.Source
-import scala.util.*
 
 object Day25 extends App:
 
@@ -77,10 +75,11 @@ object Day25 extends App:
    */
   object Dot:
 
-    import java.io.{File, FileWriter}
     import scalax.collection.edges.labeled.WUnDiEdge
     import scalax.collection.immutable.Graph
     import scalax.collection.io.dot.*
+
+    import java.io.{File, FileWriter}
 
     val prefix = "graph"
 
@@ -112,7 +111,7 @@ object Day25 extends App:
         fileWriter.write(dot)
         fileWriter.close()
       catch
-        case _ => println("unable to write dot file [ignoring]")
+        case e: Exception => println(s"unable to write dot file [ignoring]\n${e.getMessage}")
 
 
     def showDOT(connections: Set[Connection]): Unit =
@@ -121,4 +120,4 @@ object Day25 extends App:
         Runtime.getRuntime.exec(Array("neato", "-Tpdf", s"/tmp/$prefix.dot", "-o", s"/tmp/$prefix.pdf")).waitFor()
         Runtime.getRuntime.exec(Array("open", s"/tmp/$prefix.pdf")).waitFor()
       catch
-        case _ => println(s"unable to show visualisation [ignoring]")
+        case e: Exception => println(s"unable to show visualisation [ignoring]\n${e.getMessage}")
