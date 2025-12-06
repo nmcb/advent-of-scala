@@ -7,5 +7,5 @@ object Day25 extends App:
     BigInt(card).modPow(Iterator.iterate(1)(step).indexWhere(_ == door), 20201227).toInt
 
   val start1  = System.currentTimeMillis
-  val answer1 = solve(card = 5290733, door = 15231938)
+  lazy val answer1 = solve(card = 5290733, door = 15231938)
   println(s"Answer AOC 2020 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")

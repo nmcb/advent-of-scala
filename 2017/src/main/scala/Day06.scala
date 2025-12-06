@@ -47,7 +47,7 @@ object Day06 extends App:
   val start1: Long =
     System.currentTimeMillis
 
-  val answer1: Int =
+  lazy val answer1: Int =
     Area(banks).redistribute.size - 1
 
   println(s"Answer AOC 2017 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
@@ -55,7 +55,7 @@ object Day06 extends App:
   val start2: Long =
     System.currentTimeMillis
 
-  val answer2: Int =
+  lazy val answer2: Int =
     val seen = Area(banks).redistribute
     val last = seen.last
     seen.dropWhile(_ != last).size - 1

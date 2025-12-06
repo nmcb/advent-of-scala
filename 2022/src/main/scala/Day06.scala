@@ -39,7 +39,7 @@ object Day06 extends App:
   assert(solve1("nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg") == 10)
   assert(solve1("zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw")  == 11)
 
-  val answer1: Int =
+  lazy val answer1: Int =
     solve1(input)
 
   println(s"Answer AOC 2022 day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
@@ -54,7 +54,7 @@ object Day06 extends App:
   assert(solve2("nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg") == 29)
   assert(solve2("zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw")  == 26)
 
-  val answer2: Int =
+  lazy val answer2: Int =
     solve2(input)
 
   println(s"Answer AOC 2022 day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")

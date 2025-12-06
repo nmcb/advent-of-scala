@@ -47,9 +47,9 @@ object Day11 extends App:
       .toVector
 
   val start1: Long = System.currentTimeMillis
-  val answer1: Int = path.foldLeft(Hex.zero)(_ move _) manhattanDistance Hex.zero
+  lazy val answer1: Int = path.foldLeft(Hex.zero)(_ move _) manhattanDistance Hex.zero
   println(s"Answer AOC 2017 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long = System.currentTimeMillis
-  val answer2: Int = path.scanLeft(Hex.zero)(_ move _).map(_ manhattanDistance Hex.zero).max
+  lazy val answer2: Int = path.scanLeft(Hex.zero)(_ move _).map(_ manhattanDistance Hex.zero).max
   println(s"Answer AOC 2017 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

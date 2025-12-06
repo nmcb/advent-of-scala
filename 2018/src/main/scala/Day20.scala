@@ -83,9 +83,9 @@ object Day20 extends App:
       .trim
 
   val start1  = System.currentTimeMillis
-  val answer1 = solve(directions).max
+  lazy val answer1 = solve(directions).max
   println(s"Answer AOC 2018 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2  = System.currentTimeMillis
-  val answer2 = solve(directions).count(_ >= 1000)
+  lazy val answer2 = solve(directions).count(_ >= 1000)
   println(s"Answer AOC 2018 day $day part 2: $answer2 [${System.currentTimeMillis - start1}ms]")

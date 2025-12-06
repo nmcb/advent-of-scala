@@ -94,7 +94,7 @@ object Day11 extends App:
   val start1: Long =
     System.currentTimeMillis
 
-  val answer1: Long =
+  lazy val answer1: Long =
     val ms = monkeys.map(_.copy(lowerWorry = _ / 3))
     solve(20, ms)
 
@@ -103,7 +103,7 @@ object Day11 extends App:
   val start2: Long =
     System.currentTimeMillis
 
-  val answer2: Long =
+  lazy val answer2: Long =
     val productOfDivisibles = monkeys.map(_.divisible).product
     val ms = monkeys.map(_.copy(lowerWorry = _ % productOfDivisibles))
     solve(10000, ms)

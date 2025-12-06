@@ -16,10 +16,10 @@ object Day06 extends App:
     list.fold("")(_+_).distinct
     
   val start1  = System.currentTimeMillis
-  val answer1 = answers.map(chars).map(_.size).sum
+  lazy val answer1 = answers.map(chars).map(_.size).sum
   println(s"Answer AOC 2020 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2  = System.currentTimeMillis
-  val answer2 = answers.map(grp => grp.fold(chars(grp))(_ intersect _).size).sum
+  lazy val answer2 = answers.map(grp => grp.fold(chars(grp))(_ intersect _).size).sum
   println(s"Answer AOC 2020 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
 

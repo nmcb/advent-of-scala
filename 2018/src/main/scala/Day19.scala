@@ -108,7 +108,7 @@ object Day19 extends App:
     CPU(pragma, program)
 
   val start1  = System.currentTimeMillis
-  val answer1 = cpu.run.mem.valueOf(0)
+  lazy val answer1 = cpu.run.mem.valueOf(0)
   println(s"Answer AOC 2018 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   /**
@@ -136,5 +136,5 @@ object Day19 extends App:
   assert(answer1 == sumOfFactorsOf(nPart1))
 
   val start2  = System.currentTimeMillis
-  val answer2 = sumOfFactorsOf(nPart2)
+  lazy val answer2 = sumOfFactorsOf(nPart2)
   println(s"Answer AOC 2018 day $day part 2: $answer2 [${System.currentTimeMillis - start1}ms]")

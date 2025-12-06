@@ -43,9 +43,9 @@ object Day06 extends App:
       .map(_.foldLeft(Counter.empty)(_ add _))
 
   val start1  = System.currentTimeMillis
-  val answer1 = counted(input).map(_.max).mkString
+  lazy val answer1 = counted(input).map(_.max).mkString
   println(s"Answer AOC 2016 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2  = System.currentTimeMillis
-  val answer2 = counted(input).map(_.min).mkString
+  lazy val answer2 = counted(input).map(_.min).mkString
   println(s"Answer AOC 2016 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

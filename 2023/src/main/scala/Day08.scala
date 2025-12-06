@@ -49,9 +49,9 @@ object Day08 extends App:
     Network(Directions(lines.head), lines.drop(2).map { case s"$src = ($left, $right)" => src -> (left, right) }.toMap)
 
   val start1: Long = System.currentTimeMillis
-  val answer1: Int = network.steps1
+  lazy val answer1: Int = network.steps1
   println(s"Answer AOC 2023 day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long  = System.currentTimeMillis
-  val answer2: Long = network.step2
+  lazy val answer2: Long = network.step2
   println(s"Answer AOC 2023 day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")

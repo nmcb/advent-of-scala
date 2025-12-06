@@ -34,7 +34,7 @@ object Day03 extends App:
 
   val gamma   = diagnostics.transpose.map(_.mostCommon).toInt
   val epsilon = diagnostics.transpose.map(_.leastCommon).toInt
-  val answer1 = gamma * epsilon
+  lazy val answer1 = gamma * epsilon
   
   println(s"Answer AOC 2020 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
@@ -54,6 +54,6 @@ object Day03 extends App:
 
   val oxygenRating       = rating(diagnostics, _.mostCommon)
   val co2SchrubberRating = rating(diagnostics, _.leastCommon)
-  val answer2            = oxygenRating * co2SchrubberRating
+  lazy val answer2            = oxygenRating * co2SchrubberRating
 
   println(s"Answer AOC 2020 day $day part 1: $answer2 [${System.currentTimeMillis - start2}ms]")

@@ -58,7 +58,7 @@ object Day10 extends App:
         .max - 1
 
   val start1  = System.currentTimeMillis
-  val answer1 = maxBlockedByCount(astroids)
+  lazy val answer1 = maxBlockedByCount(astroids)
   println(s"Answer AOC 2019 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   type Aim = (Double,Double,Pos)
@@ -89,5 +89,5 @@ object Day10 extends App:
       fireAll(nr)(right, done ++ left, count + 1, Option.when (count == nr)(aim.target).orElse(result))
 
   val start2  = System.currentTimeMillis
-  val answer2 = fireAll(200)(testLaser(Pos(8,16))(astroids)).get.part2
+  lazy val answer2 = fireAll(200)(testLaser(Pos(8,16))(astroids)).get.part2
   println(s"Answer AOC 2019 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

@@ -27,7 +27,7 @@ object Day02 extends App:
       case ('C','Z') => 3 + 3
       case _ => sys.error(s"illegal chars: ($p1,$p2)")
 
-  val answer1: Int =
+  lazy val answer1: Int =
     input.map(score1).sum
 
   println(s"Answer AOC 2022 day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
@@ -49,7 +49,7 @@ object Day02 extends App:
       case ('C','Z') => 1 + 6
       case _ => sys.error(s"illegal chars: ($p1,$p2)")
 
-  val answer2: Int =
+  lazy val answer2: Int =
     input.map(score2).sum
 
   println(s"Answer AOC 2022 day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")

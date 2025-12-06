@@ -62,7 +62,7 @@ object Day11 extends App:
 
 
   val start1  = System.currentTimeMillis
-  val answer1 = solve(start = init)
+  lazy val answer1 = solve(start = init)
   println(s"Answer AOC 2016 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val expanded: Area =
@@ -70,5 +70,5 @@ object Day11 extends App:
     init.copy(floors = init.floors.updated(0, floor0))
 
   val start2  = System.currentTimeMillis
-  val answer2 = solve(start = expanded)
+  lazy val answer2 = solve(start = expanded)
   println(s"Answer AOC 2016 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

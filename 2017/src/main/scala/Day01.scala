@@ -17,7 +17,7 @@ object Day01 extends App:
   private val start1: Long =
     System.currentTimeMillis
 
-  val answer1: Int =
+  lazy val answer1: Int =
     input
       .zip(input.tail :+ input.head)
       .map(equal)
@@ -29,7 +29,7 @@ object Day01 extends App:
   private val start2: Long =
     System.currentTimeMillis
 
-  val answer2: Int =
+  lazy val answer2: Int =
     assert(input.length % 2 == 0)
     val (msb, lsb) = input.splitAt(input.length / 2)
     input

@@ -8,7 +8,7 @@ object Day02 extends App:
   val program = Mem.parse(Source.fromResource(s"input$day.txt").mkString.trim)
 
   val start1 = System.currentTimeMillis
-  val answer1 = CPU(program.updated(1,12).updated(2,2)).execFinal.mem(0)
+  lazy val answer1 = CPU(program.updated(1,12).updated(2,2)).execFinal.mem(0)
   println(s"Answer AOC 2019 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
 
@@ -30,5 +30,5 @@ object Day02 extends App:
     100 * noun + verb
 
   val start2 = System.currentTimeMillis
-  val answer2 = experiment(program)
+  lazy val answer2 = experiment(program)
   println(s"Answer AOC 2019 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

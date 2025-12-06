@@ -13,7 +13,7 @@ object Day02 extends App:
       .toSeq
 
   val start1: Long = System.currentTimeMillis
-  val answer1: Int = input.map(ns => ns.max - ns.min).sum
+  lazy val answer1: Int = input.map(ns => ns.max - ns.min).sum
   println(s"Answer AOC 2017 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   def process(ns: Seq[Int]): Int =
@@ -21,5 +21,5 @@ object Day02 extends App:
     nominator / denominator
 
   val start2: Long = System.currentTimeMillis
-  val answer2: Int = input.map(process).sum
+  lazy val answer2: Int = input.map(process).sum
   println(s"Answer AOC 2017 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

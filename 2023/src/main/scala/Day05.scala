@@ -91,7 +91,7 @@ object Day05 extends App:
   val start1: Long =
     System.currentTimeMillis
 
-  val answer1: Long =
+  lazy val answer1: Long =
     input.minSeedByLocation
 
   println(s"Answer AOC 2023 day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
@@ -99,7 +99,7 @@ object Day05 extends App:
   val start2: Long =
     System.currentTimeMillis
 
-  val answer2: Long =
+  lazy val answer2: Long =
     input.minSeedRangeByLocation
 
   println(s"Answer AOC 2023 day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")

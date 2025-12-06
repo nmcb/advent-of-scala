@@ -26,7 +26,8 @@ object Day12 extends App:
         case None       => None
       )
 
-    private def loop(s: String, acc: List[A] = List.empty): (List[A], String) =
+    @tailrec
+    private def loop[B >: A](s: String, acc: List[B] = List.empty): (List[B], String) =
       parse(s) match {
         case None         => (acc.reverse, s)
         case Some((a,ss)) => loop(ss, a :: acc)
@@ -126,12 +127,12 @@ object Day12 extends App:
     Json.parse(Source.fromResource(s"input$day.txt").mkString.trim)
 
   val start1: Long = System.currentTimeMillis
-  val answer1: Int = solve(input)
-  println(s"Answer AOC 2015 day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
+  lazy val answer1: Int = solve(input)
+  println(s"Answer AOC 2015 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
 
   /** Part 2 */
 
   val start2: Long = System.currentTimeMillis
-  val answer2: Int = solve(input, _ != Str("red"))
-  println(s"Answer AOC 2015 day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
+  lazy val answer2: Int = solve(input, _ != Str("red"))
+  println(s"Answer AOC 2015 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

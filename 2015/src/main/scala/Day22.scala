@@ -83,9 +83,9 @@ object Day22 extends App:
   val start: Game = Game(50, 500, 0, 0, 71, 10, Map.empty)
 
   val start1: Long = System.currentTimeMillis
-  val answer1: Int = solve(start, hard = false)
+  lazy val answer1: Int = solve(start, hard = false)
   println(s"Answer AOC 2015 day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long = System.currentTimeMillis
-  val answer2: Int = solve(start, hard = true)
+  lazy val answer2: Int = solve(start, hard = true)
   println(s"Answer AOC 2015 day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")

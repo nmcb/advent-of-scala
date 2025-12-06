@@ -36,12 +36,12 @@ object Day14 extends App:
   val input = "zpqevtbw"
 
   val start1  = System.currentTimeMillis
-  val answer1 = solve(index => hash(s"$input$index"))
+  lazy val answer1 = solve(index => hash(s"$input$index"))
   println(s"Answer AOC 2016 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   def stretched(string: String): String =
     Iterator.iterate(string)(hash).drop(1 + 2016).next
 
   val start2  = System.currentTimeMillis
-  val answer2 = solve(index => stretched(s"$input$index"))
+  lazy val answer2 = solve(index => stretched(s"$input$index"))
   println(s"Answer AOC 2016 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

@@ -88,7 +88,7 @@ object Day20 extends App:
     corners(tiles).map(_.id).product
 
   val start1 = System.currentTimeMillis
-  val answer1 = solve1(tiles)
+  lazy val answer1 = solve1(tiles)
   println(s"Answer AOC 2020 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   def unscrambleTiles(tiles: Vector[Tile]): Map[Pos, Tile] =
@@ -139,5 +139,5 @@ object Day20 extends App:
     roughness.min
 
   val start2 = System.currentTimeMillis
-  val answer2 = solve2(tiles)
+  lazy val answer2 = solve2(tiles)
   println(s"Answer AOC 2020 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

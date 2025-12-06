@@ -54,9 +54,9 @@ object Day12 extends App:
       Iterator.iterate(plants)(_.next(rules)).drop(generations.toInt).next.sum.toLong
 
   val start1  = System.currentTimeMillis
-  val answer1 = solve(plants, rules, generations = 20)
+  lazy val answer1 = solve(plants, rules, generations = 20)
   println(s"Answer AOC 2018 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2  = System.currentTimeMillis
-  val answer2 = solve(plants, rules, generations = 50000000000L)
+  lazy val answer2 = solve(plants, rules, generations = 50000000000L)
   println(s"Answer AOC 2018 day $day part 2: $answer2 [${System.currentTimeMillis - start1}ms]")

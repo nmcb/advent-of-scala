@@ -56,9 +56,9 @@ object Day12 extends App:
         .toList)
 
   val start1: Long  = System.currentTimeMillis
-  val answer1: Long = input.arrangements
+  lazy val answer1: Long = input.arrangements
   println(s"Answer AOC 2023 day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long  = System.currentTimeMillis
-  val answer2: Long = input.unfoldAll.arrangements
+  lazy val answer2: Long = input.unfoldAll.arrangements
   println(s"Answer AOC 2023 day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")

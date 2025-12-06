@@ -62,9 +62,9 @@ object Day08 extends App:
         case RotateCol(index, by)    => transpose.shiftRow(index, by).transpose
 
   val start1: Long = System.currentTimeMillis
-  val answer1: Int = operations.foldLeft(Screen.empty)(_ process _).countLit
+  lazy val answer1: Int = operations.foldLeft(Screen.empty)(_ process _).countLit
   println(s"Answer AOC 2016 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long    = System.currentTimeMillis
-  val answer2: String = operations.foldLeft(Screen.empty)(_ process _).asString
+  lazy val answer2: String = operations.foldLeft(Screen.empty)(_ process _).asString
   println(s"Answer AOC 2016 day $day part 2:\n$answer2 [${System.currentTimeMillis - start2}ms]")

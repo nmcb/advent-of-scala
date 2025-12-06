@@ -74,9 +74,9 @@ object Day05 extends App:
 
 
   val start1  = System.currentTimeMillis
-  val answer1 = Floor(lines.filterNot(_.isInstanceOf[DLine])).crossings
+  lazy val answer1 = Floor(lines.filterNot(_.isInstanceOf[DLine])).crossings
   println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2  = System.currentTimeMillis
-  val answer2 = Floor(lines).crossings
+  lazy val answer2 = Floor(lines).crossings
   println(s"Answer AOC 2021 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

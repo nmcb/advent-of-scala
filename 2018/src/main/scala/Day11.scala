@@ -65,7 +65,7 @@ object Day11 extends App:
     cell.asIdString(size)
 
   val start1  = System.currentTimeMillis
-  val answer1 = solve1()
+  lazy val answer1 = solve1()
   println(s"Answer AOC 2018 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   def solve2(): String =
@@ -73,5 +73,5 @@ object Day11 extends App:
     s"${cell.asIdString(size)},${size.toString}"
 
   val start2  = System.currentTimeMillis
-  val answer2 = solve2()
+  lazy val answer2 = solve2()
   println(s"Answer AOC 2018 day $day part 2: $answer2 [${System.currentTimeMillis - start1}ms]")

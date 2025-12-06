@@ -44,7 +44,7 @@ object Day03 extends App:
     this.getClass.getName.filter(_.isDigit).mkString("")
 
   val start1: Long = System.currentTimeMillis
-  val answer1: Int = Pos.zero manhattan position(277678)
+  lazy val answer1: Int = Pos.zero manhattan position(277678)
   println(s"Answer AOC 2017 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   def spiralSquares(to: Int):Int =
@@ -58,7 +58,7 @@ object Day03 extends App:
     loop(2)
 
   val start2: Long = System.currentTimeMillis
-  val answer2: Int = spiralSquares(277678)
+  lazy val answer2: Int = spiralSquares(277678)
 
   println(s"Answer AOC 2017 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
 

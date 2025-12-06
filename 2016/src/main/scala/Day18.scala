@@ -18,10 +18,10 @@ object Day18 extends App:
   val input   = Source.fromResource(s"input$day.txt").mkString.trim
 
   val start1  = System.currentTimeMillis
-  val answer1 = Iterator.iterate(input)(next).map(safe).take(40).sum
+  lazy val answer1 = Iterator.iterate(input)(next).map(safe).take(40).sum
   println(s"Answer AOC 2016 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2  = System.currentTimeMillis
-  val answer2 = Iterator.iterate(input)(next).map(safe).take(400000).sum
+  lazy val answer2 = Iterator.iterate(input)(next).map(safe).take(400000).sum
   println(s"Answer AOC 2016 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
 

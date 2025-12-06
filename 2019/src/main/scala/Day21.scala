@@ -37,9 +37,9 @@ object Day21 extends App:
     CPU(program).withInput(input *).outputs.last
 
   val start1  = System.currentTimeMillis
-  val answer1 = survey(program, script = walk :+ "WALK")
+  lazy val answer1 = survey(program, script = walk :+ "WALK")
   println(s"Answer AOC 2019 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2  = System.currentTimeMillis
-  val answer2 = survey(program, script = run :+ "RUN")
+  lazy val answer2 = survey(program, script = run :+ "RUN")
   println(s"Answer AOC 2019 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

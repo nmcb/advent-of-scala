@@ -54,7 +54,7 @@ object Day08 extends App:
   /** Part 1 */
 
   val start1: Long = System.currentTimeMillis
-  val answer1: Int = input.map(str => str.quoted.size - str.unescaped.size).sum
+  lazy val answer1: Int = input.map(str => str.quoted.size - str.unescaped.size).sum
 
   println(s"Answer AOC 2015 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
@@ -62,6 +62,6 @@ object Day08 extends App:
   /** Part 2 */
 
   val start2: Long = System.currentTimeMillis
-  val answer2: Int = input.map(str => str.escaped.size - str.quoted.size).sum
+  lazy val answer2: Int = input.map(str => str.escaped.size - str.quoted.size).sum
 
   println(s"Answer AOC 2015 day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")

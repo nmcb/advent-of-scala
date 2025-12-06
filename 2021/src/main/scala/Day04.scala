@@ -68,7 +68,7 @@ object Day04 extends App:
 
   val start1  = System.currentTimeMillis
   val board1  = playWhoWinsFirst(draws)
-  val answer1 = board1.unmarked.sum * board1.lastDraw
+  lazy val answer1 = board1.unmarked.sum * board1.lastDraw
   println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   def playWhoWinsLast[A](draws: Vector[A], game: Vector[Board[A]] = boards): Board[A] =
@@ -81,5 +81,5 @@ object Day04 extends App:
 
   val start2  = System.currentTimeMillis
   val board2  = playWhoWinsLast(draws)
-  val answer2 = board2.unmarked.sum * board2.lastDraw
+  lazy val answer2 = board2.unmarked.sum * board2.lastDraw
   println(s"Answer AOC 2021 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

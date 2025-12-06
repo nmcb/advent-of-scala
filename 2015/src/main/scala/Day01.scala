@@ -14,7 +14,7 @@ object Day01 extends App:
       .trim
       .toList
 
-  val answer1: Int =
+  lazy val answer1: Int =
     commands
       .foldLeft(0): (f,c) =>
         if c == '(' then
@@ -29,7 +29,7 @@ object Day01 extends App:
   val start2: Long =
     System.currentTimeMillis
 
-  val answer2: Int =
+  lazy val answer2: Int =
     commands
       .scanLeft(0): (f,c) =>
         if c == '(' then

@@ -31,7 +31,7 @@ object Day17 extends App:
     Iterator.iterate(points)(step(offsets)).drop(6).next.size
 
   val start1 = System.currentTimeMillis
-  val answer1 = solve1(points)
+  lazy val answer1 = solve1(points)
   println(s"Answer AOC 2020 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   def solve2(points: Set[Cube]): Int =
@@ -39,5 +39,5 @@ object Day17 extends App:
     Iterator.iterate(points)(step(directions)).drop(6).next.size
 
   val start2 = System.currentTimeMillis
-  val answer2 = solve2(points)
+  lazy val answer2 = solve2(points)
   println(s"Answer AOC 2020 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

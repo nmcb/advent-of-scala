@@ -21,7 +21,7 @@ object Day16 extends App:
     nearby.flatMap(ticket => ticket.filterNot(field => rules.exists(rule => rule.check(field)))).sum
 
   val start1  = System.currentTimeMillis
-  val answer1 = solve1(rules, mine, nearby)
+  lazy val answer1 = solve1(rules, mine, nearby)
   println(s"Answer AOC 2020 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   def solve2(rules: Set[Rule], mine: Seq[Int], nearby: Seq[Seq[Int]]): Long =
@@ -37,5 +37,5 @@ object Day16 extends App:
     departures.map((_,field) => field.toLong).product
 
   val start2  = System.currentTimeMillis
-  val answer2 = solve2(rules, mine, nearby)
+  lazy val answer2 = solve2(rules, mine, nearby)
   println(s"Answer AOC 2020 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

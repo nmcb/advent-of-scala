@@ -33,9 +33,9 @@ object Day08 extends App:
   val input = Source.fromResource(s"input$day.txt").mkString
 
   val start1: Long = System.currentTimeMillis
-  val answer1: Int = Node.parseTree(input).licenceNumber
+  lazy val answer1: Int = Node.parseTree(input).licenceNumber
   println(s"Answer AOC 2018 day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long = System.currentTimeMillis
-  val answer2: Int = Node.parseTree(input).value
+  lazy val answer2: Int = Node.parseTree(input).value
   println(s"Answer AOC 2018 day $day part 2: ${answer2} [${System.currentTimeMillis - start1}ms]")

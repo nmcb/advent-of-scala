@@ -121,9 +121,9 @@ object Day20 extends App:
   val lines = Source.fromResource(s"input$day.txt").getLines.toSeq
 
   val start1  = System.currentTimeMillis
-  val answer1 = explore(lines, recursive = false)
+  lazy val answer1 = explore(lines, recursive = false)
   println(s"Answer AOC 2019 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2  = System.currentTimeMillis
-  val answer2 = explore(lines, recursive = true)
+  lazy val answer2 = explore(lines, recursive = true)
   println(s"Answer AOC 2019 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

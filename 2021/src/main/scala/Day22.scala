@@ -81,7 +81,7 @@ object Day22 extends App:
       steps.filter(inside).foldLeft(grid)((g,s) => g.update(cuboid(s)))
 
   val start1  = System.currentTimeMillis
-  val answer1 = Cuboid.reboot(cuboidSteps).all.values.count(identity)
+  lazy val answer1 = Cuboid.reboot(cuboidSteps).all.values.count(identity)
   println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
 
@@ -144,5 +144,5 @@ object Day22 extends App:
 
   
   val start2  = System.currentTimeMillis
-  val answer2 = Cube.reboot(cubeSteps)
+  lazy val answer2 = Cube.reboot(cubeSteps)
   println(s"Answer AOC 2021 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

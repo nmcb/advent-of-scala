@@ -71,9 +71,9 @@ object Day12 extends App:
       .toVector
 
   val start1  = System.currentTimeMillis
-  val answer1 = CPU(instructions).run.registers.valueOf("a")
+  lazy val answer1 = CPU(instructions).run.registers.valueOf("a")
   println(s"Answer AOC 2016 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2  = System.currentTimeMillis
-  val answer2 = CPU(instructions = instructions, registers = Map("c" -> 1)).run.registers.valueOf("a")
+  lazy val answer2 = CPU(instructions = instructions, registers = Map("c" -> 1)).run.registers.valueOf("a")
   println(s"Answer AOC 2016 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

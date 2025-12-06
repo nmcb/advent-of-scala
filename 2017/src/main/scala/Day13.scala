@@ -29,9 +29,9 @@ object Day13 extends App:
 
 
   val start1: Long = System.currentTimeMillis
-  val answer1: Int = layers.tripSeverity
+  lazy val answer1: Int = layers.tripSeverity
   println(s"Answer AOC 2017 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long = System.currentTimeMillis
-  val answer2: Int = layers.uncaughtDelay
+  lazy val answer2: Int = layers.uncaughtDelay
   println(s"Answer AOC 2017 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

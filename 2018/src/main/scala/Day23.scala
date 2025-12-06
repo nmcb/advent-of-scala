@@ -28,7 +28,7 @@ object Day23 extends App:
     reachable
 
   val start1  = System.currentTimeMillis
-  val answer1 = solve1(bots)
+  lazy val answer1 = solve1(bots)
   println(s"Answer AOC 2018 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   
@@ -67,5 +67,5 @@ object Day23 extends App:
     bronKerbosch(overlappingRadiusesOf).map(bot => bot.pos.manhattan(Pos.origin) - bot.radius).max
 
   val start2  = System.currentTimeMillis
-  val answer2 = solve2(bots)
+  lazy val answer2 = solve2(bots)
   println(s"Answer AOC 2018 day $day part 2: $answer2 [${System.currentTimeMillis - start1}ms]")

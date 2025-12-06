@@ -61,9 +61,9 @@ object Day19 extends App:
   val path   = Iterator.iterate(tracer)(_.next).takeWhile(_.isPath).toList
 
   val start1: Long    = System.currentTimeMillis
-  val answer1: String = path.map(_.char).filter(_.isLetter).mkString("")
+  lazy val answer1: String = path.map(_.char).filter(_.isLetter).mkString("")
   println(s"Answer AOC 2017 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long = System.currentTimeMillis
-  val answer2: Int = path.size
+  lazy val answer2: Int = path.size
   println(s"Answer AOC 2017 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

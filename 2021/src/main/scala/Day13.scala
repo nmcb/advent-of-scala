@@ -46,7 +46,7 @@ object Day13 extends App:
       case (dots, (Hor, line)) => dots.map(horizontal(line))
 
   val start1  = System.currentTimeMillis
-  val answer1 = origami(dots, folds.take(1)).size
+  lazy val answer1 = origami(dots, folds.take(1)).size
   println(s"Answer AOC 2021 day $day part 1 [${System.currentTimeMillis - start1}ms]: $answer1")
 
   extension (dots: Dots) def asString: String =
@@ -61,5 +61,5 @@ object Day13 extends App:
     buffer.toString + "\n"
 
   val start2  = System.currentTimeMillis
-  val answer2 = origami(dots, folds).asString
+  lazy val answer2 = origami(dots, folds).asString
   println(s"Answer AOC 2021 day $day part 2 [${System.currentTimeMillis - start1}ms]: $answer2")

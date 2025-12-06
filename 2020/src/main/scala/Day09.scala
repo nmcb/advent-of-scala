@@ -28,7 +28,7 @@ object Day09 extends App:
     go(inbound)
 
   val start1 = System.currentTimeMillis
-  val answer1 = solve1(preamble, inbound)
+  lazy val answer1 = solve1(preamble, inbound)
   println(s"Answer AOC 2020 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   def solve2(inbound: Vector[Long], sum: Long): Option[Long] =
@@ -45,5 +45,5 @@ object Day09 extends App:
     result
 
   val start2 = System.currentTimeMillis
-  val answer2: Long = solve2(inbound, answer1).get
+  lazy val answer2: Long = solve2(inbound, answer1).get
   println(s"Answer AOC 2020 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

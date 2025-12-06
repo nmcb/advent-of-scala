@@ -61,9 +61,9 @@ object Day10 extends App:
       .toVector
 
   val start1: Long = System.currentTimeMillis
-  val answer1: Int = KnotHash.compute(lengths, runs = 1).productOfFirstTwo
+  lazy val answer1: Int = KnotHash.compute(lengths, runs = 1).productOfFirstTwo
   println(s"Answer AOC 2017 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long = System.currentTimeMillis
-  val answer2: String = KnotHash.compute(input, runs = 64).toString
+  lazy val answer2: String = KnotHash.compute(input, runs = 64).toString
   println(s"Answer AOC 2017 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

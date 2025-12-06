@@ -49,7 +49,7 @@ object Day21 extends App:
 
 
   val start1  = System.currentTimeMillis
-  val answer1 = solve1(game1)
+  lazy val answer1 = solve1(game1)
   println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
 
@@ -91,5 +91,5 @@ object Day21 extends App:
 
 
   val start2 = System.currentTimeMillis
-  val answer2 = solve2(Pawn(pos = 7), Pawn(pos = 9))
+  lazy val answer2 = solve2(Pawn(pos = 7), Pawn(pos = 9))
   println(s"Answer AOC 2021 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

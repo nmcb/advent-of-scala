@@ -64,7 +64,7 @@ object Day21 extends App:
     input.map((ingredients,_) => inert.keySet.intersect(ingredients).size).sum
 
   val start1  = System.currentTimeMillis
-  val answer1 = part1(input)
+  lazy val answer1 = part1(input)
   println(s"Answer AOC 2020 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   def part2(input: Input): String =
@@ -72,5 +72,5 @@ object Day21 extends App:
     findIngredient(risky)
 
   val start2  = System.currentTimeMillis
-  val answer2 = part2(input)
+  lazy val answer2 = part2(input)
   println(s"Answer AOC 2020 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

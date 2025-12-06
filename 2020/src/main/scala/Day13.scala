@@ -31,7 +31,7 @@ object Day13 extends App:
     go(start)
 
   val start1 = System.currentTimeMillis
-  val answer1: Long = solve1(schedule, begin.toLong)
+  lazy val answer1: Long = solve1(schedule, begin.toLong)
   println(s"Answer AOC 2020 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   /**
@@ -77,5 +77,5 @@ object Day13 extends App:
       .toMap
 
   val start2 = System.currentTimeMillis
-  val answer2 = crt(equations.keys.toList, equations.values.toList).getOrElse(sys.error("boom")) - input.length + 1
+  lazy val answer2 = crt(equations.keys.toList, equations.values.toList).getOrElse(sys.error("boom")) - input.length + 1
   println(s"Answer part 2: $answer2 [${System.currentTimeMillis - start1}ms]")

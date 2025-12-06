@@ -61,7 +61,7 @@ object Day23 extends App:
     Iterator.iterate(CPU.load(prog))(_.step).dropWhile(_.running).next.countMUL
 
   val start1: Long  = System.currentTimeMillis
-  val answer1: Long = solve(instructions)
+  lazy val answer1: Long = solve(instructions)
   println(s"Answer AOC 2017 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   /*
@@ -215,5 +215,5 @@ object Day23 extends App:
     (2 to math.sqrt(n.toDouble).toInt).exists(n % _ == 0)
 
   val start2: Long = System.currentTimeMillis
-  val answer2: Int = (105700 to 122700 by 17).count(notPrime)
+  lazy val answer2: Int = (105700 to 122700 by 17).count(notPrime)
   println(s"Answer AOC 2017 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

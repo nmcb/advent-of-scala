@@ -52,9 +52,9 @@ object Day23 extends App:
   val digits = "193467258".trim.map(_.asDigit).toVector
 
   val start1  = System.currentTimeMillis
-  val answer1 = solve1(digits)
+  lazy val answer1 = solve1(digits)
   println(s"Answer AOC 2020 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2  = System.currentTimeMillis
-  val answer2 = solve2(digits)
+  lazy val answer2 = solve2(digits)
   println(s"Answer AOC 2020 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

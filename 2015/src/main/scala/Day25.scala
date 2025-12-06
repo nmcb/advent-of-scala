@@ -13,6 +13,6 @@ object Day25 extends App:
   val base     = BigInt(252533)
   val modulo   = BigInt(33554393)
   val exponent = indexOf(row = 2947, column = 3029) - 1
-  val answer1  = initial * base.modPow(exponent, modulo) % modulo
+  lazy val answer1  = initial * base.modPow(exponent, modulo) % modulo
 
   println(s"Answer AOC 2015 day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")

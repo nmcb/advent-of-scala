@@ -33,7 +33,7 @@ object Day12 extends App:
     loop("start", Nil)
 
   val start1  = System.currentTimeMillis
-  val answer1 = decend(caves)((next, path) => path.contains(next))
+  lazy val answer1 = decend(caves)((next, path) => path.contains(next))
   println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   def solve2(caves: Caves): Int =
@@ -43,5 +43,5 @@ object Day12 extends App:
     }
 
   val start2  = System.currentTimeMillis
-  val answer2 = solve2(caves)
+  lazy val answer2 = solve2(caves)
   println(s"Answer AOC 2021 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

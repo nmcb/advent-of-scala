@@ -132,9 +132,9 @@ object Day22 extends App:
     Iterator.iterate(init)(next).drop(iterations).next.infected
 
   val start1: Long = System.currentTimeMillis
-  val answer1: Int = solve(carrier, 10000)(_.wake1)
+  lazy val answer1: Int = solve(carrier, 10000)(_.wake1)
   println(s"Answer AOC 2017 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long = System.currentTimeMillis
-  val answer2: Int = solve(carrier, 10000000)(_.wake2)
+  lazy val answer2: Int = solve(carrier, 10000000)(_.wake2)
   println(s"Answer AOC 2017 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

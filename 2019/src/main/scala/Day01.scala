@@ -16,7 +16,7 @@ object Day01 extends App:
     (mass / 3) - 2
 
   val start1  = System.currentTimeMillis
-  val answer1 = masses.map(massToFuel).sum
+  lazy val answer1 = masses.map(massToFuel).sum
   println(s"Answer AOC 2019 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
 
@@ -31,5 +31,5 @@ object Day01 extends App:
     go(mass)
 
   val start2  = System.currentTimeMillis
-  val answer2 = masses.map(massToFuelRequirement).sum
+  lazy val answer2 = masses.map(massToFuelRequirement).sum
   println(s"Answer AOC 2019 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

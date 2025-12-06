@@ -46,7 +46,7 @@ object Day02 extends App:
   val start1: Long =
     System.currentTimeMillis
 
-  val answer1: Long =
+  lazy val answer1: Long =
     games.filter(_.possibleWith(12, 13, 14)).map(_.id).sum
 
   println(s"Answer AOC 2023 day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
@@ -55,7 +55,7 @@ object Day02 extends App:
   val start2: Long =
     System.currentTimeMillis
 
-  val answer2: Long =
+  lazy val answer2: Long =
     games.map(_.power).sum
 
   println(s"Answer AOC 2023 day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")

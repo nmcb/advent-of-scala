@@ -104,7 +104,7 @@ object Day23 extends App:
       size.sum
 
   val start1: Long = System.currentTimeMillis
-  val answer1: Int = (1 to 10).foldLeft(Mat(input))((m,_) => m.next).countEmpty
+  lazy val answer1: Int = (1 to 10).foldLeft(Mat(input))((m,_) => m.next).countEmpty
   println(s"Answer AOC 2022 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
 
@@ -117,5 +117,5 @@ object Day23 extends App:
       solve2(next, c + 1)
 
   val start2: Long  = System.currentTimeMillis
-  val answer2: Long = solve2(Mat(input))
+  lazy val answer2: Long = solve2(Mat(input))
   println(s"Answer AOC 2022 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

@@ -42,9 +42,9 @@ object Day22 extends App:
   val rules: Seq[String] = Source.fromResource(s"input$day.txt").getLines.toSeq
 
   val start1  = System.currentTimeMillis
-  val answer1 = solve(rules, 10007).shuffle(2019)
+  lazy val answer1 = solve(rules, 10007).shuffle(2019)
   println(s"Answer AOC 2019 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2  = System.currentTimeMillis
-  val answer2 = solve(rules, 119315717514047L).inverse.pow(101741582076661L).shuffle(2020)
+  lazy val answer2 = solve(rules, 119315717514047L).inverse.pow(101741582076661L).shuffle(2020)
   println(s"Answer AOC 2019 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

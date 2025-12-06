@@ -26,7 +26,7 @@ object Day14 extends App:
       KnotHash.compute(s"uugsqrei-$i", runs = 64).toBinaryString
 
   val start1: Long = System.currentTimeMillis
-  val answer1: Int = hashes.mkString("").count(_ == '1')
+  lazy val answer1: Int = hashes.mkString("").count(_ == '1')
   println(s"Answer AOC 2017 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   case class Pos(x: Int, y: Int):
@@ -61,5 +61,5 @@ object Day14 extends App:
     loop(used)
 
   val start2: Long = System.currentTimeMillis
-  val answer2: Int = regions(used).size
+  lazy val answer2: Int = regions(used).size
   println(s"Answer AOC 2017 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

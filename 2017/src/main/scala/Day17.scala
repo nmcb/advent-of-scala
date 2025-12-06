@@ -25,7 +25,7 @@ object Day17 extends App:
       Iterator.iterate(Circle1.init)(_.insert(steps)).drop(amount).next()
 
   val start1: Long = System.currentTimeMillis
-  val answer1: Int = Circle1.spin(370, 2017).nextValue
+  lazy val answer1: Int = Circle1.spin(370, 2017).nextValue
   println(s"Answer AOC 2017 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   case class Circle2(size: Int, value: Int, current: Int):
@@ -48,5 +48,5 @@ object Day17 extends App:
 
 
   val start2: Long = System.currentTimeMillis
-  val answer2: Int = Circle2.spin(370, 50000000).value
+  lazy val answer2: Int = Circle2.spin(370, 50000000).value
   println(s"Answer AOC 2017 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
