@@ -26,7 +26,7 @@ object Day12 extends App:
         case None       => None
       )
 
-    private def loop(s: String, acc: List[A] = List.empty): (List[A], String) =
+    private def loop[B >: A](s: String, acc: List[B] = List.empty): (List[B], String) =
       parse(s) match {
         case None         => (acc.reverse, s)
         case Some((a,ss)) => loop(ss, a :: acc)

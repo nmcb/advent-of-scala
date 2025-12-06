@@ -11,8 +11,8 @@ object Day15 extends App:
 
   def generatorA = Iterator.iterate(591L)(next(16807)).drop(1)
   def generatorB = Iterator.iterate(393L)(next(48271)).drop(1)
-  val generator1 = generatorA zip generatorB
-  val generator2 = generatorA.filter(_ % 4 == 0) zip generatorB.filter(_ % 8 == 0)
+  def generator1 = generatorA zip generatorB
+  def generator2 = generatorA.filter(_ % 4 == 0) zip generatorB.filter(_ % 8 == 0)
 
   val start1: Long  = System.currentTimeMillis
   val answer1: Long = generator1.take(40000000).count(same)
