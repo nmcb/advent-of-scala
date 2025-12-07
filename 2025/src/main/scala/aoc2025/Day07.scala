@@ -16,22 +16,22 @@ object Day07 extends AoC:
       if manifold.nonEmpty then
         val splitters       = manifold.head.zipWithIndex.filter((s,_) => s == '^').map((_,i) => i)
         val (process, pass) = beams.partition(b => splitters.contains(b))
-        val split           = process.flatMap(b => Set(b-1, b+1))
-        loop(manifold.tail, pass ++ split, count + process.size)
+        val splits          = process.flatMap(b => Set(b-1, b+1))
+        loop(manifold.tail, pass ++ splits, count + process.size)
       else
         count
 
     loop(manifold.tail, Set(manifold.head.indexOf('S')))
 
 
-  extension (counter: Map[Int, Long])
+  extension [K] (counters: Map[K, Long])
 
-    inline def <+>(that: Map[Int, Long]): Map[Int, Long] =
-      that.foldLeft(counter):
-        case (result, (b, n)) =>
-          result.updatedWith(b):
-            case None          => Some(n)
-            case Some(current) => if current + n != 0 then Some(current + n) else None
+    inline def <+>(that: Map[K, Long]): Map[K, Long] =
+      that.foldLeft(counters):
+        case (result, (key, count)) =>
+          result.updatedWith(key):
+            case None          => Some(count)
+            case Some(current) => if current + count != 0 then Some(current + count) else None
 
 
   def solve2(manifold: Vector[String]): Long =
@@ -41,8 +41,8 @@ object Day07 extends AoC:
       if manifold.nonEmpty then
         val splitters = manifold.head.zipWithIndex.filter((s,_) => s == '^').map((_, i) => i)
         val process   = worlds.filter((w,n) => splitters.contains(w))
-        val split     = process.toSeq.flatMap((w,n) => Seq((w-1,n), (w+1,n), (w,-n))).groupMapReduce(_._1)(_._2)(_+_)
-        loop(manifold.tail, worlds <+> split)
+        val splits    = process.toSeq.flatMap((w,n) => Seq((w-1,n), (w+1,n), (w,-n))).groupMapReduce(_._1)(_._2)(_+_)
+        loop(manifold.tail, worlds <+> splits)
       else
         worlds.valuesIterator.sum
 

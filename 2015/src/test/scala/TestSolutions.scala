@@ -1,5 +1,7 @@
 import org.scalatest.funsuite.AnyFunSuite
 
+import nmcb.*
+
 class TestSolutions extends AnyFunSuite:
 
   test("Day01"):
