@@ -66,9 +66,9 @@ object Day14 extends App:
   val polymer = Polymer.make(rules, template)
 
   val start1  = System.currentTimeMillis
-  val answer1 = solve(polymer, 10)
+  lazy val answer1 = solve(polymer, 10)
   println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2  = System.currentTimeMillis
-  val answer2 = solve(polymer, 40)
+  lazy val answer2 = solve(polymer, 40)
   println(s"Answer AOC 2021 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

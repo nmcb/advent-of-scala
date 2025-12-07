@@ -55,7 +55,7 @@ object Day06 extends App:
     val off    = _ => false
 
   val start1: Long = System.currentTimeMillis
-  val answer1: Int = BooleanLights.run.count(identity)
+  lazy val answer1: Int = BooleanLights.run.count(identity)
 
   println(s"Answer AOC 2015 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
@@ -69,6 +69,6 @@ object Day06 extends App:
     val off    = v => if v <= 0 then 0 else v - 1
 
   val start2: Long = System.currentTimeMillis
-  val answer2: Int = IntLights.run.sum
+  lazy val answer2: Int = IntLights.run.sum
 
   println(s"Answer AOC 2015 day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")

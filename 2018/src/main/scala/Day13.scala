@@ -134,7 +134,7 @@ object Day13 extends App:
     s"${collision.x},${collision.y}"
 
   val start1  = System.currentTimeMillis
-  val answer1 = solve1(grid, carts)
+  lazy val answer1 = solve1(grid, carts)
   println(s"Answer AOC 2018 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
 
@@ -158,5 +158,5 @@ object Day13 extends App:
     s"${last.x},${last.y}"
 
   val start2  = System.currentTimeMillis
-  val answer2 = solve2(grid, carts)
+  lazy val answer2 = solve2(grid, carts)
   println(s"Answer AOC 2018 day $day part 2: $answer2 [${System.currentTimeMillis - start1}ms]")

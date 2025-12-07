@@ -69,7 +69,7 @@ object Day15 extends App:
   val start1: Long =
     System.currentTimeMillis
 
-  val answer1: Int =
+  lazy val answer1: Int =
     recipes.map(_.score).max
 
   println(s"Answer AOC 2015 day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
@@ -80,7 +80,7 @@ object Day15 extends App:
   val start2: Long =
     System.currentTimeMillis
 
-  val answer2: Int =
+  lazy val answer2: Int =
     recipes.filter(_.calories == 500).map(_.score).max
 
   println(s"Answer AOC 2015 day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")

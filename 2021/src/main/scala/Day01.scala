@@ -16,9 +16,9 @@ object Day01 extends App:
     l.sliding(2).count(l => l(1) > l(0))
 
   val start1 = System.currentTimeMillis
-  val answer1: Int = solve(depths)
+  lazy val answer1: Int = solve(depths)
   println(s"Answer AOC 2021 day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
   val start2 = System.currentTimeMillis
-  val answer2: Int = solve(depths.sliding(3).map(_.sum).toList)
+  lazy val answer2: Int = solve(depths.sliding(3).map(_.sum).toList)
   println(s"Answer AOC 2021 day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")

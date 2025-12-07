@@ -45,10 +45,10 @@ object Day07 extends App:
           case _                   => sys.error("boom!")
 
   val start1  = System.currentTimeMillis
-  val answer1 = bags.solve1(bags.parentsOf("shinygold")).distinct.size
+  lazy val answer1 = bags.solve1(bags.parentsOf("shinygold")).distinct.size
   println(s"Answer AOC 2020 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2  = System.currentTimeMillis
-  val answer2 = bags.solve2(bags.childrenOf("shinygold"))
+  lazy val answer2 = bags.solve2(bags.childrenOf("shinygold"))
   println(s"Answer AOC 2020 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
 

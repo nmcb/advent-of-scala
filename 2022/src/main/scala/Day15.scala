@@ -33,7 +33,7 @@ object Day15 extends App:
   val start1: Long =
     System.currentTimeMillis
 
-  val answer1: Int =
+  lazy val answer1: Int =
     val covers: List[Cover] = locks.flatMap(_.cover(2000000))
     val maxX: Int = max(covers.map(_.max).max, 2000000)
     val minX: Int = min(covers.map(_.min).min, 0)
@@ -46,7 +46,7 @@ object Day15 extends App:
   val start2: Long =
     System.currentTimeMillis
 
-  val answer2: Long =
+  lazy val answer2: Long =
     var answer: Long = 0
     for (y <- 0 to 4000000) yield
       val lcs = locks.flatMap(_.cover(y)).sortBy(_.min)

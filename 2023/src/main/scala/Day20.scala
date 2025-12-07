@@ -118,9 +118,9 @@ object Day20 extends App:
     Machine(modules)
 
   val start1: Long  = System.currentTimeMillis
-  val answer1: Long = (1 to 1000).foldLeft(machine)((m,_) => m.press).result
+  lazy val answer1: Long = (1 to 1000).foldLeft(machine)((m,_) => m.press).result
   println(s"Answer AOC 2023 day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long  = System.currentTimeMillis
-  val answer2: Long = machine.solveRX
+  lazy val answer2: Long = machine.solveRX
   println(s"Answer AOC 2023 day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")

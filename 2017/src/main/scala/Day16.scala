@@ -44,7 +44,7 @@ object Day16 extends App:
 
 
   val start1: Long    = System.currentTimeMillis
-  val answer1: String = Programs.init.dance(moves)
+  lazy val answer1: String = Programs.init.dance(moves)
   println(s"Answer AOC 2017 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   case class Cycle[A](stemSize: Int, cycleSize: Int, cycleHead: A, cycleLast: A, cycleHeadRepeat: A)
@@ -99,5 +99,5 @@ object Day16 extends App:
   val remainingDance = List.iterate(Programs.init, remaining.toInt + 1)(_.dance(moves)).last
 
   val start2: Long    = System.currentTimeMillis
-  val answer2: String = remainingDance
+  lazy val answer2: String = remainingDance
   println(s"Answer AOC 2017 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

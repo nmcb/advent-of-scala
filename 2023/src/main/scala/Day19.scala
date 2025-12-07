@@ -92,7 +92,7 @@ object Day19 extends App:
 
 
   val start1: Long  = System.currentTimeMillis
-  val answer1: Long =
+  lazy val answer1: Long =
     parts
       .filter(part => process1(part, "in", workflows) == Accepted)
       .map(p => p.x + p.m + p.a + p.s)
@@ -152,7 +152,7 @@ object Day19 extends App:
 
 
   val start2: Long  = System.currentTimeMillis
-  val answer2: Long =
+  lazy val answer2: Long =
     val start = Search(Range(1, 4000), Range(1, 4000), Range(1, 4000), Range(1, 4000), "in")
     val ranges = process2(List(start), workflows, List.empty)
     ranges.map(_.size).sum

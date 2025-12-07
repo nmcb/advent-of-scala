@@ -107,7 +107,7 @@ object Day18 extends App:
   val start1: Long =
     System.currentTimeMillis
 
-  val answer1: Int =
+  lazy val answer1: Int =
     grid
       .animate(100)
       .count
@@ -120,7 +120,7 @@ object Day18 extends App:
   val start2: Long =
     System.currentTimeMillis
 
-  val answer2: Int =
+  lazy val answer2: Int =
     import grid.*
     grid
       .withOverlay((minY,minX), (minY,maxX), (maxY,minX), (maxY,maxX))

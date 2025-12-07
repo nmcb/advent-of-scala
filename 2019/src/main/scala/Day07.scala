@@ -16,7 +16,7 @@ object Day07 extends App:
       .max
 
   val start1  = System.currentTimeMillis
-  val answer1 = highestSignal(program, 0 to 4)
+  lazy val answer1 = highestSignal(program, 0 to 4)
   println(s"Answer AOC 2019 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   
@@ -37,5 +37,5 @@ object Day07 extends App:
       .max
   
   val start2  = System.currentTimeMillis
-  val answer2 = highestSignalWithFeedback(program, 5 to 9)
+  lazy val answer2 = highestSignalWithFeedback(program, 5 to 9)
   println(s"Answer AOC 2019 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

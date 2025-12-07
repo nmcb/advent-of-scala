@@ -38,7 +38,7 @@ object Day07 extends App:
       .getOrElse(sys.error("no root"))
 
   val start1: Long    = System.currentTimeMillis
-  val answer1: String = nodes.root
+  lazy val answer1: String = nodes.root
   println(s"Answer AOC 2017 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   def sequence[K,A,B](map: Map[K,Either[A,B]]): Either[A,Map[K,B]] =
@@ -76,5 +76,5 @@ object Day07 extends App:
     eitherDiffOrTotalWeight(nodes(root)).swap.getOrElse(sys.error("no bad child"))
 
   val start2: Long = System.currentTimeMillis
-  val answer2: Int = nodes.correctBalanceWeight
+  lazy val answer2: Int = nodes.correctBalanceWeight
   println(s"Answer AOC 2017 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

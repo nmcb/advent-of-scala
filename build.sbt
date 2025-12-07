@@ -28,6 +28,8 @@ ThisBuild / Test / javaOptions ++= Seq("-Xmx4G", "-Xss1G", "-XX:+UseG1GC")
 Global / onChangedBuildSource   := ReloadOnSourceChanges
 
 
+lazy val input   = project.in(file("input"))
+lazy val nmcb    = project.in(file("nmcb"))
 lazy val aoc2015 = project.in(file("2015"))
 lazy val aoc2016 = project.in(file("2016"))
 lazy val aoc2017 = project.in(file("2017"))
@@ -37,8 +39,8 @@ lazy val aoc2020 = project.in(file("2020"))
 lazy val aoc2021 = project.in(file("2021"))
 lazy val aoc2022 = project.in(file("2022"))
 lazy val aoc2023 = project.in(file("2023"))
-lazy val aoc2024 = project.in(file("2024"))
-lazy val aoc2025 = project.in(file("2025"))
+lazy val aoc2024 = project.in(file("2024")).dependsOn(input, nmcb)
+lazy val aoc2025 = project.in(file("2025")).dependsOn(input, nmcb)
 
 lazy val aoc = (project in file("."))
   .aggregate(

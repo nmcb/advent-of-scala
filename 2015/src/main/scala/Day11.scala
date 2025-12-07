@@ -109,12 +109,12 @@ object Day11 extends App:
   /** Part 1 */
 
   val start1: Long = System.currentTimeMillis
-  val answer1: String = Password.fromString(input).next.toString
+  lazy val answer1: String = Password.fromString(input).next.toString
   println(s"Answer AOC 2015 day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
 
   /** Part 2 */
 
   val start2: Long = System.currentTimeMillis
-  val answer2: String = Password.fromString(answer1).next.toString
+  lazy val answer2: String = Password.fromString(answer1).next.toString
   println(s"Answer AOC 2015 day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")

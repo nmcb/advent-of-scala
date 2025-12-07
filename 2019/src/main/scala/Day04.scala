@@ -11,7 +11,7 @@ object Day04 extends App:
       rule1 && rule2
 
   val start1 = System.currentTimeMillis
-  val answer1 = solve1(235741, 706948)
+  lazy val answer1 = solve1(235741, 706948)
   println(s"Answer AOC 2019 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
 
@@ -25,5 +25,5 @@ object Day04 extends App:
       rule1 && (rule2 -- rule3).nonEmpty
 
   val start2 = System.currentTimeMillis
-  val answer2 = solve2(235741, 706948)
+  lazy val answer2 = solve2(235741, 706948)
   println(s"Answer AOC 2019 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

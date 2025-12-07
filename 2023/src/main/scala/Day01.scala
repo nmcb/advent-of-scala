@@ -33,7 +33,7 @@ object Day01 extends App:
   val start1: Long =
     System.currentTimeMillis
 
-  val answer1: Int =
+  lazy val answer1: Int =
     values.map(recover(digits)).sum
 
   println(s"Answer AOC 2023 day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
@@ -56,7 +56,7 @@ object Day01 extends App:
       "zero"  -> '0'
     )
 
-  val answer2: Int =
+  lazy val answer2: Int =
     values.map(recover(digits ++ names)).sum
 
   println(s"Answer AOC 2023 day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")

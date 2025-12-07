@@ -58,7 +58,7 @@ object Day14 extends App:
         .toVector)
 
   val start1: Long  = System.currentTimeMillis
-  val answer1: Long = grid.tiltN.load
+  lazy val answer1: Long = grid.tiltN.load
   println(s"Answer AOC 2023 day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
   lazy val cycle = Cycle.find(grid, _.cycle)(_.cycleInvariant)
@@ -67,7 +67,7 @@ object Day14 extends App:
   lazy val end   = (0 until count).foldLeft(grid)((g, _) => g.cycle)
 
   val start2: Long  = System.currentTimeMillis
-  val answer2: Long = end.load
+  lazy val answer2: Long = end.load
   println(s"Answer AOC 2023 day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
 
   /** Utilities */

@@ -67,5 +67,5 @@ object Day25 extends App:
       if dividend == 0 then Number(acc) else fromLong(dividend, acc)
 
   val start1: Long = System.currentTimeMillis
-  val answer1: String = Number.fromLong(snafus.map(_.toLong).sum).toString
+  lazy val answer1: String = Number.fromLong(snafus.map(_.toLong).sum).toString
   println(s"Answer AOC 2022 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")

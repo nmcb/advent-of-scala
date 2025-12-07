@@ -37,9 +37,9 @@ object Day04 extends App:
       .toSeq
 
   val start1: Long = System.currentTimeMillis
-  val answer1: Int = input.count(_.valid1)
+  lazy val answer1: Int = input.count(_.valid1)
   println(s"Answer AOC 2017 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long = System.currentTimeMillis
-  val answer2: Int = input.count(_.valid2)
+  lazy val answer2: Int = input.count(_.valid2)
   println(s"Answer AOC 2017 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

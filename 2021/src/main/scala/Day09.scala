@@ -51,12 +51,12 @@ object Day09 extends App:
     result
 
   val start1  = System.currentTimeMillis
-  val answer1 = heights.map((_,h) => h + 1).sum
+  lazy val answer1 = heights.map((_,h) => h + 1).sum
   println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
 
   val start2  = System.currentTimeMillis
-  val answer2 =
+  lazy val answer2 =
     def loop(todo: List[Pos], acc: List[Pos] = List.empty): Int =
       if todo.isEmpty then
         acc.size

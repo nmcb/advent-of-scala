@@ -23,7 +23,7 @@ object Day24 extends App:
         x >= min && x <= max && y >= min && y <= max
 
   val start1: Long = System.currentTimeMillis
-  val answer1: Int = solve1(min = 200000000000000L, max = 400000000000000L)
+  lazy val answer1: Int = solve1(min = 200000000000000L, max = 400000000000000L)
   println(s"Answer AOC 2023 day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
 
 
@@ -292,7 +292,7 @@ object Day24 extends App:
 
 
   val start2: Long    = System.currentTimeMillis
-  val answer2: BigInt = Attempt3.solve()
+  lazy val answer2: BigInt = Attempt3.solve()
   println(s"Answer AOC 2023 day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
 
   case class Stone(location: Vec, velocity: Vec):

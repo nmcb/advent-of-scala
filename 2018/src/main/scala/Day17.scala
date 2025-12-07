@@ -73,7 +73,7 @@ object Day17 extends App:
     flowing + stopped
 
   val start1  = System.currentTimeMillis
-  val answer1 = solve1(area)
+  lazy val answer1 = solve1(area)
   println(s"Answer AOC 2018 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
 
@@ -82,5 +82,5 @@ object Day17 extends App:
     stopped
 
   val start2  = System.currentTimeMillis
-  val answer2 = solve2(area)
+  lazy val answer2 = solve2(area)
   println(s"Answer AOC 2018 day $day part 2: $answer2 [${System.currentTimeMillis - start1}ms]")

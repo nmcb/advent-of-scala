@@ -27,7 +27,7 @@ object Day03 extends App:
       .toVector
 
   val start1  = System.currentTimeMillis
-  val answer1 = triangles.count(_.isValid)
+  lazy val answer1 = triangles.count(_.isValid)
   println(s"Answer AOC 2016 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   def triangulate(todo: Vector[Int], result: Vector[Triangle] = Vector.empty): Vector[Triangle] =
@@ -36,5 +36,5 @@ object Day03 extends App:
       case _                   => result
 
   val start2  = System.currentTimeMillis
-  val answer2 = triangulate(triangles.transpose.flatten).count(_.isValid)
+  lazy val answer2 = triangulate(triangles.transpose.flatten).count(_.isValid)
   println(s"Answer AOC 2016 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

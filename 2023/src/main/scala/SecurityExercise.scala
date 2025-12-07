@@ -50,6 +50,6 @@ object SecurityExercise extends App:
   val cluster0 = clusters.head.size
   val cluster1 = clusters.last.size
 
-  println(cuts)
-  println(cluster0)
-  println(cluster1)
+//  println(cuts)
+//  println(cluster0)
+//  println(cluster1)

@@ -52,7 +52,7 @@ object Day03 extends App:
     def init: Area =
       Area(start = Area.Loc.init, deliveries = Area.Deliveries.init)
 
-  val answer1: Int =
+  lazy val answer1: Int =
     commands
       .foldLeft(Area.init)(_ next _)
       .deliveries
@@ -71,7 +71,7 @@ object Day03 extends App:
         if (index % 2 != 0) (robot next command, santa) else (robot, santa next command)
       }
 
-  val answer2: Int =
+  lazy val answer2: Int =
     (robot.deliveries ++ santa.deliveries).values.size
   
   println(s"Answer AOC 2015 day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")

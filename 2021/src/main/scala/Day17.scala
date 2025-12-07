@@ -24,10 +24,10 @@ object Day17 extends App:
       case Probe(nx, ny, nvx, nvy) => go(nx, ny, nvx, nvy, if ny > maxY then ny else maxY)
 
   val start1  = System.currentTimeMillis
-  val answer1 = (0 to 50).flatMap(vx => (0 to 200).flatMap(vy => go(0, 0, vx, vy))).max
+  lazy val answer1 = (0 to 50).flatMap(vx => (0 to 200).flatMap(vy => go(0, 0, vx, vy))).max
   println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   
   val start2  = System.currentTimeMillis
-  val answer2 = (0 to 200).flatMap(vx => (-200 to 200).flatMap(vy => go(0, 0, vx, vy))).size
+  lazy val answer2 = (0 to 200).flatMap(vx => (-200 to 200).flatMap(vy => go(0, 0, vx, vy))).size
   println(s"Answer AOC 2021 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

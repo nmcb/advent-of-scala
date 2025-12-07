@@ -86,12 +86,12 @@ object Day07 extends App:
   /** Part 1 */
 
   val start1: Long = System.currentTimeMillis
-  val answer1: Int = Solver.solve(rules = input, wire = "a")
+  lazy val answer1: Int = Solver.solve(rules = input, wire = "a")
   println(s"Answer AOC 2015 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
 
   /** Part 2 */
 
   val start2: Long = System.currentTimeMillis
-  val answer2: Int = Solver.solve(rules = input, wire = "a", setWireB = Some(answer1))
+  lazy val answer2: Int = Solver.solve(rules = input, wire = "a", setWireB = Some(answer1))
   println(s"Answer AOC 2015 day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")

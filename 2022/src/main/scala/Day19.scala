@@ -126,9 +126,9 @@ object Day19 extends App:
             if scored > score then scored else score
 
   val start1: Long = System.currentTimeMillis
-  val answer1: Int = input.map(print => simulate(print, 24) * print.index).sum
+  lazy val answer1: Int = input.map(print => simulate(print, 24) * print.index).sum
   println(s"Answer AOC 2022 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2: Long = System.currentTimeMillis
-  val answer2: Int = input.take(3).map(print => simulate(print, 32)).product
+  lazy val answer2: Int = input.take(3).map(print => simulate(print, 32)).product
   println(s"Answer AOC 2022 day $day part 2: $answer2 [${System.currentTimeMillis - start1}ms]")

@@ -55,7 +55,7 @@ object Day13 extends App:
   val start1: Long =
     System.currentTimeMillis
 
-  val answer1: Int =
+  lazy val answer1: Int =
     input
       .grouped(2)
       .zipWithIndex
@@ -68,7 +68,7 @@ object Day13 extends App:
   val start2: Long =
     System.currentTimeMillis
 
-  val answer2: Long =
+  lazy val answer2: Long =
     val divider1: E = L(L(N(2)))
     val divider2: E = L(L(N(6)))
 

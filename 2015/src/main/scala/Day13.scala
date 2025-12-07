@@ -58,7 +58,7 @@ object Day13 extends App:
   val start1: Long =
     System.currentTimeMillis
 
-  val answer1: Int =
+  lazy val answer1: Int =
     names
       .permutations
       .map(setting => Table(setting, preferences).totalHappiness)
@@ -82,7 +82,7 @@ object Day13 extends App:
     val zero = name -> preferences.keys.map(n => n -> 0).toMap
     preferences.map((n,p) => n -> (p + (name -> 0))) + zero
 
-  val answer2: Int =
+  lazy val answer2: Int =
     names2
       .permutations
       .map(setting => Table(setting, preferences2).totalHappiness)

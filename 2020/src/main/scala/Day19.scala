@@ -70,7 +70,7 @@ object Day19 extends App:
     messages.count(message => rules(0).prefix(message)(using rules).contains(message.length))
 
   val start1  = System.currentTimeMillis
-  val answer1 = solve(rules, messages)
+  lazy val answer1 = solve(rules, messages)
   println(s"Answer AOC 2020 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
 
@@ -88,6 +88,6 @@ object Day19 extends App:
       Option.when(found)(line.length)
 
   val start2  = System.currentTimeMillis
-  val answer2 = solve(rules.updated(0, RuleZero(8)), messages)
+  lazy val answer2 = solve(rules.updated(0, RuleZero(8)), messages)
   println(s"Answer AOC 2020 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
 

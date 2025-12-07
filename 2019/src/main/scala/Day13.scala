@@ -30,7 +30,7 @@ object Day13 extends App:
 
   val program = Mem.parse(Source.fromResource(s"input$day.txt").mkString.trim)
   val start1  = System.currentTimeMillis
-  val answer1 = CPU(program).outputs.render.values.count(_ == Block)
+  lazy val answer1 = CPU(program).outputs.render.values.count(_ == Block)
   println(s"Answer AOC 2019 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
 
@@ -108,5 +108,5 @@ object Day13 extends App:
     go(CPU(program + (0 -> 2L)), GameState(None, None, None, Map.empty.withDefaultValue(Empty)))
 
   val start2  = System.currentTimeMillis
-  val answer2 = play(program, onScreen = false)
+  lazy val answer2 = play(program, onScreen = false)
   println(s"Answer AOC 2019 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

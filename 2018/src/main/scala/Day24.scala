@@ -105,7 +105,7 @@ object Day24 extends App:
     Source.fromResource(s"input$day.txt").getLines.toVector
 
   val start1  = System.currentTimeMillis
-  val answer1 = fight(groups(lines, boost = 0)).units
+  lazy val answer1 = fight(groups(lines, boost = 0)).units
   println(s"Answer AOC 2018 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
 
@@ -117,5 +117,5 @@ object Day24 extends App:
     go(1)
 
   val start2  = System.currentTimeMillis
-  val answer2 = solve2()
+  lazy val answer2 = solve2()
   println(s"Answer AOC 2018 day $day part 2: $answer2 [${System.currentTimeMillis - start1}ms]")

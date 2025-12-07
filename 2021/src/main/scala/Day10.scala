@@ -32,7 +32,7 @@ object Day10 extends App:
 
 
   val start1 = System.currentTimeMillis
-  val answer1 =
+  lazy val answer1 =
     lines
       .flatMap(incomplete)
       .map:
@@ -67,7 +67,7 @@ object Day10 extends App:
 
   val start2 = System.currentTimeMillis
 
-  val answer2 =
+  lazy val answer2 =
 
     val scores =
       lines

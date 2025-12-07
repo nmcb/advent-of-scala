@@ -47,7 +47,7 @@ object Day07 extends App:
       .toVector
 
   val start1  = System.currentTimeMillis
-  val answer1 = solve(steps, timer = _ => 1, parallelization = 1)._2.mkString("")
+  lazy val answer1 = solve(steps, timer = _ => 1, parallelization = 1)._2.mkString("")
   println(s"Answer AOC 2018 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2       = System.currentTimeMillis

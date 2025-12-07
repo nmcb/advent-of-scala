@@ -56,7 +56,7 @@ object Day15 extends App:
     dijkstra(Set(start), Map(start -> 0))
 
   val start1  = System.currentTimeMillis
-  val answer1 = solve(grid)
+  lazy val answer1 = solve(grid)
   println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   def expanded(grid: Grid): Grid =
@@ -75,5 +75,5 @@ object Day15 extends App:
       .toMap
 
   val start2  = System.currentTimeMillis
-  val answer2 = solve(expanded(grid))
+  lazy val answer2 = solve(expanded(grid))
   println(s"Answer AOC 2021 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

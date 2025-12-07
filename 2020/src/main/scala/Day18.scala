@@ -57,7 +57,7 @@ object Day18 extends App:
 
 
   val start1  = System.currentTimeMillis
-  val answer1 = input.map(parse1).map(_.eval).sum
+  lazy val answer1 = input.map(parse1).map(_.eval).sum
   println(s"Answer AOC 2020 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
 
@@ -75,5 +75,5 @@ object Day18 extends App:
     run(expr2)(line)
 
   val start2  = System.currentTimeMillis
-  val answer2 = input.map(parse2).map(_.eval).sum
+  lazy val answer2 = input.map(parse2).map(_.eval).sum
   println(s"Answer AOC 2020 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
