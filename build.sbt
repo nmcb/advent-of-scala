@@ -24,20 +24,21 @@ ThisBuild / Compile / run / javaOptions ++= Seq("-Xmx4G", "-Xss1G", "-XX:+UseG1G
 
 ThisBuild / Test / fork         := true
 ThisBuild / Test / javaOptions ++= Seq("-Xmx4G", "-Xss1G", "-XX:+UseG1GC")
+ThisBuild / Test / testOptions  += Tests.Argument("-oD")
 
 Global / onChangedBuildSource   := ReloadOnSourceChanges
 
 
 lazy val input   = project.in(file("input"))
 lazy val nmcb    = project.in(file("nmcb"))
-lazy val aoc2015 = project.in(file("2015"))
-lazy val aoc2016 = project.in(file("2016"))
-lazy val aoc2017 = project.in(file("2017"))
-lazy val aoc2018 = project.in(file("2018"))
-lazy val aoc2019 = project.in(file("2019"))
-lazy val aoc2020 = project.in(file("2020"))
-lazy val aoc2021 = project.in(file("2021"))
-lazy val aoc2022 = project.in(file("2022"))
+lazy val aoc2015 = project.in(file("2015")).dependsOn(input, nmcb)
+lazy val aoc2016 = project.in(file("2016")).dependsOn(input, nmcb)
+lazy val aoc2017 = project.in(file("2017")).dependsOn(input, nmcb)
+lazy val aoc2018 = project.in(file("2018")).dependsOn(input, nmcb)
+lazy val aoc2019 = project.in(file("2019")).dependsOn(input, nmcb)
+lazy val aoc2020 = project.in(file("2020")).dependsOn(input, nmcb)
+lazy val aoc2021 = project.in(file("2021")).dependsOn(input, nmcb)
+lazy val aoc2022 = project.in(file("2022")).dependsOn(input, nmcb)
 lazy val aoc2023 = project.in(file("2023")).dependsOn(input, nmcb)
 lazy val aoc2024 = project.in(file("2024")).dependsOn(input, nmcb)
 lazy val aoc2025 = project.in(file("2025")).dependsOn(input, nmcb)

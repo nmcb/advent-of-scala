@@ -123,8 +123,7 @@ object Day12 extends App:
 
   /** Part 1 */
 
-  val input: Json  =
-    Json.parse(Source.fromResource(s"input$day.txt").mkString.trim)
+  lazy val input: Json = Json.parse(Source.fromResource(s"input$day.txt").mkString.trim)
 
   val start1: Long = System.currentTimeMillis
   lazy val answer1: Int = solve(input)
