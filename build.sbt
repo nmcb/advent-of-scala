@@ -38,7 +38,7 @@ lazy val aoc2019 = project.in(file("2019"))
 lazy val aoc2020 = project.in(file("2020"))
 lazy val aoc2021 = project.in(file("2021"))
 lazy val aoc2022 = project.in(file("2022"))
-lazy val aoc2023 = project.in(file("2023"))
+lazy val aoc2023 = project.in(file("2023")).dependsOn(input, nmcb)
 lazy val aoc2024 = project.in(file("2024")).dependsOn(input, nmcb)
 lazy val aoc2025 = project.in(file("2025")).dependsOn(input, nmcb)
 
