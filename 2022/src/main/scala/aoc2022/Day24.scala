@@ -1,8 +1,11 @@
+package aoc2022
+
+import nmcb.*
+
+import scala.annotation.tailrec
 import scala.io.*
 
-object Day24 extends App:
-
-  val day: String = this.getClass.getName.drop(3).init
+object Day24 extends AoC:
 
   case class Pos(x: Int, y: Int):
     def +(p: Pos): Pos = Pos(x + p.x, y + p.y)
@@ -17,7 +20,6 @@ object Day24 extends App:
         Ordering[(Int,Int)].compare((a.y, a.x), (b.y, b.x))
 
   case class Bounds(max: Pos):
-    import Dir.*
     val sizeX: Int = max.x + 1
     val sizeY: Int = max.y + 1
     val fieldSize: Int = sizeX * sizeY
@@ -143,7 +145,7 @@ object Day24 extends App:
       })
 
     def reachedGoal: Boolean =
-      found.exists(_ == target)
+      found.contains(target)
 
     def fewestMinutes: Int =
       minutes
@@ -162,12 +164,11 @@ object Day24 extends App:
   object World:
     import Dir.*
     import Field.*
-    import Stream.*
 
     def init: World =
       val initField: Field[Char] =
         Source
-          .fromResource(s"input$day.txt")
+          .fromResource(s"$day.txt")
           .getLines
           .foldLeft(Vector.empty[Vector[Char]])(_ :+ _.toVector)
           .trimBorder
@@ -194,17 +195,15 @@ object Day24 extends App:
 
       World(Pos.end(bounds), initField, streams.futureField, streams.next, 0, bounds, Paths.start)
 
+  @tailrec
   def solve1(world: World): Int =
     if world.reachedGoal then world.fewestMinutes else
       val n = world.next
       solve1(n)
 
-  val start1: Long = System.currentTimeMillis
-  lazy val answer1: Int = solve1(World.init) + 1
-  println(s"Answer AOC 2022 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
-
   def solve2(world: World): Int =
 
+    @tailrec
     def loop(w: World): (World, Int) =
       if w.reachedGoal then (w, w.fewestMinutes) else loop(w.next)
 
@@ -234,6 +233,5 @@ object Day24 extends App:
     m5 + 1
 
 
-  val start2: Long = System.currentTimeMillis
+  lazy val answer1: Int = solve1(World.init) + 1
   lazy val answer2: Int = solve2(World.init)
-  println(s"Answer AOC 2022 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

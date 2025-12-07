@@ -1,22 +1,22 @@
+package aoc2022
+
+import nmcb.*
+
 import scala.annotation.*
 import scala.io.*
 import scala.math.*
 
-object Day18 extends App:
-
-  val day: String = this.getClass.getName.drop(3).init
+object Day18 extends AoC:
 
   val input: Set[Box] =
     Source
-      .fromResource(s"input$day.txt")
+      .fromResource(s"$day.txt")
       .getLines
       .map(_.trim)
       .map { case s"$x,$y,$z" => Box(x.toInt, y.toInt, z.toInt) }
       .toSet
 
   case class Box(x: Int, y: Int, z: Int):
-    import Box.*
-
     infix def -(b: Box): Box = Box(x - b.x, y - b.y, z - b.z)
     infix def +(b: Box): Box = Box(x + b.x, y + b.y, z + b.z)
     infix def min(b: Box): Box = Box(math.min(x, b.x), math.min(y, b.y), math.min(z, b.z))
@@ -30,15 +30,13 @@ object Day18 extends App:
       val zs = Set(Box( 0, 0,-1), Box(0, 0, 1))
       (xs ++ ys ++ zs).map(this + _)
 
-  val start1: Long = System.currentTimeMillis
-  lazy val answer1 = input.toList.map(p => 6 - (p.neighbours intersect input).size).sum
-  println(s"Answer AOC 2022 day $day part 2: $answer1 [${System.currentTimeMillis - start1}ms]")
 
 
-  def solve2: Int =
+  def solve2(): Int =
     val min = input.reduce(_ min _) - Box(1,1,1)
     val max = input.reduce(_ max _) + Box(1,1,1)
 
+    @tailrec
     def flood(todo: List[Box], visited: Set[Box]): Set[Box] =
       todo match
         case Nil =>
@@ -56,6 +54,6 @@ object Day18 extends App:
     val outer = flood(List(min), Set.empty)
     input.toSeq.map(_.neighbours.count(outer.contains)).sum
 
-  val start2: Long = System.currentTimeMillis
-  lazy val answer2 = solve2
-  println(s"Answer AOC 2022 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  
+  lazy val answer1: Int = input.toList.map(p => 6 - (p.neighbours intersect input).size).sum
+  lazy val answer2: Int = solve2()

@@ -1,8 +1,10 @@
+package aoc2022
+
+import nmcb.*
+
 import scala.io.Source
 
-object Day07 extends App:
-
-  val day = getClass.getSimpleName.filter(_.isDigit).mkString
+object Day07 extends AoC:
 
   sealed trait Line
   case object LsLine                             extends Line
@@ -19,7 +21,7 @@ object Day07 extends App:
 
   val input: List[Line] =
     Source
-      .fromResource(s"input$day.txt")
+      .fromResource(s"$day.txt")
       .getLines
       .map(parseLine)
       .toList
@@ -62,24 +64,9 @@ object Day07 extends App:
           case _                    => sys
       )
 
-  val start1: Long =
-    System.currentTimeMillis
 
-  lazy val answer1: Long =
-    fileSystem.sizes.filter(_ <= 100000L).sum
+  lazy val free: Long = 70000000L - fileSystem.sizeOf("/")
+  lazy val clean: Long = 30000000L - free
 
-  println(s"Answer AOC 2022 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
-
-  lazy val free: Long =
-    70000000L - fileSystem.sizeOf("/")
-
-  lazy val clean: Long =
-    30000000L - free
-
-  val start2: Long =
-    System.currentTimeMillis
-
-  lazy val answer2 =
-    fileSystem.sizes.filter(_ >= clean).min
-
-  println(s"Answer AOC 2022 day $day part 2: $answer2 [${System.currentTimeMillis - start1}ms]")
+  lazy val answer1: Long = fileSystem.sizes.filter(_ <= 100000L).sum
+  lazy val answer2: Long = fileSystem.sizes.filter(_ >= clean).min

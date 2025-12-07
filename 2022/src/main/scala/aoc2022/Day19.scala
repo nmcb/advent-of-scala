@@ -1,11 +1,14 @@
+package aoc2022
+
+import nmcb.*
+
+import scala.annotation.tailrec
 import scala.io.*
 
-object Day19 extends App:
-
-  val day = getClass.getSimpleName.filter(_.isDigit).mkString
+object Day19 extends AoC:
 
   val input: Vector[Blueprint] =
-    Source.fromResource(s"input$day.txt").getLines.map(Blueprint.fromString).toVector
+    Source.fromResource(s"$day.txt").getLines.map(Blueprint.fromString).toVector
 
   case class Blueprint(
     index:                  Int,
@@ -47,8 +50,8 @@ object Day19 extends App:
   import Build.*
 
   def buildActions(print: Blueprint, material: MaterialStash, robots: Vector[Robot]): Vector[Build] =
-    import print.*
     import material.*
+    import print.*
 
     def robotCount(material: Material): Int =
       robots.count(_ == Robot(material))
@@ -76,6 +79,7 @@ object Day19 extends App:
       case GeodeRobot    => Robot(Geode)
       case Nothing       => sys.error("boom robot!")
 
+  @tailrec
   def produce(robots: Vector[Robot], stash: MaterialStash): MaterialStash =
     import stash.*
     robots match
@@ -125,10 +129,6 @@ object Day19 extends App:
             val scored   = simulate(blueprint,timeLimit, consumed, builds +: robots, next, time + 1)
             if scored > score then scored else score
 
-  val start1: Long = System.currentTimeMillis
-  lazy val answer1: Int = input.map(print => simulate(print, 24) * print.index).sum
-  println(s"Answer AOC 2022 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
-  val start2: Long = System.currentTimeMillis
+  lazy val answer1: Int = input.map(print => simulate(print, 24) * print.index).sum
   lazy val answer2: Int = input.take(3).map(print => simulate(print, 32)).product
-  println(s"Answer AOC 2022 day $day part 2: $answer2 [${System.currentTimeMillis - start1}ms]")

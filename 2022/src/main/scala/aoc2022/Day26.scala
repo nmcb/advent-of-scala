@@ -1,12 +1,14 @@
-import scala.io.*
+package aoc2022
 
-object Day26 extends App:
+import nmcb.*
+import scala.annotation.tailrec
 
-  val day: String = this.getClass.getName.drop(3).init
+object Day26 extends AoC:
 
   type LookAndSay = Vector[Char]
 
   def decompose(number: LookAndSay): Vector[LookAndSay] =
+    @tailrec
     def loop(number: LookAndSay, digits: Vector[LookAndSay]): Vector[LookAndSay] =
       number match
         case h +: t if digits.last.contains(h) => loop(t, digits.init :+ (digits.last :+ h))
@@ -18,6 +20,5 @@ object Day26 extends App:
     decompose(n).flatMap(c => Vector(c.size.toString.head, c.head))
 
 
-  val start1: Long = System.currentTimeMillis
-  lazy val answer10 = Iterator.iterate(Vector('1'))(successor).take(10).toList.last.size
-  println(s"Answer AOC 2022 day $day part 2: ${answer10} [${System.currentTimeMillis - start1}ms]")
+  lazy val answer1: Int    = Iterator.iterate(Vector('1'))(successor).take(10).toList.last.size
+  lazy val answer2: String = "<unimplemented>"

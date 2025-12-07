@@ -1,15 +1,14 @@
+package aoc2022
+
+import nmcb.*
+
 import scala.io.*
 
-object Day03 extends App:
-
-  val day = getClass.getSimpleName.filter(_.isDigit).mkString
-
-  val start1: Long =
-    System.currentTimeMillis
+object Day03 extends AoC:
 
   val items: List[String] =
     Source
-      .fromResource(s"input$day.txt")
+      .fromResource(s"$day.txt")
       .getLines
       .toList
 
@@ -23,15 +22,6 @@ object Day03 extends App:
     val List(c) = left.toSet.intersect(right.toSet).toList
     priority(c)
 
-  lazy val answer1: Int =
-    items.map(priority).sum
-
-  println(s"Answer AOC 2022 day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
-
-
-  val start2: Long =
-    System.currentTimeMillis
-
   def priority(lines: List[String]): Int =
     assert(lines.length == 3)
     assert(lines.forall(_.length % 2 == 0))
@@ -39,7 +29,6 @@ object Day03 extends App:
     val List(c) = r1.toSet.intersect(r2.toSet).intersect(r3.toSet).toList
     priority(c)
 
-  lazy val answer2: Int =
-    items.grouped(3).map(priority).sum
 
-  println(s"Answer AOC 2022 day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
+  lazy val answer1: Int = items.map(priority).sum
+  lazy val answer2: Int = items.grouped(3).map(priority).sum

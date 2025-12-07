@@ -1,12 +1,15 @@
+package aoc2022
+
+import nmcb.*
+
+import scala.annotation.tailrec
 import scala.io.*
 
-object Day25 extends App:
-
-  val day: String = this.getClass.getName.drop(3).init
+object Day25 extends AoC:
 
   val snafus: List[Number] =
     Source
-      .fromResource(s"input$day.txt")
+      .fromResource(s"$day.txt")
       .getLines
       .map(s => Number.fromString(s.toList))
       .toList
@@ -46,11 +49,13 @@ object Day25 extends App:
 
   object Number:
 
+    @tailrec
     def fromString(s: List[Char], a: List[Digit] = List.empty): Number =
       s match
         case Nil    => Number(a)
         case h :: t => fromString(t, a :+ Digit.fromChar(h))
 
+    @tailrec
     def fromLong(l: Long, a: List[Digit] = List.empty): Number =
       val remainder = l % 5
 
@@ -66,6 +71,6 @@ object Day25 extends App:
 
       if dividend == 0 then Number(acc) else fromLong(dividend, acc)
 
-  val start1: Long = System.currentTimeMillis
+
   lazy val answer1: String = Number.fromLong(snafus.map(_.toLong).sum).toString
-  println(s"Answer AOC 2022 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  lazy val answer2: String = "<unimplemented>"

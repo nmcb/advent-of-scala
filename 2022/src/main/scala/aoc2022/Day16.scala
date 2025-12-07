@@ -1,15 +1,16 @@
+package aoc2022
+
+import nmcb.*
 import scala.io.*
 import scala.math.*
 
-object Day16 extends App:
-
-  val day: Vertex = this.getClass.getName.drop(3).init
+object Day16 extends AoC:
 
   case class Valve(name: Vertex, rate: Int, tunnels: List[Vertex], closed: Boolean = true)
 
   val valves: List[Valve] =
     Source
-      .fromResource(s"input$day.txt")
+      .fromResource(s"$day.txt")
       .getLines()
       .toList
       .map {
@@ -43,36 +44,32 @@ object Day16 extends App:
     m.toMap
 
   def solve1(time: Int, pressure: Int, flow: Int, current: Vertex, remaining: List[Vertex], limit: Int): Int =
-    remaining.foldLeft(pressure + (limit - time) * flow)((max, v) =>
+    remaining.foldLeft(pressure + (limit - time) * flow): (max, v) =>
       val steps = distances((current, v)) + 1
       if (time + steps) < limit then
         val t = time + steps
         val p = pressure + (steps * flow)
         val f = flow + pressures(v)
         val score = solve1(t, p, f, v, remaining.filter(_ != v), limit)
-        if score > max then score else max
-      else max
-    )
-
-  val start1: Long = System.currentTimeMillis
-  lazy val answer1: Int = solve1(0, 0, 0, "AA", nonzero, 30)
-  println(s"Answer AOC 2022 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
-
-
+        if score > max then
+          score
+        else
+          max
+      else
+        max
+  
   def solve2(): Int =
-    (1 to nonzero.length / 2).foldLeft(0)((max,i) =>
-      nonzero.combinations(i).foldLeft(max)((max,left) =>
+    (1 to nonzero.length / 2).foldLeft(0): (max,i) =>
+      nonzero.combinations(i).foldLeft(max): (max,left) =>
         val max2a = solve1(0, 0, 0, "AA", left, 26)
         val right = nonzero.filterNot(v => left.contains(v))
         val max2b = solve1(0, 0, 0, "AA", right, 26)
         if max2a + max2b > max then max2a + max2b else max
-      )
-    )
 
-  val start2: Long = System.currentTimeMillis
+  lazy val answer1: Int = solve1(0, 0, 0, "AA", nonzero, 30)
   lazy val answer2: Int = solve2()
-  println(s"Answer AOC 2022 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
 
+  
   /** Utilities */
 
   type Vertex = String
@@ -101,8 +98,8 @@ object Day16 extends App:
       Graph(adjacent.updatedWith(e.from)(_.map(_ :+ e).orElse(Some(List(e)))))
 
     def run(from: Vertex): Calc =
+
       import scala.collection.mutable
-      import scala.util.Try
 
       val edgeTo = mutable.Map.empty[Vertex, Edge]
       val distTo = mutable.Map.from(adjacent.map((f,_) => f -> Int.MaxValue))

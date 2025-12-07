@@ -1,16 +1,18 @@
+package aoc2022
+
+import nmcb.*
+
 import scala.annotation.*
 import scala.collection.AbstractIterator
 import scala.io.*
 import scala.math.*
 import scala.math.Integral.Implicits.*
 
-object Day17 extends App:
-
-  val day: String = this.getClass.getName.drop(3).init
+object Day17 extends AoC:
 
   val input: List[Move] =
     Source
-      .fromResource(s"input$day.txt")
+      .fromResource(s"$day.txt")
       .mkString
       .trim
       .toList
@@ -59,6 +61,7 @@ object Day17 extends App:
       def appear: Pos =
         Pos.origin.translate(dx = 2, dy = height + 3)
 
+      @tailrec
       def drop(pos: Pos, moves: LazyList[Move], trace: List[Move] = List.empty): (List[Move], Pos) =
 
         val moved = moves.head match
@@ -106,17 +109,8 @@ object Day17 extends App:
       Chamber(Rock.sequence, Move.pattern, Set.empty, 0)
 
 
-  val start1: Long =
-    System.currentTimeMillis
-
   lazy val answer1: Int =
     Iterator.iterate(Chamber.empty)(_.next).drop(2022).next.height
-
-  println(s"Answer AOC 2022 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
-
-
-  val start2: Long =
-    System.currentTimeMillis
 
   lazy val answer2: Long =
 
@@ -137,8 +131,6 @@ object Day17 extends App:
 
     stemHeight + cycleNr * cycleHeight + tailHeight
 
-  println(s"Answer AOC 2022 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
-
 
   /** Utilities */
 
@@ -146,7 +138,7 @@ object Day17 extends App:
 
   object CycleFinder:
 
-    import scala.collection._
+    import scala.collection.*
 
     extension [A](it: Iterator[A]) def zipWithPrev: Iterator[(Option[A], A)] =
         new AbstractIterator[(Option[A], A)]:

@@ -1,14 +1,13 @@
+package aoc2022
+
+import nmcb.*
 import scala.io.*
-import java.util.StringTokenizer
-import scala.jdk.CollectionConverters.*
 
-object Day22 extends App:
-
-  val day: String = this.getClass.getName.drop(3).init
+object Day22 extends AoC:
 
   val input: Seq[String] =
     Source
-      .fromResource(s"input$day.txt")
+      .fromResource(s"$day.txt")
       .getLines
       .toIndexedSeq
 
@@ -186,23 +185,12 @@ object Day22 extends App:
     def start: Pos = Pos(tiles(1).indexOf('.'), 1, E, path)
 
   
-  val start1: Long =
-    System.currentTimeMillis
-
   lazy val answer1: Long =
     var pos = Pos.start
     while (pos.hasNext) pos = pos.next1
     pos.value
 
-  println(s"Answer AOC 2022 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
-
-
-  val start2: Long =
-    System.currentTimeMillis
-
   lazy val answer2: Long =
     var pos = Pos.start
     while (pos.hasNext) pos = pos.next2
     pos.value
-
-  println(s"Answer AOC 2022 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

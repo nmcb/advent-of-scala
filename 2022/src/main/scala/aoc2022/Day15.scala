@@ -1,9 +1,11 @@
+package aoc2022
+
+import nmcb.*
+
 import scala.io.*
 import scala.math.*
 
-object Day15 extends App:
-
-  val day = getClass.getSimpleName.filter(_.isDigit).mkString
+object Day15 extends AoC:
 
   case class Pos(x: Int, y: Int)
 
@@ -22,7 +24,7 @@ object Day15 extends App:
 
   val locks: List[Lock] =
     Source
-      .fromResource(s"input$day.txt")
+      .fromResource(s"$day.txt")
       .getLines()
       .toList
       .map {
@@ -30,30 +32,20 @@ object Day15 extends App:
           Lock(Pos(sx.toInt,sy.toInt), Pos(bx.toInt,by.toInt))
       }
 
-  val start1: Long =
-    System.currentTimeMillis
-
   lazy val answer1: Int =
     val covers: List[Cover] = locks.flatMap(_.cover(2000000))
     val maxX: Int = max(covers.map(_.max).max, 2000000)
     val minX: Int = min(covers.map(_.min).min, 0)
-    (minX to maxX).foldLeft(0)((count,x) =>
+    (minX to maxX).foldLeft(0): (count,x) =>
       if covers.exists(c => c.min <= x && c.max >= x) then count + 1 else count
-    )
-
-  println(s"Answer AOC 2022 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
-
-  val start2: Long =
-    System.currentTimeMillis
 
   lazy val answer2: Long =
     var answer: Long = 0
-    for (y <- 0 to 4000000) yield
+    for
+      y <- 0 to 4000000
+    yield
       val lcs = locks.flatMap(_.cover(y)).sortBy(_.min)
-      lcs.foldLeft(0)((x,cur) =>
+      lcs.foldLeft(0): (x,cur) =>
           if cur.min > x then answer = x.toLong * 4000000 + y
           max(x + 1, cur.max)
-      )
     answer
-
-  println(s"Answer AOC 2022 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

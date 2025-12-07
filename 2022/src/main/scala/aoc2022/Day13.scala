@@ -1,11 +1,9 @@
+package aoc2022
+
+import nmcb.*
 import scala.io.Source
-import scala.util.Try
 
-object Day13 extends App:
-
-  val day: String = this.getClass.getName.drop(3).init
-
-  /** Modeling */
+object Day13 extends AoC:
 
   enum E:
     case N(n: Int)
@@ -39,34 +37,25 @@ object Day13 extends App:
 
   /** Solutions */
 
-  import E.*
-  import E.given
+  import E.{*, given}
 
   import math.Ordered.orderingToOrdered
 
   val input: List[E] =
     Source
-      .fromResource(s"input$day.txt")
+      .fromResource(s"$day.txt")
       .getLines
       .filterNot(_.isBlank)
       .map(parse)
       .toList
 
-  val start1: Long =
-    System.currentTimeMillis
-
+  
   lazy val answer1: Int =
     input
       .grouped(2)
       .zipWithIndex
       .map((es,idx) => if es(0) <= es(1) then idx + 1 else 0)
       .sum
-
-  println(s"Answer AOC 2022 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
-
-
-  val start2: Long =
-    System.currentTimeMillis
 
   lazy val answer2: Long =
     val divider1: E = L(L(N(2)))
@@ -76,8 +65,6 @@ object Day13 extends App:
     val idx1 = ordered.indexWhere(_ == divider1) + 1
     val idx2 = ordered.indexWhere(_ == divider2) + 1
     idx1 * idx2
-
-  println(s"Answer AOC 2022 day $day part 2: $answer2 [${System.currentTimeMillis - start1}ms]")
 
 
   /** Utilities */

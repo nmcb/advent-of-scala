@@ -1,15 +1,11 @@
+package aoc2022
+
+import nmcb.*
+
 import scala.annotation.targetName
 import scala.io.*
 
-object Day21 extends App:
-
-  val day: String = this.getClass.getName.drop(3).init
-
-  @targetName("peaceBeUponHim")
-  def ﷺ[A](a: A): A =
-    a
-
-  val peaceBeUponHim = ﷺ
+object Day21 extends AoC:
 
   type Name = String
   type Lazy = Long => Long
@@ -89,7 +85,7 @@ object Day21 extends App:
         input
           .find(_.name == name)
           .map(e => e.apply(search))
-          .getOrElse(ﷺ)
+          .getOrElse(identity)
 
     val solve: Option[Long] =
       search("root") match
@@ -98,22 +94,17 @@ object Day21 extends App:
 
   val program: List[Expr] =
     Source
-      .fromResource(s"input$day.txt")
+      .fromResource(s"$day.txt")
       .getLines
       .map(Expr.parseLine)
       .toList
 
-  val start1: Long  = System.currentTimeMillis
-  lazy val answer1 = SAT(program).solve.getOrElse(sys.error(s"unsolved ${program.foldLeft("\n")(_ + _)}"))
-  println(s"Answer AOC 2022 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
-
-  val patch = program.flatMap {
+  val patch: List[Expr] = program.flatMap:
     case Bin("root", lhs, rhs, op, line) => Some(Bin("root", lhs, rhs, "=", line.replace(op.head, '=')))
-    case m if m.name == "humn"    => None
-    case m                        => Some(m)
-  }
+    case m if m.name == "humn"           => None
+    case m                               => Some(m)
 
-  val start2: Long  = System.currentTimeMillis
-  lazy val answer2 = SAT(patch).solve.getOrElse(sys.error(s"unsolved ${program.foldLeft("\n")(_ + _)}"))
-  println(s"Answer AOC 2022 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+
+  lazy val answer1: Long = SAT(program).solve.getOrElse(sys.error(s"unsolved ${program.foldLeft("\n")(_ + _)}"))
+  lazy val answer2: Long = SAT(patch).solve.getOrElse(sys.error(s"unsolved ${program.foldLeft("\n")(_ + _)}"))
 

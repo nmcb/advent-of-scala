@@ -1,11 +1,11 @@
-import scala.annotation.tailrec
-import scala.io.Source
+package aoc2022
 
-object Day14 extends App:
+import nmcb.*
 
-  val day: String = this.getClass.getName.drop(3).init
+import scala.annotation.*
+import scala.io.*
 
-  /** Modeling */
+object Day14 extends AoC:
 
   enum E(val c: Char):
     case S extends E('o')
@@ -31,7 +31,7 @@ object Day14 extends App:
   val rocks: Vector[Pos] =
     val paths =
       Source
-        .fromResource(s"input$day.txt")
+        .fromResource(s"$day.txt")
         .getLines
         .map(parse)
         .toVector
@@ -114,10 +114,6 @@ object Day14 extends App:
 
     val drip: Pos = Pos(500,0)
 
-  val start1: Long = System.currentTimeMillis
-  lazy val answer1: Int = Cave.from1(rocks).solve1
-  println(s"Answer AOC 2022 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
-  val start2: Long = System.currentTimeMillis
+  lazy val answer1: Int = Cave.from1(rocks).solve1
   lazy val answer2: Int = Cave.from2(rocks).solve2
-  println(s"Answer AOC 2022 day $day part 2: $answer2 [${System.currentTimeMillis - start1}ms]")

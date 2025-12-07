@@ -1,13 +1,15 @@
-import scala.io.Source
-import scala.util.Try
+package aoc2022
 
-object Day11 extends App:
+import nmcb.*
 
-  val day: String = this.getClass.getName.drop(3).init
+import scala.io.*
+import scala.util.*
+
+object Day11 extends AoC:
 
   lazy val monkeys: List[Monkey] =
     Source
-      .fromResource(s"input$day.txt")
+      .fromResource(s"$day.txt")
       .getLines
       .filterNot(_.isBlank)
       .grouped(6)
@@ -91,21 +93,12 @@ object Day11 extends App:
       .takeRight(2)
       .product
 
-  val start1: Long =
-    System.currentTimeMillis
 
   lazy val answer1: Long =
     val ms = monkeys.map(_.copy(lowerWorry = _ / 3))
-    solve(20, ms)
-
-  println(s"Answer AOC 2022 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
-
-  val start2: Long =
-    System.currentTimeMillis
+    solve(20, monkeys.map(_.copy(lowerWorry = _ / 3)))
 
   lazy val answer2: Long =
-    val productOfDivisibles = monkeys.map(_.divisible).product
-    val ms = monkeys.map(_.copy(lowerWorry = _ % productOfDivisibles))
+    val productOfDivisible = monkeys.map(_.divisible).product
+    val ms = monkeys.map(_.copy(lowerWorry = _ % productOfDivisible))
     solve(10000, ms)
-
-  println(s"Answer AOC 2022 day $day part 2: $answer2 [${System.currentTimeMillis - start1}ms]")

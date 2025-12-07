@@ -1,21 +1,22 @@
+package aoc2022
+
+import nmcb.*
+
 import scala.collection.mutable
 import scala.io.*
-import scala.collection.mutable.*
 
-object Day20 extends App:
-
-  val day: String = this.getClass.getName.drop(3).init
+object Day20 extends AoC:
 
   val input: List[Long] =
     Source
-      .fromResource(s"input$day.txt")
+      .fromResource(s"$day.txt")
       .getLines
       .map(_.trim.toLong)
       .toList
 
   def solve(input: List[Long], key: Int = 1, runs: Int = 1): List[Long] =
 
-    extension (buffer: Buffer[(Long,Int)]) infix def mix(element: (Long,Int)): Buffer[(Long,Int)] =
+    extension (buffer: mutable.Buffer[(Long,Int)]) infix def mix(element: (Long,Int)): mutable.Buffer[(Long,Int)] =
       val (steps,_) = element
       val from = buffer.indexOf(element)
       buffer.remove(from)
@@ -39,10 +40,6 @@ object Day20 extends App:
       coords(idx)
     indices.map(get)
 
-  val start1: Long  = System.currentTimeMillis
-  lazy val answer1: Long = grove(List(1000,2000,3000))(solve(input)).sum
-  println(s"Answer AOC 2022 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
-  val start2: Long  = System.currentTimeMillis
+  lazy val answer1: Long = grove(List(1000,2000,3000))(solve(input)).sum
   lazy val answer2: Long = grove(List(1000,2000,3000))(solve(input, 811589153, 10)).sum
-  println(s"Answer AOC 2022 day $day part 2: $answer2 [${System.currentTimeMillis - start1}ms]")

@@ -1,9 +1,10 @@
+package aoc2022
+
+import nmcb.*
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day23 extends App:
-
-  val day: String = this.getClass.getName.drop(3).init
+object Day23 extends AoC:
 
   case class Pos(x: Int, y: Int):
     def +(p: Pos): Pos = copy(x = x + p.x, y = y + p.y)
@@ -16,7 +17,7 @@ object Day23 extends App:
 
   val input: Set[Pos] =
     Source
-      .fromResource(s"input$day.txt")
+      .fromResource(s"$day.txt")
       .getLines
       .zipWithIndex
       .foldLeft(Set.empty):
@@ -103,11 +104,6 @@ object Day23 extends App:
       yield 1
       size.sum
 
-  val start1: Long = System.currentTimeMillis
-  lazy val answer1: Int = (1 to 10).foldLeft(Mat(input))((m,_) => m.next).countEmpty
-  println(s"Answer AOC 2022 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
-
-
   @tailrec
   def solve2(m: Mat, c: Int = 1): Int =
     val next = m.next
@@ -116,6 +112,6 @@ object Day23 extends App:
     else
       solve2(next, c + 1)
 
-  val start2: Long  = System.currentTimeMillis
+
+  lazy val answer1: Int = (1 to 10).foldLeft(Mat(input))((m,_) => m.next).countEmpty
   lazy val answer2: Long = solve2(Mat(input))
-  println(s"Answer AOC 2022 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

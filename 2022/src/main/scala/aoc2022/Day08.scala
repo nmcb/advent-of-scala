@@ -1,8 +1,10 @@
+package aoc2022
+
+import nmcb.*
+
 import scala.io.Source
 
-object Day08 extends App:
-
-  val day = getClass.getSimpleName.filter(_.isDigit).mkString
+object Day08 extends AoC:
 
   case class Pos(x: Int, y: Int)
 
@@ -62,7 +64,7 @@ object Day08 extends App:
   val grid: Mat =
     Mat(
       Source
-        .fromResource(s"input$day.txt")
+        .fromResource(s"$day.txt")
         .getLines
         .zipWithIndex
         .foldLeft(Map.empty[Pos,Int]) { case (a,(r,y)) =>
@@ -71,10 +73,5 @@ object Day08 extends App:
         }})
 
 
-  val start1: Long  = System.currentTimeMillis
   lazy val answer1: Long = grid.maxVisibleTrees
-  println(s"Answer AOC 2022 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
-
-  val start2: Long  = System.currentTimeMillis
   lazy val answer2: Long = grid.maxScenicScore
-  println(s"Answer AOC 2022 day $day part 2: $answer2 [${System.currentTimeMillis - start1}ms]")

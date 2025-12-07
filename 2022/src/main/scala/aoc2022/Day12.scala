@@ -1,12 +1,14 @@
-import scala.io.Source
+package aoc2022
 
-object Day12 extends App:
+import nmcb.*
 
-  val day: String = this.getClass.getName.drop(3).init
+import scala.io.*
+
+object Day12 extends AoC:
 
   val input: List[(Int,Int,Char)] =
     Source
-      .fromResource(s"input$day.txt")
+      .fromResource(s"$day.txt")
       .getLines
       .zipWithIndex
       .foldLeft(List.empty[(Int,Int,Char)]) { case (a, (r, y)) =>
@@ -126,13 +128,7 @@ object Day12 extends App:
       Calc(edgeTo.toMap, distTo.toMap)
 
 
-  val start1: Long = System.currentTimeMillis
   lazy val answer1: Int = graph.run(from).pathTo(to).length
-  println(s"Answer AOC 2022 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
-
-  val start2: Long = System.currentTimeMillis
   lazy val answer2: Long =
     val as: List[Vertex] = input.filter((_,_,c) => c == 'a' || c == 'S').map((x,y,_) => Vertex(x,y))
     as.map(f => graph.run(f).pathTo(to).length).filterNot(_ == 0).min
-
-  println(s"Answer AOC 2022 day $day part 2: $answer2 [${System.currentTimeMillis - start1}ms]")

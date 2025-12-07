@@ -1,8 +1,11 @@
+package aoc2022
+
+import nmcb.*
+
+import scala.annotation.tailrec
 import scala.io.Source
 
-object Day10 extends App:
-
-  val day: String = this.getClass.getName.drop(3).init
+object Day10 extends AoC:
 
   sealed trait Inst
   case object Nop                             extends Inst
@@ -10,7 +13,7 @@ object Day10 extends App:
 
   lazy val instructions: List[Inst] =
     Source
-      .fromResource(s"input$day.txt")
+      .fromResource(s"$day.txt")
       .getLines
       .map(_.trim)
       .map {
@@ -21,7 +24,7 @@ object Day10 extends App:
 
   case class CPU(is: List[Inst], cycle: Int = 0, x: Int = 1):
 
-    val sync = List(20, 60, 100, 140, 180, 220).map(_ - 1)
+    val sync: Seq[Int] = List(20, 60, 100, 140, 180, 220).map(_ - 1)
 
     def nextCycle: CPU =
       is match
@@ -39,6 +42,7 @@ object Day10 extends App:
     val draw: Char =
       if sprite.contains(cycle % 40) then '#' else '.'
 
+  @tailrec
   def solve1(cpu: CPU, acc: Int = 0): Int =
     if cpu.cycle > cpu.sync.max then
       acc
@@ -48,16 +52,14 @@ object Day10 extends App:
       solve1(cpu.nextCycle, acc)
 
 
-  val start1: Long = System.currentTimeMillis
-  lazy val answer1: Int = solve1(CPU(instructions))
-  println(s"Answer AOC 2022 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
+  @tailrec
   def solve2(cpu: CPU, pixels: String = ""): String =
     if cpu.is.isEmpty then
       pixels.grouped(40).mkString("\n")
     else
       solve2(cpu.nextCycle, pixels :+ cpu.draw)
 
-  val start2: Long = System.currentTimeMillis
+
+  lazy val answer1: Int = solve1(CPU(instructions))
   lazy val answer2: String = solve2(CPU(instructions))
-  println(s"Answer AOC 2022 day $day part 2: \n$answer2 [${System.currentTimeMillis - start1}ms]")
