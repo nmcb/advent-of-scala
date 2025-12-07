@@ -2,8 +2,6 @@ package aoc2024
 
 import nmcb.*
 
-import scala.io.*
-
 object Day02 extends AoC:
 
   private case class Report(levels: Seq[Int]):
@@ -35,8 +33,7 @@ object Day02 extends AoC:
       withOneLevelRemoved.count(_.isSafe) > 0
 
 
-  private val reports: Seq[Report] =
-    Source.fromResource(s"$day.txt").getLines.map(s => Report(s.split(' ').map(_.toInt).toSeq)).toSeq
+  private val reports: Seq[Report] = lines.map(s => Report(s.split(' ').map(_.toInt).toSeq))
 
   lazy val answer1: Int = reports.count(_.isSafe)
   lazy val answer2: Int = reports.count(r => r.isSafe || r.isSafeWithOneLevelRemoved)

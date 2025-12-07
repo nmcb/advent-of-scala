@@ -3,13 +3,12 @@ package aoc2024
 import nmcb.*
 
 import scala.annotation.*
-import scala.io.*
 
 object Day06 extends AoC:
 
   import nmcb.Dir.*
 
-  private val grid: Grid[Char] = Grid.fromLines(Source.fromResource(s"$day.txt").getLines)
+  private val grid: Grid[Char] = Grid.fromLines(lines)
 
   extension (g: Grid[Char])
 

@@ -3,11 +3,8 @@ package aoc2025
 import nmcb.*
 
 import scala.annotation.*
-import scala.io.*
 
 object Day07 extends AoC:
-
-  val manifold: Vector[String] = Source.fromResource(s"$day.txt").getLines.toVector
 
   def solve1(manifold: Vector[String]): Int =
 
@@ -49,5 +46,5 @@ object Day07 extends AoC:
     loop(manifold.tail, Map(manifold.head.indexOf('S') -> 1L))
 
 
-  lazy val answer1: Long = solve1(manifold)
-  lazy val answer2: Long = solve2(manifold)
+  lazy val answer1: Long = solve1(lines)
+  lazy val answer2: Long = solve2(lines)

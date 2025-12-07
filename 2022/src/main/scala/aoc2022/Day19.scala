@@ -3,12 +3,10 @@ package aoc2022
 import nmcb.*
 
 import scala.annotation.tailrec
-import scala.io.*
 
 object Day19 extends AoC:
 
-  val input: Vector[Blueprint] =
-    Source.fromResource(s"$day.txt").getLines.map(Blueprint.fromString).toVector
+  val blueprints: Vector[Blueprint] = lines.map(Blueprint.fromString).toVector
 
   case class Blueprint(
     index:                  Int,
@@ -130,5 +128,5 @@ object Day19 extends AoC:
             if scored > score then scored else score
 
 
-  lazy val answer1: Int = input.map(print => simulate(print, 24) * print.index).sum
-  lazy val answer2: Int = input.take(3).map(print => simulate(print, 32)).product
+  lazy val answer1: Int = blueprints.map(print => simulate(print, 24) * print.index).sum
+  lazy val answer2: Int = blueprints.take(3).map(print => simulate(print, 32)).product

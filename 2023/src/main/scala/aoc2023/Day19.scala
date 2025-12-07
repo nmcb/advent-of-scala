@@ -3,7 +3,6 @@ package aoc2023
 import nmcb.*
 
 import scala.annotation.tailrec
-import scala.io.Source
 
 object Day19 extends AoC:
 
@@ -65,13 +64,7 @@ object Day19 extends AoC:
 
     parts -> workflows
 
-  val lines: List[String] =
-    Source
-      .fromResource(s"$day.txt")
-      .getLines()
-      .toList
-
-  val (parts, workflows) = parse(lines)
+  val (parts, workflows) = parse(lines.toList)
 
 
   @tailrec

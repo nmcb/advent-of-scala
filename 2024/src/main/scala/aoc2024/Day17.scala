@@ -4,16 +4,15 @@ import nmcb.*
 import nmcb.predef.*
 
 import scala.annotation.*
-import scala.io.*
 
 object Day17 extends AoC:
 
   case class CPU(a: Long, b: Long, c: Long, program: Vector[Long], ip: Int = 0, out: Long = 0):
 
-    def opcode =
+    def opcode: Long =
       program(ip)
 
-    def operand =
+    def operand: Long =
       program(ip + 1)
 
     def halts: Boolean =
@@ -57,17 +56,18 @@ object Day17 extends AoC:
       display(out)
 
   val cpu: CPU =
-    val input =
-      Source.fromResource(s"$day.txt").getLines
+    
+    val source =
+      lines
         .collect:
           case s"$p: $v" => p -> v.trim.split(',').map(_.toLong).toVector
         .toMap
 
     CPU(
-      a = input("Register A").head,
-      b = input("Register B").head,
-      c = input("Register C").head,
-      program = input("Program")
+      a = source("Register A").head,
+      b = source("Register B").head,
+      c = source("Register C").head,
+      program = source("Program")
     )
 
   def quineA(cpu: CPU): Long =

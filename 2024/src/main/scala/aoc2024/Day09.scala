@@ -3,7 +3,6 @@ package aoc2024
 import nmcb.*
 
 import scala.annotation.*
-import scala.io.*
 
 object Day09 extends AoC:
 
@@ -25,7 +24,7 @@ object Day09 extends AoC:
           loop(rest, id + 1, result ++ Vector.fill(size.asDigit)(Block(id)) ++ Vector.fill(free.asDigit)(Block.free))
         case size :: Nil =>
           loop(Nil, id + 1, result ++ Vector.fill(size.asDigit)(Block(id)))
-    loop(Source.fromResource(s"$day.txt").mkString.trim.toList)
+    loop(input.toList)
 
   def compact1(disk: Vector[Block]): Vector[Block] =
     @tailrec
@@ -136,9 +135,6 @@ object Day09 extends AoC:
    * print(sum(id*m.val() for id, m in enumerate(mem[::2])))
    */
 
-  val input: String =
-    Source.fromResource(s"$day.txt").mkString.trim
-
   lazy val answer2Mutable: Long =
     class Mem(var pos: Int, var len: Int):
       infix def value(id: Int, pointer: Int = pos, result: Long = 0): Long =
@@ -169,8 +165,7 @@ object Day09 extends AoC:
     result.zipWithIndex.foldLeft(0L):
       case (acc, (c, i)) => if c == -1 then acc else acc + i * c
 
-  val inputJP: Vector[Char] =
-    Source.fromResource(s"$day.txt").getLines().toVector.head.toVector
+  val inputJP: Vector[Char] = lines.head.toVector
 
   val initFilesLeft: Vector[(Int, Int)] =
     inputJP.zipWithIndex.filter((c, i) => i % 2 == 0).map((c, i) => (c.asDigit, i))

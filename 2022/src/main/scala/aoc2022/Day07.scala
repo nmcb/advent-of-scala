@@ -2,8 +2,6 @@ package aoc2022
 
 import nmcb.*
 
-import scala.io.Source
-
 object Day07 extends AoC:
 
   sealed trait Line
@@ -19,12 +17,7 @@ object Day07 extends AoC:
       case s"$size $name" if size.head.isDigit => FileLine(name, size.toLong)
       case s"dir $name"                        => DirLine(name)
 
-  val input: List[Line] =
-    Source
-      .fromResource(s"$day.txt")
-      .getLines
-      .map(parseLine)
-      .toList
+  val stdout: List[Line] = lines.map(parseLine).toList
 
   type Path = String
 
@@ -52,9 +45,9 @@ object Day07 extends AoC:
   object FileSystem:
     val empty = FileSystem(List(Path.empty), List.empty, List(Path.root))
 
-  lazy val fileSystem =
+  lazy val fileSystem: FileSystem =
     import Path.*
-    input
+    stdout
       .foldLeft(FileSystem.empty)((sys,line) =>
         line match
           case DirLine(name)        => sys.copy(ds = sys.ds :+ flatten(sys.cur :+ name))

@@ -2,17 +2,11 @@ package aoc2023
 
 import nmcb.*
 
-import scala.io.*
 import scala.math
 
 object Day24 extends AoC:
 
-  val stones: Vector[Stone] =
-    Source
-      .fromResource(s"$day.txt")
-      .getLines
-      .map(Stone.fromString)
-      .toVector
+  val stones: Vector[Stone] = lines.map(Stone.fromString)
 
   def solve1(min: Long, max: Long): Int =
     stones
@@ -254,14 +248,8 @@ object Day24 extends AoC:
       Option.when(hitAll)(hit)
 
     def solve() =
-      val input =
-        Source
-          .fromResource(s"$day.txt")
-          .mkString
-          .trim
 
-      val stones: Seq[Stone] =
-        parse(input)
+      val stones: Seq[Stone] = parse(input)
 
       val search =
         for

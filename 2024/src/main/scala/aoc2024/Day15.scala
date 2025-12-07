@@ -3,7 +3,6 @@ package aoc2024
 import nmcb.*
 
 import scala.annotation.*
-import scala.io.*
 
 object Day15 extends AoC:
 
@@ -94,7 +93,7 @@ object Day15 extends AoC:
 
 
   val (grid: Grid, moves: List[Dir]) =
-    val Array(top, bottom) = Source.fromResource(s"$day.txt").mkString.split("\n\n").map(_.trim)
+    val Array(top, bottom) = input.split("\n\n").map(_.trim)
     val positions = for {
       (l, y) <- top.split("\n").zipWithIndex
       (c, x) <- l.trim.zipWithIndex

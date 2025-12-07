@@ -3,7 +3,6 @@ package aoc2023
 import nmcb.*
 
 import scala.annotation.tailrec
-import scala.io.*
 
 object Day18 extends AoC:
 
@@ -92,12 +91,7 @@ object Day18 extends AoC:
     val dug   = Pos.grid(min, max).toSet diff outer
     dug.size.toLong
 
-  lazy val operationsPart1: Vector[Op] =
-    Source
-      .fromResource(s"$day.txt")
-      .getLines
-      .map(Op.fromStringPart)
-      .toVector
+  lazy val operationsPart1: Vector[Op] = lines.map(Op.fromStringPart)
 
   /** one operation = one polygon - geometric driven shoelace formula made discrete with pick's theorem */
   def dig2(operations: Vector[Op]): Long =
@@ -123,12 +117,7 @@ object Day18 extends AoC:
 
   assert(answer1 == dig2(operationsPart1)) // 1000x faster
 
-  lazy val operationsPart2: Vector[Op] =
-    Source
-      .fromResource(s"$day.txt")
-      .getLines
-      .map(Op.fromHexPart)
-      .toVector
+  lazy val operationsPart2: Vector[Op] = lines.map(Op.fromHexPart)
 
 
   lazy val answer1: Long = dig1(operationsPart1)

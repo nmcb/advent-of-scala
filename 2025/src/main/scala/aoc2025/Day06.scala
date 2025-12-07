@@ -2,11 +2,7 @@ package aoc2025
 
 import nmcb.*
 
-import scala.io.*
-
 object Day06 extends AoC:
-
-  val lines: Vector[String] = Source.fromResource(s"$day.txt").getLines.toVector
 
   def calculate(operators: Vector[Char], operands: Vector[Vector[Long]]): Vector[Long] =
     operators.zip(operands).map:

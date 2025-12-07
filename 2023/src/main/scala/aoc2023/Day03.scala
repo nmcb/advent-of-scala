@@ -3,7 +3,6 @@ package aoc2023
 import nmcb.*
 
 import scala.annotation.*
-import scala.io.*
 
 object Day03 extends AoC:
 
@@ -75,7 +74,7 @@ object Day03 extends AoC:
         yield ns1
       ratios.toVector
 
-  val page: Page = Page(Source.fromResource(s"$day.txt").getLines.map(_.toVector).toVector)
+  val page: Page = Page(lines.map(_.toVector).toVector)
 
 
   lazy val answer1: Int = page.numbersWithAdjacentSymbols.map(_.value).sum

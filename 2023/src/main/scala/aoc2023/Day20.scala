@@ -3,7 +3,6 @@ package aoc2023
 import nmcb.*
 
 import scala.annotation.tailrec
-import scala.io.Source
 
 object Day20 extends AoC:
 
@@ -100,15 +99,13 @@ object Day20 extends AoC:
 
 
   val machine: Machine =
+
     val parsed: Vector[Module] =
-      Source
-        .fromResource(s"$day.txt")
-        .getLines
+      lines
         .map:
           case s"%$name -> $destinations" => FlipFlop(name, destinations.split(", ").toVector)
           case s"&$name -> $destinations" => Conjunction(name, destinations.split(", ").toVector)
           case  s"$name -> $destinations" => Broadcaster(name, destinations.split(", ").toVector)
-        .toVector
 
     val modules: Map[Name, Module] =
       parsed

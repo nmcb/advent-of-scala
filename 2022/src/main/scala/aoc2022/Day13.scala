@@ -1,7 +1,6 @@
 package aoc2022
 
 import nmcb.*
-import scala.io.Source
 
 object Day13 extends AoC:
 
@@ -41,17 +40,15 @@ object Day13 extends AoC:
 
   import math.Ordered.orderingToOrdered
 
-  val input: List[E] =
-    Source
-      .fromResource(s"$day.txt")
-      .getLines
+  val expressions: List[E] =
+    lines
       .filterNot(_.isBlank)
       .map(parse)
       .toList
 
   
   lazy val answer1: Int =
-    input
+    expressions
       .grouped(2)
       .zipWithIndex
       .map((es,idx) => if es(0) <= es(1) then idx + 1 else 0)
@@ -61,7 +58,7 @@ object Day13 extends AoC:
     val divider1: E = L(L(N(2)))
     val divider2: E = L(L(N(6)))
 
-    val ordered = (divider1 :: divider2 :: input).sorted
+    val ordered = (divider1 :: divider2 :: expressions).sorted
     val idx1 = ordered.indexWhere(_ == divider1) + 1
     val idx2 = ordered.indexWhere(_ == divider2) + 1
     idx1 * idx2

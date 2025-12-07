@@ -1,18 +1,9 @@
 package aoc2023
 
 import nmcb.*
-
-import scala.io.*
-
 object Day11 extends AoC:
 
-  lazy val image: Image =
-    Image(
-      Source
-      .fromResource(s"$day.txt")
-      .getLines
-      .map(_.toVector)
-      .toVector)
+  lazy val image: Image = Image(lines.map(_.toVector))
 
   case class Pos(x: Int, y: Int)
 

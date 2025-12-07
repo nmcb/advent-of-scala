@@ -78,6 +78,9 @@ object Grid:
   def fromLines(lines: Iterator[String]): Grid[Char] =
     Grid(lines.map(_.toVector).toVector)
 
+  def fromLines(lines: Seq[String]): Grid[Char] =
+    Grid(lines.map(_.toVector).toVector)
+
   def fromString[A](s: String): Grid[Char] =
     fromLines(s.trim.split('\n').iterator)
 

@@ -3,8 +3,6 @@ package aoc2023
 import nmcb.*
 
 import scala.annotation.tailrec
-import scala.collection.immutable.Seq
-import scala.io.*
 
 object Day14 extends AoC:
 
@@ -52,13 +50,7 @@ object Day14 extends AoC:
       this
 
 
-  lazy val grid: Grid =
-    Grid(
-      Source
-        .fromResource(s"$day.txt")
-        .getLines
-        .map(_.toVector)
-        .toVector)
+  lazy val grid: Grid = Grid(lines.map(_.toVector))
 
 
   lazy val cycle = Cycle.find(grid, _.cycle)(_.cycleInvariant)

@@ -2,8 +2,6 @@ package aoc2022
 
 import nmcb.*
 
-import scala.io.Source
-
 object Day09 extends AoC:
 
   enum Dir:
@@ -64,17 +62,11 @@ object Day09 extends AoC:
 
   case class Cmd(dir: Dir, steps: Int)
 
-  lazy val input: List[Cmd] =
-    Source
-      .fromResource(s"$day.txt")
-      .getLines
-      .map {
-        case s"U $s" => Cmd(U, s.toInt)
-        case s"D $s" => Cmd(D, s.toInt)
-        case s"L $s" => Cmd(L, s.toInt)
-        case s"R $s" => Cmd(R, s.toInt)
-      }
-      .toList
+  lazy val commands: Vector[Cmd] = lines.map:
+      case s"U $s" => Cmd(U, s.toInt)
+      case s"D $s" => Cmd(D, s.toInt)
+      case s"L $s" => Cmd(L, s.toInt)
+      case s"R $s" => Cmd(R, s.toInt)
 
   case class Bac(strep: List[Pos]):
 
@@ -92,7 +84,7 @@ object Day09 extends AoC:
     def of(size: Int): Bac =
       Bac(List.fill(size)(Pos.of(0,0)))
 
-    def solve(commands: List[Cmd], size: Int): Int =
+    def solve(commands: Vector[Cmd], size: Int): Int =
       commands
         .foldLeft(List(Bac.of(size)))((p,c) => p ++ p.last.move(c))
         .map(_.strep.last)
@@ -100,5 +92,5 @@ object Day09 extends AoC:
         .size
 
 
-  lazy val answer1: Int = Bac.solve(input, 2)
-  lazy val answer2: Int = Bac.solve(input, 10)
+  lazy val answer1: Int = Bac.solve(commands, 2)
+  lazy val answer2: Int = Bac.solve(commands, 10)

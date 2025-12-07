@@ -3,14 +3,13 @@ package aoc2024
 import nmcb.*
 
 import scala.annotation.*
-import scala.io.*
 
 object Day18 extends AoC:
 
   import Dijkstra.*
   import Pos.*
 
-  val bytes  = Source.fromResource(s"$day.txt").getLines.map(_.split(',')).map(_.toPos).toVector
+  val bytes  = lines.map(_.split(',')).map(_.toPos).toVector
   val memory = Grid.fill(71, 71, '.')
 
   lazy val answer1: Int =

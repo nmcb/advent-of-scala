@@ -3,7 +3,6 @@ package aoc2023
 import nmcb.*
 
 import scala.collection.mutable
-import scala.io.*
 
 object Day17 extends AoC:
 
@@ -98,14 +97,7 @@ object Day17 extends AoC:
           reachable(node).foreach((reach, delta) => enqueue(reach, weight + delta))
       None
 
-  lazy val city: City =
-    City(
-      Source
-        .fromResource(s"$day.txt")
-        .getLines
-        .map(_.map(_.asDigit).toVector)
-        .toVector
-    )
+  lazy val city: City = City(lines.map(_.map(_.asDigit).toVector))
 
 
   lazy val answer1: Int = city.leastHeatLoss(_.canMove1, _.canStop1).get

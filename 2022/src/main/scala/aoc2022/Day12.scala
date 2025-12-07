@@ -2,14 +2,10 @@ package aoc2022
 
 import nmcb.*
 
-import scala.io.*
-
 object Day12 extends AoC:
 
-  val input: List[(Int,Int,Char)] =
-    Source
-      .fromResource(s"$day.txt")
-      .getLines
+  val puzzle: List[(Int,Int,Char)] =
+    lines
       .zipWithIndex
       .foldLeft(List.empty[(Int,Int,Char)]) { case (a, (r, y)) =>
         r.zipWithIndex.foldLeft(a){ case (aa,(c,x)) =>
@@ -19,8 +15,8 @@ object Day12 extends AoC:
 
   lazy val (graph, from, to): (Graph, Vertex, Vertex) =
 
-    val maxX: Int = input.maxBy(_._1)._1
-    val maxY: Int = input.maxBy(_._2)._2
+    val maxX: Int = puzzle.maxBy(_._1)._1
+    val maxY: Int = puzzle.maxBy(_._2)._2
 
     def neighbours(x: Int, y: Int): Seq[(Int,Int)] =
       Seq((-1,0),(1,0),(0,-1),(0,1))
@@ -32,7 +28,7 @@ object Day12 extends AoC:
       m.updatedWith(t)(_.map(_ :+ e).orElse(Some(List(e))))
 
     def char(v: Vertex): Char =
-      input.find((sx,sy,_) => sx == v.x && sy == v.y).map((_,_,c) => c).getOrElse(sys.error("boom!"))
+      puzzle.find((sx, sy, _) => sx == v.x && sy == v.y).map((_, _, c) => c).getOrElse(sys.error("boom!"))
 
     def height(c: Char): Int =
       if      c == 'S' then 0
@@ -52,7 +48,7 @@ object Day12 extends AoC:
 
     val g: Graph =
       val adjacent: Map[Vertex,Seq[Edge]] =
-        input.foldLeft(Map.empty[Vertex,Seq[Edge]]):
+        puzzle.foldLeft(Map.empty[Vertex,Seq[Edge]]):
           case (a,(x,y,_)) =>
             val f = Vertex(x, y)
             neighbours(x, y).foldLeft(a):
@@ -62,11 +58,11 @@ object Day12 extends AoC:
       Graph(adjacent)
 
     val f: Vertex =
-      val (x, y, _) = input.filter(_._3 == 'S').head
+      val (x, y, _) = puzzle.filter(_._3 == 'S').head
       Vertex(x, y)
 
     val t: Vertex =
-      val (x, y, _) = input.filter(_._3 == 'E').head
+      val (x, y, _) = puzzle.filter(_._3 == 'E').head
       Vertex(x, y)
 
     (g, f, t)
@@ -130,5 +126,5 @@ object Day12 extends AoC:
 
   lazy val answer1: Int = graph.run(from).pathTo(to).length
   lazy val answer2: Long =
-    val as: List[Vertex] = input.filter((_,_,c) => c == 'a' || c == 'S').map((x,y,_) => Vertex(x,y))
+    val as: List[Vertex] = puzzle.filter((_, _, c) => c == 'a' || c == 'S').map((x, y, _) => Vertex(x,y))
     as.map(f => graph.run(f).pathTo(to).length).filterNot(_ == 0).min

@@ -3,7 +3,6 @@ package aoc2023
 import nmcb.*
 
 import scala.annotation.*
-import scala.io.*
 
 object Day04 extends AoC:
 
@@ -29,13 +28,7 @@ object Day04 extends AoC:
         case s"Card $id: $winning | $mine" => Card(id.trim.toInt, ints(winning), ints(mine))
         case _ => sys.error(s"unmatched: $s")
 
-  val cards: Map[Int,Card] =
-    Source
-      .fromResource(s"$day.txt")
-      .getLines
-      .map(Card.fromString)
-      .map(c => c.id -> c)
-      .toMap
+  val cards: Map[Int,Card] = lines.map(Card.fromString).map(c => c.id -> c).toMap
 
   def solve2(cards: Map[Int,Card]): Int =
     val maxId: Int =

@@ -2,16 +2,10 @@ package aoc2022
 
 import nmcb.*
 
-import scala.io.*
-
 object Day02 extends AoC:
 
-  val input: List[(Char,Char)] =
-    Source
-      .fromResource(s"$day.txt")
-      .getLines
-      .map { case s"$p1 $p2" => (p1.head,p2.head) }
-      .toList
+  val codes: Vector[(Char,Char)] = lines.map:
+    case s"$p1 $p2" => (p1.head,p2.head)
 
   def score1(p1: Char, p2: Char): Int =
     (p1,p2) match
@@ -40,5 +34,5 @@ object Day02 extends AoC:
       case _ => sys.error(s"illegal chars: ($p1,$p2)")
 
   
-  lazy val answer1: Int = input.map(score1).sum
-  lazy val answer2: Int = input.map(score2).sum
+  lazy val answer1: Int = codes.map(score1).sum
+  lazy val answer2: Int = codes.map(score2).sum

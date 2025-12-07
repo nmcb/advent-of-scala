@@ -2,8 +2,6 @@ package aoc2023
 
 import nmcb.*
 
-import scala.io.*
-
 object Day05 extends AoC:
 
   case class Range(min: Long, max: Long):
@@ -43,7 +41,8 @@ object Day05 extends AoC:
       val unmapped = dependencies.foldLeft(Set(that))((acc,dep) => acc.flatMap(_ diff dep.sourceRange))
       mapped ++ unmapped
 
-  case class Input(seeds: Seq[Long], chain: Seq[Dependencies]):
+  case class Puzzle(seeds: Seq[Long], chain: Seq[Dependencies]):
+    
     private def mapDependenciesBy(that: Range): Set[Range] =
       chain.foldLeft(Set(that))((rs,ms) => rs.flatMap(ms.mapBy))
 
@@ -62,7 +61,7 @@ object Day05 extends AoC:
         .map(_.min)
         .min
 
-  lazy val input: Input =
+  lazy val puzzle: Puzzle =
 
     def parseDependency(s: String): Dependency =
       s match
@@ -72,10 +71,7 @@ object Day05 extends AoC:
       Dependencies(s.linesIterator.drop(1).map(parseDependency).toSet)
 
     val lines: Seq[String] =
-      Source
-        .fromResource(s"$day.txt")
-        .mkString
-        .trim
+      input
         .split("\n\n")
         .toSeq
 
@@ -86,8 +82,8 @@ object Day05 extends AoC:
     val dependencies: Seq[Dependencies] =
       lines.tail.map(parseDependencies)
 
-    Input(seeds, dependencies)
+    Puzzle(seeds, dependencies)
 
 
-  lazy val answer1: Long = input.minSeedByLocation
-  lazy val answer2: Long = input.minSeedRangeByLocation
+  lazy val answer1: Long = puzzle.minSeedByLocation
+  lazy val answer2: Long = puzzle.minSeedRangeByLocation

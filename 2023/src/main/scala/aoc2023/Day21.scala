@@ -3,7 +3,6 @@ package aoc2023
 import nmcb.*
 
 import scala.annotation.tailrec
-import scala.io.Source
 
 /** @see Credits for part 2 - https://github.com/merlinorg */
 object Day21 extends AoC:
@@ -98,14 +97,7 @@ object Day21 extends AoC:
         .flatMap(_.solution)
         .next
 
-  val garden: Garden =
-    Garden(
-      Source
-        .fromResource(s"$day.txt")
-        .getLines
-        .map(_.toVector)
-        .toVector
-    )
+  val garden: Garden = Garden(lines.map(_.toVector))
 
 
   lazy val answer1: Int = garden.solve1(64)

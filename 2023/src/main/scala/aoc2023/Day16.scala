@@ -3,7 +3,6 @@ package aoc2023
 import nmcb.*
 
 import scala.annotation.tailrec
-import scala.io.*
 
 object Day16 extends AoC:
 
@@ -81,7 +80,7 @@ object Day16 extends AoC:
       val entries = List(north, east, south, west).flatten
       entries.map((p,d) => energized(p,d)).max
 
-  lazy val grid: Grid = Grid(Source.fromResource(s"$day.txt").getLines.map(_.toVector).toVector)
+  lazy val grid: Grid = Grid(lines.map(_.toVector))
 
   lazy val answer1: Long = grid.energized(start = Pos(0,0), direction = E)
   lazy val answer2: Long = grid.maxEnergized
