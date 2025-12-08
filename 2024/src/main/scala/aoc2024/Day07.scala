@@ -3,6 +3,8 @@ package aoc2024
 import nmcb.*
 import nmcb.predef.*
 
+import scala.annotation.tailrec
+
 object  Day07 extends AoC:
 
   type Operator     = Long => Long => Long
@@ -31,20 +33,20 @@ object  Day07 extends AoC:
 
   object Equation:
 
-    val cache = memo[(Int, Operators), Combinations]()
+    private val cache = memo[(Int, Operators), Combinations]()
+    def combinations1(n: Int, operators: Operators): Combinations = cache.memoize(n, operators):
 
-    def combinations1(n: Int, operators: Operators): Combinations =
-      cache.memoize(n, operators):
+      @tailrec
+      def leftPad(todo: Operators, padTo: Combinations, result: Combinations = List.empty): Combinations =
+        todo match
+          case Nil => result
+          case h :: t => leftPad(t, padTo, result ++ padTo.map(h +: _))
 
-        def leftPad(todo: Operators, padTo: Combinations, result: Combinations = List.empty): Combinations =
-          todo match
-            case Nil => result
-            case h :: t => leftPad(t, padTo, result ++ padTo.map(h +: _))
+      @tailrec
+      def loop(todo: Int, result: Combinations = List(List.empty)): Combinations =
+        if todo <= 0 then result else loop(todo - 1, leftPad(operators, result))
 
-        def loop(todo: Int, result: Combinations = List(List.empty)): Combinations =
-          if todo <= 0 then result else loop(todo - 1, leftPad(operators, result))
-
-        loop(n)
+      loop(n)
 
     def combinations2[A](n: Int, elements: List[A]): Iterator[List[A]] =
       val m = elements.length
@@ -73,10 +75,13 @@ object  Day07 extends AoC:
 
   /** https://github.com/stewSquared/advent-of-code/blob/master/src/main/scala/2024/Day07.worksheet.sc */
   def solvable(equation: Equation): Boolean =
+
     def loop(lhs: Long, rhs: List[Long]): Boolean =
       rhs match
-        case Nil => ???
-        case head :: Nil => head == lhs
+        case Nil =>
+          sys.error(s"empty right hand side")
+        case head :: Nil =>
+          head == lhs
         case n :: ns =>
           /* complement addition       */
           loop(lhs - n, ns)

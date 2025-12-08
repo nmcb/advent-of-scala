@@ -28,7 +28,7 @@ object Day08 extends AoC:
 
   def solve(boxes: Vector[Box]): Iterator[State] =
     boxes
-      .pairs((a,b) => a distance b)
+      .pairs((a, b) => a distance b)
       .scanLeft(State.empty):
         case ((ids, circuits, _, id), (a, b)) =>
           (ids.get(a), ids.get(b)) match
