@@ -16,12 +16,12 @@ object Day08 extends AoC:
 
   type Pair      = (a: Box, b: Box)
   type CircuitId = Long
-  type State     = (ids: Map[Box,CircuitId], circuits: Map[CircuitId,Set[Box]], pair: Pair, id: CircuitId)
+  type State     = (ids: Map[Box, CircuitId], circuits: Map[CircuitId, Set[Box]], pair: Pair, id: CircuitId)
 
   object State:
     def empty: State = (
-      ids      = Map.empty[Box,CircuitId],
-      circuits = Map.empty[CircuitId,Set[Box]],
+      ids      = Map.empty[Box, CircuitId],
+      circuits = Map.empty[CircuitId, Set[Box]],
       pair     = (x = 0, y = 0, z = 0) -> (0, 0, 0),
       id       = 0L
     )
@@ -58,9 +58,8 @@ object Day08 extends AoC:
     val found = solve(boxes).dropWhile(state => state.ids.size != boxes.size || state.circuits.size != 1).next()
     found.pair.a.x.toLong * found.pair.b.x
 
-  val boxes: Vector[Box] =
-    lines.collect:
-      case s"$x,$y,$z" => (x = x.toInt, y = y.toInt, z = z.toInt)
+  val boxes: Vector[Box] = lines.collect:
+    case s"$x,$y,$z" => (x = x.toInt, y = y.toInt, z = z.toInt)
 
   lazy val answer1: Long = solve1(boxes, 1000)
   lazy val answer2: Long = solve2(boxes)
