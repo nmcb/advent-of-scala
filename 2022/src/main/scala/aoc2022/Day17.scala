@@ -1,6 +1,7 @@
 package aoc2022
 
 import nmcb.*
+import nmcb.predef.*
 
 import scala.annotation.*
 import scala.collection.AbstractIterator
@@ -104,7 +105,7 @@ object Day17 extends AoC:
 
 
   lazy val answer1: Int =
-    Iterator.iterate(Chamber.empty)(_.next).drop(2022).next.height
+    Iterator.iterate(Chamber.empty)(_.next).nth(2022).height
 
   lazy val answer2: Long =
 
@@ -121,7 +122,7 @@ object Day17 extends AoC:
       cycle.cycleHeadRepeat.height - stemHeight
 
     val tailHeight: Long =
-      Iterator.iterate(cycle.cycleHead)(_.next).drop(tailNr.toInt).next.height - stemHeight
+      Iterator.iterate(cycle.cycleHead)(_.next).nth(tailNr.toInt).height - stemHeight
 
     stemHeight + cycleNr * cycleHeight + tailHeight
 

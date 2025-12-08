@@ -1,6 +1,7 @@
 package aoc2025
 
 import nmcb.*
+import nmcb.predef.*
 
 object Day08 extends AoC:
 
@@ -51,11 +52,11 @@ object Day08 extends AoC:
               (ids ++ circuits(d).map(_ -> c), circuits - d + (c -> (circuits(c) ++ circuits(d))), a -> b, id)
 
   def solve1(boxes: Vector[Box], count: Int): Long =
-    val found = solve(boxes).drop(count).next()
+    val found = solve(boxes).nth(count)
     found.circuits.values.map(_.size).toVector.sorted.takeRight(3).product
 
   def solve2(boxes: Vector[Box]): Long =
-    val found = solve(boxes).dropWhile(state => state.ids.size != boxes.size || state.circuits.size != 1).next()
+    val found = solve(boxes).findFirst(state => state.ids.size == boxes.size && state.circuits.size == 1)
     found.pair.a.x.toLong * found.pair.b.x
 
   val boxes: Vector[Box] = lines.collect:

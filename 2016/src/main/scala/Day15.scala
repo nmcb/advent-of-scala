@@ -1,3 +1,4 @@
+import nmcb.predef.*
 import scala.io.Source
 
 object Day15 extends App:
@@ -23,9 +24,9 @@ object Day15 extends App:
     discs.forall(_.passWhenDroppedAt(time))
 
   val start1  = System.currentTimeMillis
-  lazy val answer1 = Iterator.from(0).filter(validDrop(discs)).next
+  lazy val answer1 = Iterator.from(0).findFirst(validDrop(discs))
   println(s"Answer AOC 2016 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2  = System.currentTimeMillis
-  lazy val answer2 = Iterator.from(0).filter(validDrop(discs :+ Disc(nr = 7, positions = 11, position = 0))).next
+  lazy val answer2 = Iterator.from(0).findFirst(validDrop(discs :+ Disc(nr = 7, positions = 11, position = 0)))
   println(s"Answer AOC 2016 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

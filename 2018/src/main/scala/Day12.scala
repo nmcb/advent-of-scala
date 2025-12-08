@@ -1,3 +1,4 @@
+import nmcb.predef.*
 import scala.annotation.tailrec
 import scala.io.Source
 
@@ -51,7 +52,7 @@ object Day12 extends App:
           go(next, delta, generation + 1)
       go(plants, 0, 1)
     else
-      Iterator.iterate(plants)(_.next(rules)).drop(generations.toInt).next.sum.toLong
+      Iterator.iterate(plants)(_.next(rules)).nth(generations.toInt).sum.toLong
 
   val start1  = System.currentTimeMillis
   lazy val answer1 = solve(plants, rules, generations = 20)
