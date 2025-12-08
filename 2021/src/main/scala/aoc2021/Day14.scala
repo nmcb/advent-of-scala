@@ -2,6 +2,7 @@ package aoc2021
 
 import nmcb.*
 import nmcb.predef.*
+
 object Day14 extends AoC:
 
   type Rules  = Map[(Char,Char),Char]
@@ -17,12 +18,6 @@ object Day14 extends AoC:
         case s"$pair -> $insert" => (pair.charAt(0), pair.charAt(1)) -> insert.charAt(0)
       .toMap
 
-  def fst[A](pair: (A,?)): A =
-    pair._1
-
-  def snd[B](pair: (?,B)): B =
-    pair._2
-
   /** maintain a count for sequences of pairs as well as individual molecules */
   case class Polymer(rules: Rules, pairs: Pairs, counts: Counts):
 
@@ -33,15 +28,15 @@ object Day14 extends AoC:
           .toVector
           .flatMap: (pair,count) =>
             val char = rules(pair)
-            Vector((fst(pair),char) -> count, (char, snd(pair)) -> count)
-          .groupMapReduce(fst)(snd)(_ + _)
+            Vector((pair.left,char) -> count, (char, pair.right) -> count)
+          .groupMapReduce(_.left)(_.right)(_ + _)
 
       val nextCounts: Counts =
         pairs
           .foldLeft(counts): (result,count) =>
-            val char = rules(fst(count))
-            result.updated(char, result(char) + snd(count))
-          .groupMapReduce(fst)(snd)(_ + _)
+            val char = rules(count.left)
+            result.updated(char, result(char) + count.right)
+          .groupMapReduce(_.left)(_.right)(_ + _)
 
       copy(pairs = nextPairs, counts = nextCounts)
 

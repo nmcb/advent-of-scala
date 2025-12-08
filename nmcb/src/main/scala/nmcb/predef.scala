@@ -23,8 +23,18 @@ object predef:
       while i.hasNext do a = i.next
       a
 
+  extension [A](i: Iterable[A])
+
+    def pairs[B](order: ((A,A)) => B = identity)(using Ordering[B]): Iterator[(A,A)] =
+      i.tails
+        .toVector
+        .tail
+        .flatMap(i.zip)
+        .sortBy(order)
+        .iterator
+
   extension (s: String)
-    def leftPadTo(length: Int, char: Char) =
+    def leftPadTo(length: Int, char: Char): String =
       List.fill(length - s.length)(char).mkString + s
 
   extension [A](t: (Pos,A))
@@ -40,3 +50,7 @@ object predef:
   extension [K,V](cache: mutable.Map[K,V])
     def memoize(k: K)(v: => V): V =
       cache.getOrElseUpdate(k, v)
+
+  extension [A,B](p: (A,B))
+    def left: A  = p._1
+    def right: B = p._2
