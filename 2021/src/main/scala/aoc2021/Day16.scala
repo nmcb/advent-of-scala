@@ -1,12 +1,11 @@
+package aoc2021
+
+import nmcb.*
 import scala.annotation.tailrec
-import scala.io.*
 
-object Day16 extends App:
+object Day16 extends AoC:
 
-  val day: String =
-    getClass.getSimpleName.filter(_.isDigit).mkString
-
-  val input: String =
+  val puzzle: String =
     "005173980232D7F50C740109F3B9F3F0005425D36565F202012CAC0170004262EC658B0200FC3A8AB0EA5FF3312015070037100042"
     + "62243F8F600086C378B7152529CB4981400B202D04C00C0028048095070038C00B50028C00C50030805D3700240049210021C008"
     + "10038400A400688C00C3003E605A4A19A62D3E741480261B00464C9E6A5DF3A455999C2430E0054FCBE7260084F4B37B2D600343"
@@ -139,10 +138,5 @@ object Day16 extends App:
     def header(bits: Vector[Bit]): (Version, Id, Vector[Bit]) =
       (int(bits.take(3)), int(bits.slice(3, 6)), bits.drop(6))
 
-  val start1  = System.currentTimeMillis
-  lazy val answer1 = Packet(input).versionSum
-  println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
-
-  val start2  = System.currentTimeMillis
-  lazy val answer2 = Packet(input).value
-  println(s"Answer AOC 2021 day $day part 2 = ${Packet(input).value} [${System.currentTimeMillis - start2}ms]")
+  lazy val answer1: Int  = Packet(puzzle).versionSum
+  lazy val answer2: Long = Packet(puzzle).value

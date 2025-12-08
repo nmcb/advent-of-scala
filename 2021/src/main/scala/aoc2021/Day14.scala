@@ -1,18 +1,11 @@
-import scala.io.*
+package aoc2021
 
-object Day14 extends App:
-
-  val day = getClass.getSimpleName.filter(_.isDigit).mkString
+import nmcb.*
+object Day14 extends AoC:
 
   type Rules  = Map[(Char,Char),Char]
   type Pairs  = Map[(Char,Char),Long]
   type Counts = Map[Char,Long]
-
-  val lines: Vector[String] =
-    Source
-      .fromResource(s"input$day.txt")
-      .getLines
-      .toVector
 
   val template: String =
     lines.head
@@ -20,8 +13,7 @@ object Day14 extends App:
   val rules: Rules =
     lines
       .collect:
-        case s"$pair -> $insert" =>
-          (pair.charAt(0), pair.charAt(1)) -> insert.charAt(0)
+        case s"$pair -> $insert" => (pair.charAt(0), pair.charAt(1)) -> insert.charAt(0)
       .toMap
 
   def fst[A](pair: (A,?)): A =
@@ -63,12 +55,7 @@ object Day14 extends App:
     val counts = Iterator.iterate(polymer)(_.step).drop(iterations).next.counts
     counts.values.max - counts.values.min
 
-  val polymer = Polymer.make(rules, template)
+  val polymer: Polymer = Polymer.make(rules, template)
 
-  val start1  = System.currentTimeMillis
-  lazy val answer1 = solve(polymer, 10)
-  println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
-
-  val start2  = System.currentTimeMillis
-  lazy val answer2 = solve(polymer, 40)
-  println(s"Answer AOC 2021 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  lazy val answer1: Long = solve(polymer, 10)
+  lazy val answer2: Long = solve(polymer, 40)

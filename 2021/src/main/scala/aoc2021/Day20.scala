@@ -1,9 +1,8 @@
-import scala.io.Source
+package aoc2021
 
-object Day20 extends App:
+import nmcb.*
 
-  val day: String =
-    getClass.getSimpleName.filter(_.isDigit).mkString
+object Day20 extends AoC:
 
   case class Pos(x: Int, y: Int):
     infix def +(that: Pos): Pos =
@@ -11,7 +10,7 @@ object Day20 extends App:
 
   case class Image(pixels: Vector[Vector[Boolean]], canvas: Boolean)
 
-  val offsets =
+  val offsets: Seq[Pos] =
     for
       dy <- -1 to 1
       dx <- -1 to 1
@@ -47,19 +46,14 @@ object Day20 extends App:
   def parseImage(s: String): Image =
     Image(s.linesIterator.map(_.map(_ == '#').toVector).toVector, false)
 
-  def parse(input: String) =
+  def parse(input: String): (Vector[Boolean], Image) =
     val Vector(algorithmStr, imageStr) = input.split("\n\n").toVector
     val algorithm = algorithmStr.map(_ == '#').toVector
     val image = parseImage(imageStr)
     (algorithm, image)
 
-  val (algorithm, image0) = parse(Source.fromResource(s"input$day.txt").mkString)
+  val (algorithm: Vector[Boolean], image0: Image) = parse(input)
 
-  val start1  = System.currentTimeMillis
-  lazy val answer1 = enhance(algorithm, image0).pixels.map(_.count(_ == true)).sum
-  println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
-  
-  val start2  = System.currentTimeMillis
-  lazy val answer2 = (1 to 50).foldLeft(image0)((img,_) => enhance(algorithm, img)).pixels.map(_.count(_ == true)).sum
-  println(s"Answer AOC 2021 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  lazy val answer1: Int = enhance(algorithm, image0).pixels.map(_.count(_ == true)).sum
+  lazy val answer2: Int = (1 to 50).foldLeft(image0)((img, _) => enhance(algorithm, img)).pixels.map(_.count(_ == true)).sum

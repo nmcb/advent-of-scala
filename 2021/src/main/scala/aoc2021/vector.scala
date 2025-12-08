@@ -1,3 +1,5 @@
+package aoc2021
+
 import scala.util.*
 
   case class Vec(x: Int, y: Int):

@@ -1,8 +1,8 @@
-import scala.io.*
+package aoc2021
 
-object Day13 extends App:
+import nmcb.*
 
-  val day = getClass.getSimpleName.filter(_.isDigit).mkString
+object Day13 extends AoC:
 
   enum Axis:
     case Ver, Hor
@@ -17,17 +17,13 @@ object Day13 extends App:
     def y: Int = dot._2
 
   val dots: Dots =
-    Source
-      .fromResource(s"input$day.txt")
-      .getLines
+    lines
       .collect:
         case s"$x,$y" => (x.toInt, y.toInt)
       .toSet
       
   val folds: Folds =
-    Source
-      .fromResource(s"input$day.txt")
-      .getLines
+    lines
       .collect:
         case s"fold along x=$x" => (Ver, x.toInt)
         case s"fold along y=$y" => (Hor, y.toInt)
@@ -45,10 +41,6 @@ object Day13 extends App:
       case (dots, (Ver, line)) => dots.map(vertical(line))
       case (dots, (Hor, line)) => dots.map(horizontal(line))
 
-  val start1  = System.currentTimeMillis
-  lazy val answer1 = origami(dots, folds.take(1)).size
-  println(s"Answer AOC 2021 day $day part 1 [${System.currentTimeMillis - start1}ms]: $answer1")
-
   extension (dots: Dots) def asString: String =
     val buffer = StringBuffer()
     for y <- 0 to dots.map(_.y).max do
@@ -60,6 +52,5 @@ object Day13 extends App:
           buffer.append('.')
     buffer.toString + "\n"
 
-  val start2  = System.currentTimeMillis
-  lazy val answer2 = origami(dots, folds).asString
-  println(s"Answer AOC 2021 day $day part 2 [${System.currentTimeMillis - start1}ms]: $answer2")
+  lazy val answer1: Int    = origami(dots, folds.take(1)).size
+  lazy val answer2: String = origami(dots, folds).asString

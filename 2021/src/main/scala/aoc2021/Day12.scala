@@ -1,17 +1,14 @@
-import scala.io.*
+package aoc2021
 
+import nmcb.*
 
-object Day12 extends App:
-
-  val day = getClass.getSimpleName.filter(_.isDigit).mkString
+object Day12 extends AoC:
 
   type Cave  = (String, List[String])
   type Caves = Map[String, List[String]]
 
   val caves: Caves =
-    Source
-      .fromResource(s"input$day.txt")
-      .getLines
+    lines
       .foldLeft[Caves](Map().withDefaultValue(Nil)): (cave, line) =>
         val Array(start,end) = line.split("-")
         cave.updated(start, end :: cave(start)).updated(end, start :: cave(end))
@@ -32,16 +29,10 @@ object Day12 extends App:
 
     loop("start", Nil)
 
-  val start1  = System.currentTimeMillis
-  lazy val answer1 = decend(caves)((next, path) => path.contains(next))
-  println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
-
   def solve2(caves: Caves): Int =
-    decend(caves) { (next, path) =>
+    decend(caves): (next, path) =>
       val occurrences = (next :: path).groupBy(identity).values.map(_.length)
       occurrences.exists(_ > 2) || occurrences.count(_ == 2) > 1
-    }
 
-  val start2  = System.currentTimeMillis
-  lazy val answer2 = solve2(caves)
-  println(s"Answer AOC 2021 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  lazy val answer1: Int = decend(caves)((next, path) => path.contains(next))
+  lazy val answer2: Int = solve2(caves)

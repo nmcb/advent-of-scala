@@ -1,17 +1,12 @@
-import scala.io.*
+package aoc2021
 
-object Day09 extends App:
+import nmcb.*
 
-  val day = getClass.getSimpleName.filter(_.isDigit).mkString
+import scala.annotation.tailrec
 
-  val floor =
-    Floor(
-      Source
-        .fromResource(s"input$day.txt")
-        .getLines
-        .toList
-        .map(line => line.toList.map(_.toString.toInt))
-    )
+object Day09 extends AoC:
+
+  val floor = Floor(lines.toList.map(line => line.toList.map(_.toString.toInt)))
 
   type Pos = (Int,Int)
 
@@ -20,8 +15,8 @@ object Day09 extends App:
     def y: Int = p._2
 
   case class Floor(loc: List[List[Int]]):
-    val sizeX = loc.head.size
-    val sizeY = loc.size
+    val sizeX: Int = loc.head.size
+    val sizeY: Int = loc.size
 
     def sample(x: Int, y: Int): Option[Int] =
       Option.when(x >= 0 && x < sizeX && y >= 0 && y < sizeY)(loc(y)(x))
@@ -39,7 +34,7 @@ object Day09 extends App:
         .filter((_,nh) => nh < 9 && nh > height(x,y))
         .map((n,_) => n)
 
-  val heights =
+  val heights: List[((Int, Int), Int)] =
     var result: List[(Pos,Int)] = List.empty
     for
       x <- 0 until floor.sizeX
@@ -50,13 +45,12 @@ object Day09 extends App:
         result = ((x,y), height) :: result
     result
 
-  val start1  = System.currentTimeMillis
-  lazy val answer1 = heights.map((_,h) => h + 1).sum
-  println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  lazy val answer1: Int =
+    heights.map((_, h) => h + 1).sum
 
 
-  val start2  = System.currentTimeMillis
-  lazy val answer2 =
+  lazy val answer2: Int =
+    @tailrec
     def loop(todo: List[Pos], acc: List[Pos] = List.empty): Int =
       if todo.isEmpty then
         acc.size
@@ -71,5 +65,3 @@ object Day09 extends App:
       .reverse
       .take(3)
       .product
-
-  println(s"Answer AOC 2021 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

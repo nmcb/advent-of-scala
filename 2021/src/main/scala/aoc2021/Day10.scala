@@ -1,15 +1,8 @@
-import scala.io.*
-import scala.quoted.Expr
+package aoc2021
 
-object Day10 extends App:
+import nmcb.*
 
-  val day = getClass.getSimpleName.filter(_.isDigit).mkString
-
-  val lines =
-    Source
-      .fromResource(s"input$day.txt")
-      .getLines
-      .toList
+object Day10 extends AoC:
 
 
   def incomplete(s: String): Option[Char] =
@@ -30,23 +23,6 @@ object Day10 extends App:
           case c :: _                                      => Some(c)
     loop(s.toList)
 
-
-  val start1 = System.currentTimeMillis
-  lazy val answer1 =
-    lines
-      .flatMap(incomplete)
-      .map:
-        case ')' => 3L
-        case ']' => 57L
-        case '}' => 1197L
-        case '>' => 25137L
-        case c   => sys.error(s"invalid char: $c")
-      .groupMapReduce(identity)(identity)(_+_)
-      .values
-      .sum
-
-  println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
-
   def incompletes(s: String): List[Char] =
     def loop(todo: List[Char], stack: List[Char] = List.empty[Char]): List[Char] =
       if todo.isEmpty && stack.isEmpty then
@@ -65,10 +41,20 @@ object Day10 extends App:
           case      _                                      => Nil
     loop(s.toList)
 
-  val start2 = System.currentTimeMillis
+  lazy val answer1: Long =
+    lines
+      .flatMap(incomplete)
+      .map:
+        case ')' => 3L
+        case ']' => 57L
+        case '}' => 1197L
+        case '>' => 25137L
+        case c => sys.error(s"invalid char: $c")
+      .groupMapReduce(identity)(identity)(_ + _)
+      .values
+      .sum
 
   lazy val answer2 =
-
     val scores =
       lines
         .map(incompletes)
@@ -82,5 +68,3 @@ object Day10 extends App:
         .sorted
 
     scores(scores.length / 2)
-
-  println(s"Answer AOC 2021 day $day part 1: $answer2 [${System.currentTimeMillis - start2}ms]")

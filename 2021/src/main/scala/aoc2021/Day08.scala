@@ -1,37 +1,19 @@
+package aoc2021
+
+import nmcb.*
 import scala.annotation.tailrec
-import scala.io.Source
 
-object Day08 extends App:
+object Day08 extends AoC:
 
-  val day = getClass.getSimpleName.filter(_.isDigit).mkString
-
-  val lines =
-    Source
-      .fromResource(s"input$day.txt")
-      .getLines
-      .map(line =>
+  val puzzle =
+    lines
+      .map: line =>
         val input  = line.split("\\|")(0).trim.split(" ").toList
         val output = line.split("\\|")(1).trim.split(" ").toList
-        (input, output))
+        (input, output)
       .toList
 
-
-  val start1  = System.currentTimeMillis
-
-  lazy val answer1 =
-    lines
-      .map: (_,output) =>
-        output.count: digit =>
-          val is1 = digit.length == 2
-          val is7 = digit.length == 3
-          val is4 = digit.length == 4
-          val is8 = digit.length == 7
-          is1 || is4 || is7 || is8
-      .sum
-
-
-  println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
-
+  
   val leds0 = Set(0,1,2,4,5,6)
   val leds1 = Set(2,5)
   val leds2 = Set(0,2,3,4,6)
@@ -83,9 +65,19 @@ object Day08 extends App:
     loop(input)
 
 
-  val start2  = System.currentTimeMillis
-  lazy val answer2 =
+  lazy val answer1: Int =
+    puzzle
+      .map: (_,output) =>
+        output.count: digit =>
+          val is1 = digit.length == 2
+          val is7 = digit.length == 3
+          val is4 = digit.length == 4
+          val is8 = digit.length == 7
+          is1 || is4 || is7 || is8
+      .sum
 
+  lazy val answer2: Int =
+    @tailrec
     def search(wirings: List[String])(input: List[String]): String =
       val wiring = wirings.head
       if valid(wiring)(input) then
@@ -97,7 +89,7 @@ object Day08 extends App:
       "abcdefg".permutations.toList
 
     val numbers: List[Int] =
-      lines.zipWithIndex.map:
+      puzzle.zipWithIndex.map:
         case ((input,output),idx) =>
           val wiring: Wiring =
             search(init)(input)
@@ -109,5 +101,3 @@ object Day08 extends App:
           number
 
     numbers.sum
-
-  println(s"Answer AOC 2021 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

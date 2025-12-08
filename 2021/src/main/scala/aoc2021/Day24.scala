@@ -1,10 +1,9 @@
+package aoc2021
+
+import nmcb.*
 import scala.collection.*
-import scala.io.*
-import scala.util.*
 
-object Day24 extends App:
-
-  val day = getClass.getSimpleName.filter(_.isDigit).mkString
+object Day24 extends AoC:
 
   case class Step(a: Int, b: Int, d: Int)
 
@@ -129,11 +128,5 @@ object Day24 extends App:
 
     go(14)
 
-  val start1  = System.currentTimeMillis
-  lazy val answer1 = solve(constraints).map(_.max).mkString
-  println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
-
-  
-  val start2  = System.currentTimeMillis
-  lazy val answer2 = solve(constraints).map(_.min).mkString
-  println(s"Answer AOC 2021 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  lazy val answer1: String = solve(constraints).map(_.max).mkString
+  lazy val answer2: String = solve(constraints).map(_.min).mkString

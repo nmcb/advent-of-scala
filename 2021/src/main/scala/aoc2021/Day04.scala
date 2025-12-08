@@ -1,25 +1,23 @@
-import scala.io.*
+package aoc2021
 
-object Day04 extends App:
+import nmcb.*
 
-  val day = getClass.getSimpleName.filter(_.isDigit).mkString
+import scala.annotation.tailrec
+import scala.util.matching.Regex
+
+object Day04 extends AoC:
 
   val draws: Vector[Int] =
-    Source
-      .fromResource(s"input$day.txt")
-      .getLines
-      .next
+    lines
+      .head
       .split(",")
       .map(_.toInt)
       .toVector
 
-  val Line =
-    """\s*(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s*""".r
+  val Line: Regex = """\s*(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s*""".r
 
   def boards: Vector[Board[Int]] =
-    Source
-      .fromResource(s"input$day.txt")
-      .getLines
+    lines
       .drop(1)
       .filterNot(_.isBlank)
       .grouped(5)
@@ -66,11 +64,7 @@ object Day04 extends App:
       .find(_.hasBingo)
       .getOrElse(playWhoWinsFirst(draws.tail, round))
 
-  val start1  = System.currentTimeMillis
-  val board1  = playWhoWinsFirst(draws)
-  lazy val answer1 = board1.unmarked.sum * board1.lastDraw
-  println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
-
+  @tailrec
   def playWhoWinsLast[A](draws: Vector[A], game: Vector[Board[A]] = boards): Board[A] =
     val round = game.map(_.draw(draws.head))
     val todo  = round.filterNot(_.hasBingo)
@@ -79,7 +73,9 @@ object Day04 extends App:
     else 
       round.filter(_.lastDraw == draws.head).head
 
-  val start2  = System.currentTimeMillis
-  val board2  = playWhoWinsLast(draws)
-  lazy val answer2 = board2.unmarked.sum * board2.lastDraw
-  println(s"Answer AOC 2021 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+
+  lazy val board1: Board[Int] = playWhoWinsFirst(draws)
+  lazy val answer1: Int       = board1.unmarked.sum * board1.lastDraw
+
+  lazy val board2: Board[Int] = playWhoWinsLast(draws)
+  lazy val answer2: Int       = board2.unmarked.sum * board2.lastDraw
