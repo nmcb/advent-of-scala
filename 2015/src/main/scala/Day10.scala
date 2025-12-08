@@ -1,3 +1,6 @@
+
+import nmcb.predef.*
+
 object Day10 extends App:
 
   val day = getClass.getSimpleName.filter(_.isDigit).mkString
@@ -16,7 +19,7 @@ object Day10 extends App:
     result.toString
 
   def solve(s: String, times: Int): Int =
-    Iterator.iterate(s)(lookAndSay).drop(times).next.length
+    Iterator.iterate(s)(lookAndSay).nth(times).length
 
   val start1: Long = System.currentTimeMillis
   lazy val answer1: Int = solve(input, 40)

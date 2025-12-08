@@ -5,6 +5,16 @@ import scala.collection.*
 object predef:
 
   extension [A](i: Iterator[A])
+
+    def nth(n: Int): A =
+      i.drop(n).next()
+
+    def findFirst(f: A => Boolean): A =
+      i.dropWhile(a => !f(a)).next()
+
+    def findFirstNot(f: A => Boolean): A =
+      i.dropWhile(a => f(a)).next()
+
     def findMap[B](f: A => Option[B]): B =
       i.flatMap(f).next()
 

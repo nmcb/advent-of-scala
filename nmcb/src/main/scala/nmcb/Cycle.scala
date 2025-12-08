@@ -1,10 +1,12 @@
 package nmcb
 
+import predef.*
+
 case class Cycle[A](stemSize: Int, cycleSize: Int, cycleHead: A, cycleLast: A, cycleHeadRepeat: A, next: A => A):
 
   def simulate(n: Long): A =
     val iterations = (n - stemSize) % cycleSize
-    Iterator.iterate(cycleHeadRepeat)(next).drop(iterations.toInt).next
+    Iterator.iterate(cycleHeadRepeat)(next).nth(iterations.toInt)
 
 
 object Cycle:

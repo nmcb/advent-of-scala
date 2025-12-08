@@ -1,3 +1,4 @@
+import nmcb.predef.*
 import scala.io.Source
 
 object Day25 extends App:
@@ -127,5 +128,5 @@ object Day25 extends App:
   def turing: Turing = Turing(transitions, beginState)
 
   val start1: Long = System.currentTimeMillis
-  lazy val answer1: Int = Iterator.iterate(turing)(_.step).drop(steps).next.tape.count((s,v) => v == 1)
+  lazy val answer1: Int = Iterator.iterate(turing)(_.step).nth(steps).tape.count((s,v) => v == 1)
   println(s"Answer AOC 2017 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")

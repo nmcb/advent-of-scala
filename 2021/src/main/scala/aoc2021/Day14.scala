@@ -1,6 +1,7 @@
 package aoc2021
 
 import nmcb.*
+import nmcb.predef.*
 object Day14 extends AoC:
 
   type Rules  = Map[(Char,Char),Char]
@@ -52,7 +53,7 @@ object Day14 extends AoC:
       Polymer(rules, pairs, counts)
 
   def solve(polymer: Polymer, iterations: Int): Long =
-    val counts = Iterator.iterate(polymer)(_.step).drop(iterations).next.counts
+    val counts = Iterator.iterate(polymer)(_.step).nth(iterations).counts
     counts.values.max - counts.values.min
 
   val polymer: Polymer = Polymer.make(rules, template)

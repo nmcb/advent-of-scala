@@ -22,13 +22,13 @@ object Day08 extends AoC:
     def empty: State = (
       ids      = Map.empty[Box, CircuitId],
       circuits = Map.empty[CircuitId, Set[Box]],
-      pair     = (x = 0, y = 0, z = 0) -> (0, 0, 0),
+      pair     = (0, 0, 0) -> (0, 0, 0),
       id       = 0L
     )
 
   def solve(boxes: Vector[Box]): Iterator[State] =
 
-    val sortedPairIterator =
+    val sortedPairIterator: Iterator[(Box, Box)] =
       boxes
         .tails
         .toVector
