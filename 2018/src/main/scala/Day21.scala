@@ -1,6 +1,8 @@
 import scala.annotation.tailrec
 import scala.io.Source
 
+import nmcb.*
+
 object Day21 extends App:
 
   val day: String = getClass.getSimpleName.filter(_.isDigit).mkString
@@ -116,8 +118,8 @@ object Day21 extends App:
    *
    * 28: eqrr 5 0 1
    *
-   * Together with the rest of the program doesn't contain an eqrr instruction,
-   * we just check what register 5 contains the first time the line is executed.
+   * Together with the rest of the program not containing an eqrr instruction yields, that
+   * we can just check what register 5 contains the first time the line is executed.
    */
   val start1  = System.currentTimeMillis
   lazy val answer1 = cpu.nextAfterEQRR.mem.valueOf(5)
@@ -129,5 +131,5 @@ object Day21 extends App:
    * The solution takes about 2 minutes so the result is copied in.
    */
   val start2  = System.currentTimeMillis
-  lazy val answer2 = 5876609 // Day18.Cycle.find(cpu)(_.nextAfterEQRR, _.mem.valueOf(5)).cycleLast.mem.valueOf(5)
+  lazy val answer2 = 5876609 // Cycle.find(cpu, _.nextAfterEQRR, _.mem.valueOf(5)).cycleLast.mem.valueOf(5)
   println(s"Answer AOC 2018 day $day part 2: $answer2 [${System.currentTimeMillis - start1}ms]")

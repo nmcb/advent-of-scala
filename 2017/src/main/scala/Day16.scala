@@ -1,5 +1,7 @@
 import scala.io.Source
 
+import nmcb.*
+
 object Day16 extends App:
 
   val day: String =
@@ -47,57 +49,6 @@ object Day16 extends App:
   lazy val answer1: String = Programs.init.dance(moves)
   println(s"Answer AOC 2017 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
-  case class Cycle[A](stemSize: Int, cycleSize: Int, cycleHead: A, cycleLast: A, cycleHeadRepeat: A)
-
-  object Cycle:
-
-    import scala.collection.*
-
-    extension [A](i: Iterator[A]) def zipWithPrev: Iterator[(Option[A], A)] =
-      new AbstractIterator[(Option[A], A)]:
-
-        private var prev: Option[A] =
-          None
-
-        override def hasNext: Boolean =
-          i.hasNext
-
-        override def next: (Option[A], A) =
-          val cur = i.next
-          val last = prev
-          prev = Some(cur)
-          (last, cur)
-
-    def find[A, B](sequence: IterableOnce[A])(invariant: A => B): Option[Cycle[A]] =
-
-      val trace: mutable.Map[B, (A, Int)] =
-        mutable.Map[B, (A, Int)]()
-
-      sequence
-        .iterator
-        .zipWithPrev
-        .zipWithIndex
-        .map:
-          case ((last, previous), index) =>
-            (last, previous, trace.put(invariant(previous), (previous, index)), index)
-        .collectFirst:
-          case (Some(last), repeat, Some((previous, previousIndex)), index) =>
-            Cycle(
-              stemSize = previousIndex,
-              cycleSize = index - previousIndex,
-              cycleHead = previous,
-              cycleLast = last,
-              cycleHeadRepeat = repeat
-            )
-
-    /** finds a cycle for given invariant which includes given initial */
-    def find[A, B](initial: A, f: A => A)(invariant: A => B): Cycle[A] =
-      find(Iterator.iterate(initial)(f))(invariant).get
-
-  val cycle          = Cycle.find(Programs.init, _.dance(moves))(identity)
-  val remaining      = 1000000000L % cycle.cycleSize
-  val remainingDance = List.iterate(Programs.init, remaining.toInt + 1)(_.dance(moves)).last
-
   val start2: Long    = System.currentTimeMillis
-  lazy val answer2: String = remainingDance
+  lazy val answer2: String = Cycle.find(Programs.init, _.dance(moves)).simulate(1000000000L)
   println(s"Answer AOC 2017 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

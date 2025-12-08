@@ -75,5 +75,5 @@ object Day18 extends App:
   println(s"Answer AOC 2018 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2  = System.currentTimeMillis
-  lazy val answer2 = Cycle.find(landscape)(_.tick).simulate(1000000000).resourceValue
+  lazy val answer2 = Cycle.find(landscape, _.tick).simulate(1000000000).resourceValue
   println(s"Answer AOC 2018 day $day part 2: $answer2 [${System.currentTimeMillis - start1}ms]")

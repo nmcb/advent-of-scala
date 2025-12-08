@@ -51,61 +51,7 @@ object Day14 extends AoC:
 
 
   lazy val grid: Grid = Grid(lines.map(_.toVector))
-
-
-  lazy val cycle = Cycle.find(grid, _.cycle)(_.cycleInvariant)
-  lazy val tail  = (1_000_000_000L - cycle.stemSize) % cycle.cycleSize
-  lazy val count = cycle.stemSize + tail.toInt
-  lazy val end   = (0 until count).foldLeft(grid)((g, _) => g.cycle)
-
-  lazy val answer1: Long = grid.tiltN.load
-  lazy val answer2: Long = end.load
-
   
-  /** Utilities */
-
-  case class Cycle[A](stemSize: Int, cycleSize: Int, cycleHead: A, cycleLast: A, cycleHeadRepeat: A)
-
-  object Cycle:
-
-    import scala.collection.*
-
-    extension[A] (i: Iterator[A]) def zipWithPrev: Iterator[(Option[A], A)] =
-      new AbstractIterator[(Option[A], A)]:
-
-        private var prev: Option[A] =
-          None
-
-        override def hasNext: Boolean =
-          i.hasNext
-
-        override def next: (Option[A], A) =
-          val cur  = i.next
-          val last = prev
-          prev     = Some(cur)
-          (last, cur)
-
-    def find[A, B](sequence: IterableOnce[A])(invariant: A => B): Option[Cycle[A]] =
-
-      val trace: mutable.Map[B, (A, Int)] =
-        mutable.Map[B, (A, Int)]()
-
-      sequence
-        .iterator
-        .zipWithPrev
-        .zipWithIndex
-        .map:
-          case ((last, previous), index) =>
-            (last, previous, trace.put(invariant(previous), (previous, index)), index)
-        .collectFirst:
-          case (Some(last), repeat, Some((previous, previousIndex)), index) =>
-            Cycle(
-              stemSize        = previousIndex,
-              cycleSize       = index - previousIndex,
-              cycleHead       = previous,
-              cycleLast       = last,
-              cycleHeadRepeat = repeat
-            )
-
-    def find[A, B](x0: A, f: A => A)(m: A => B): Cycle[A] =
-      find(Iterator.iterate(x0)(f))(m).get
+  
+  lazy val answer1: Long = grid.tiltN.load
+  lazy val answer2: Long = Cycle.find(grid, _.cycle, _.cycleInvariant).simulate(1_000_000_000L).load

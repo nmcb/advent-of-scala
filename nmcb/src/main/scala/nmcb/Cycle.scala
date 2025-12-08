@@ -27,7 +27,7 @@ object Cycle:
           last = Some(current)
           (current, previous)
 
-  def find[A,B](a: A)(next: A => A, invariant: A => B = identity): Cycle[A] =
+  def find[A,B](a: A, next: A => A, invariant: A => B = identity): Cycle[A] =
 
     val trace: mutable.Map[B,(A,Int)] = mutable.Map[B,(A,Int)]()
 
