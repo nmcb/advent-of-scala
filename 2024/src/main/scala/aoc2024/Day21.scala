@@ -42,7 +42,6 @@ object Day21 extends AoC:
     def count: Long = t._2
 
   def solve(buttonPushes: Vector[Pushes], robots: Int): Long =
-    val cache = memo[(Pos,Pos,Int),Long]()
 
     def keypadBy(robot: Int): Grid[Button] =
       if robot == 0 then numericKeypad else directionKeypad
@@ -56,8 +55,8 @@ object Day21 extends AoC:
             to -> (moves.count + shortestPathMoves(moves.pos, to, robot))
         .count
 
-    def shortestPathMoves(from: Pos, to: Pos, robot: Int): Long =
-      cache.memoize(from,to,robot):
+    val cache = memo[(Pos,Pos,Int),Long]()
+    def shortestPathMoves(from: Pos, to: Pos, robot: Int): Long = cache.memoize(from,to,robot):
         Dijkstra
           .breadthFirstSearch((from,Vector.empty[Button])):
             case (p,pushes) if p == to => Right(

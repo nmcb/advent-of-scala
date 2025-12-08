@@ -1,4 +1,5 @@
-import scala.collection.mutable
+
+import nmcb.predef.*
 import scala.io.Source
 
 object Day04 extends App:
@@ -6,14 +7,7 @@ object Day04 extends App:
   val day: String =
     this.getClass.getName.filter(_.isDigit).mkString("")
 
-  def memo[K, V](initial: (K, V)*): mutable.Map[K, V] =
-    mutable.Map.empty[K, V] ++ initial
-
-  extension [K, V](cache: mutable.Map[K, V])
-    def memoize(k: K)(v: => V): V =
-      cache.getOrElseUpdate(k, v)
-
-  val cache: mutable.Map[String,Map[Char,Int]] = memo()
+  val cache = memo[String, Map[Char,Int]]()
   extension (s: String) def charCount: Map[Char,Int] =
     cache.memoize(s)(s.groupMapReduce(identity)(_ => 1)(_ + _))
 
