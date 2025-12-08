@@ -5,7 +5,6 @@ import nmcb.Dir.*
 import nmcb.predef.*
 
 import scala.collection.immutable.Map
-import scala.io.*
 
 object Day21 extends AoC:
 
@@ -80,7 +79,7 @@ object Day21 extends AoC:
         pointerMovesFor(pushes, 0) * pushes.filter(_.isDigit).mkString("").toLong
       .sum
 
-  val input: Grid[Char] = Grid.fromLines(Source.fromResource(s"$day.txt").getLines)
+  val grid: Grid[Char] = Grid.fromLines(lines)
 
-  lazy val answer1: Long = solve(input.matrix, 2)
-  lazy val answer2: Long = solve(input.matrix, 25)
+  lazy val answer1: Long = solve(grid.matrix, 2)
+  lazy val answer2: Long = solve(grid.matrix, 25)

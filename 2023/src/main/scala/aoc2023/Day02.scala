@@ -2,8 +2,6 @@ package aoc2023
 
 import nmcb.*
 
-import scala.io.*
-
 object Day02 extends AoC:
 
   type Color = String
@@ -38,12 +36,7 @@ object Day02 extends AoC:
         case _ =>
           sys.error(s"unmatched $s")
 
-  val games: Vector[Game] =
-    Source
-      .fromResource(s"$day.txt")
-      .getLines
-      .map(Game.fromString)
-      .toVector
+  val games: Vector[Game] = lines.map(Game.fromString)
 
   lazy val answer1: Long = games.filter(_.possibleWith(12, 13, 14)).map(_.id).sum
   lazy val answer2: Long = games.map(_.power).sum

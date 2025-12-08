@@ -2,12 +2,7 @@ package aoc2024
 
 import nmcb.*
 
-import scala.io.*
-
 object Day03 extends AoC:
-
-  private val input: String =
-    Source.fromResource(s"$day.txt").mkString
 
   def solve(memory: String, result: Int, enabled: Boolean, part2: Boolean): Int =
     memory match

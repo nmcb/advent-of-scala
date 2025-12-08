@@ -2,8 +2,6 @@ package aoc2024
 
 import nmcb.AoC
 
-import scala.io.*
-
 object Day05 extends AoC:
 
   case class Rule(before: Int, after: Int):
@@ -33,7 +31,7 @@ object Day05 extends AoC:
       Update(order.sorted)
 
   private val (rules: List[Rule], updates: List[Update]) =
-    val Array(rules, updates)  = Source.fromResource(s"$day.txt").mkString.split("\n\n")
+    val Array(rules, updates)  = input.split("\n\n")
     ( rules.split("\n")
         .map:
           case s"$b|$a" => Rule(b.toInt, a.toInt)

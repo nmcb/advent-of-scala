@@ -3,7 +3,6 @@ package aoc2023
 import nmcb.*
 
 import scala.collection.mutable
-import scala.io.Source
 
 object Day25 extends AoC:
 
@@ -13,9 +12,7 @@ object Day25 extends AoC:
   type Connection = (Component, Component)
 
   val connections: Set[Connection] =
-    Source
-      .fromResource(s"$day.txt")
-      .getLines
+    lines
       .flatMap:
         case s"$name1: $connections" =>
           connections.split(" ").map(name2 => name1 -> name2)

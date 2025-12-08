@@ -3,16 +3,10 @@ package aoc2022
 import nmcb.*
 
 import scala.annotation.tailrec
-import scala.io.*
 
 object Day06 extends AoC:
 
   case class Move(size: Int, from: Int, to: Int)
-
-  val input: String =
-    Source
-      .fromResource(s"$day.txt")
-      .mkString
 
   def solve(s: String, d: Int): Int =
     @tailrec

@@ -2,8 +2,6 @@ package aoc2024
 
 import nmcb.*
 
-import scala.io.*
-
 object Day04 extends AoC:
 
   type Direction = Pos => Pos
@@ -17,7 +15,8 @@ object Day04 extends AoC:
   val NW: Direction = p => Pos(p.x - 1, p.y - 1)
   val SW: Direction = p => Pos(p.x - 1, p.y + 1)
 
-  val grid: Grid[Char] = Grid.fromLines(Source.fromResource(s"$day.txt").getLines)
+  val grid: Grid[Char] = Grid.fromLines(lines)
+  
   extension (grid: Grid[Char])
 
     def read(length: Int, direction: Direction, from: Pos, result: String = ""): String =

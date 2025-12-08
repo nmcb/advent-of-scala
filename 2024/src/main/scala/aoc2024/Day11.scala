@@ -1,9 +1,7 @@
 package aoc2024
 
 import nmcb.*
-
 import scala.annotation.*
-import scala.io.*
 
 object Day11 extends AoC:
 
@@ -27,14 +25,7 @@ object Day11 extends AoC:
 
     handle.map(_ -> ss.count) :+ (ss.stone -> -ss.count)
 
-  val stones: Vector[StoneCount] =
-    Source
-      .fromResource(s"$day.txt")
-      .mkString
-      .trim
-      .split(' ')
-      .toVector
-      .map(_ -> 1L)
+  val stones: Vector[StoneCount] = input.split(' ').toVector.map(_ -> 1L)
 
   def blink(n: Int, stones: Vector[StoneCount]): Long =
     @tailrec

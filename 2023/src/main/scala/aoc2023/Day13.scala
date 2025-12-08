@@ -2,8 +2,6 @@ package aoc2023
 
 import nmcb.*
 
-import scala.io.*
-
 object Day13 extends AoC:
 
   case class Image(image: Vector[Vector[Char]], defects: Int = 0):
@@ -31,9 +29,7 @@ object Day13 extends AoC:
       Image(ss.map(_.toVector).toVector)
 
   lazy val images: Vector[Image] =
-    Source
-      .fromResource(s"$day.txt")
-      .mkString
+    input
       .split("\n\n")
       .map(_.split("\n"))
       .map(Image.fromString)

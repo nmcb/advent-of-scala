@@ -3,7 +3,6 @@ package aoc2025
 import nmcb.*
 
 import scala.annotation.tailrec
-import scala.io.*
 import scala.math.Ordered.orderingToOrdered
 
 object Day04 extends AoC:
@@ -13,9 +12,8 @@ object Day04 extends AoC:
   given Ordering[Pos] = Ordering.by(_.toTuple)
 
   val (minPos, maxPos, rolls) =
-    val ls = Source.fromResource(s"$day.txt").getLines.toVector
-    val ps = for y <- ls.indices.toSet ; x <- ls.head.indices.toSet yield (x = x, y = y)
-    (ps.min, ps.max, ps.filter(p => ls(p.y)(p.x) == '@'))
+    val ps = for y <- lines.indices.toSet ; x <- lines.head.indices.toSet yield (x = x, y = y)
+    (ps.min, ps.max, ps.filter(p => lines(p.y)(p.x) == '@'))
 
   extension (p: Pos)
 

@@ -2,15 +2,7 @@ package aoc2025
 
 import nmcb.*
 
-import scala.io.*
-
 object Day01 extends AoC:
-
-  val input: Vector[String] =
-      Source
-        .fromResource(s"$day.txt")
-        .getLines
-        .toVector
 
   def solve1(input: Vector[String]): Int =
     input
@@ -28,5 +20,5 @@ object Day01 extends AoC:
       .scanLeft(50)(_ + _)
       .count(step => step % 100 == 0)
 
-  lazy val answer1: Int = solve1(input)
-  lazy val answer2: Int = solve2(input)
+  lazy val answer1: Int = solve1(lines)
+  lazy val answer2: Int = solve2(lines)

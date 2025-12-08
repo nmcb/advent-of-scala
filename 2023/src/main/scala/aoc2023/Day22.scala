@@ -3,7 +3,6 @@ package aoc2023
 import nmcb.*
 
 import scala.annotation.tailrec
-import scala.io.Source
 
 object Day22 extends AoC:
 
@@ -65,13 +64,7 @@ object Day22 extends AoC:
 
       settled.map(disintegrate).sum
 
-  val stack: Stack =
-    Stack(
-      Source
-        .fromResource(s"$day.txt")
-        .getLines
-        .map(Box.fromString)
-        .toVector)
+  val stack: Stack = Stack(lines.map(Box.fromString))
 
   
   lazy val answer1: Int = stack.disintegrable

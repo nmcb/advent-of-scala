@@ -3,17 +3,14 @@ package aoc2024
 import nmcb.*
 
 import scala.annotation.*
-import scala.io.*
 
 object Day14 extends AoC:
 
   case class Robot(p: Pos, v: Pos)
 
   val space: Space =
-    val robots: Vector[Robot] =
-      Source.fromResource(s"$day.txt").getLines.toVector.map:
-        case s"p=$px,$py v=$vx,$vy" =>
-          Robot(Pos(px.toInt, py.toInt), Pos(vx.toInt, vy.toInt))
+    val robots: Vector[Robot] = lines.map:
+      case s"p=$px,$py v=$vx,$vy" => Robot(Pos(px.toInt, py.toInt), Pos(vx.toInt, vy.toInt))
 
     Space(robots, sizeX = 101, sizeY = 103)
 

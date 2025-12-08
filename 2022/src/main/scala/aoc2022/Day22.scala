@@ -5,17 +5,17 @@ import scala.io.*
 
 object Day22 extends AoC:
 
-  val input: Seq[String] =
+  val puzzle: Seq[String] =
     Source
       .fromResource(s"$day.txt")
       .getLines
       .toIndexedSeq
 
   val map: Seq[String] =
-    input.takeWhile(l => !l.isBlank)
+    puzzle.takeWhile(l => !l.isBlank)
 
   val path: String =
-    input.drop(map.size + 1).head
+    puzzle.drop(map.size + 1).head
 
   val tiles: Array[Array[Char]] =
     Array.fill(map.length + 2, map.head.length + 2)(' ')

@@ -3,21 +3,13 @@ package aoc2025
 import nmcb.*
 
 import scala.collection.immutable.NumericRange
-import scala.io.*
 
 object Day02 extends AoC:
 
   type Range = NumericRange[Long]
 
-  val input: Vector[Range] =
-      Source
-        .fromResource(s"$day.txt")
-        .mkString
-        .trim
-        .split(',')
-        .map:
-          case s"$min-$max" => min.toLong to max.toLong
-        .toVector
+  val ranges: Vector[Range] = input.split(',').toVector.map:
+    case s"$min-$max" => min.toLong to max.toLong
 
   def doubles(id: Long): Boolean =
     val s = id.toString
@@ -36,5 +28,5 @@ object Day02 extends AoC:
     val doubled = s + s
     doubled.substring(1, doubled.length - 1).contains(s)
 
-  lazy val answer1: Long = filter(input, doubles).sum
-  lazy val answer2: Long = filter(input, repeats).sum
+  lazy val answer1: Long = filter(ranges, doubles).sum
+  lazy val answer2: Long = filter(ranges, repeats).sum

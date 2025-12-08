@@ -4,18 +4,12 @@ import nmcb.*
 
 import scala.annotation.*
 import scala.collection.AbstractIterator
-import scala.io.*
 import scala.math.*
 import scala.math.Integral.Implicits.*
 
 object Day17 extends AoC:
 
-  val input: List[Move] =
-    Source
-      .fromResource(s"$day.txt")
-      .mkString
-      .trim
-      .toList
+  val moves: Vector[Move] = input.toVector
 
   case class Pos(x: Int, y: Int):
     def -(that: Pos): Pos = Pos(x - that.x, y - that.y)
@@ -33,7 +27,7 @@ object Day17 extends AoC:
   object Move:
 
     val pattern: LazyList[Move] =
-      input.to(LazyList) #::: pattern
+      moves.to(LazyList) #::: pattern
 
 
   sealed abstract class Rock(val relative: List[Pos]):

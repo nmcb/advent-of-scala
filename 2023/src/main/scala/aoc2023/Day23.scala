@@ -3,7 +3,6 @@ package aoc2023
 import nmcb.*
 
 import scala.collection.mutable
-import scala.io.Source
 
 /** @see Credits - https://github.com/sanraith */
 object Day23 extends AoC:
@@ -108,11 +107,6 @@ object Day23 extends AoC:
   val W: Dir = Pos(-1, 0)
   val N: Dir = Pos(0, -1)
   val Dir: Seq[Dir] = Seq(E, S, W, N)
-
-  def input: String =
-    Source
-      .fromResource(s"$day.txt")
-      .mkString
 
 
   lazy val answer1: Int = part1(input)

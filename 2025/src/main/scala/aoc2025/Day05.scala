@@ -2,14 +2,12 @@ package aoc2025
 
 import nmcb.*
 
-import scala.io.*
-
 object Day05 extends AoC:
 
   type Range = (min: Long, max: Long)
 
   val (ranges: Vector[Range], ingredients: Vector[Long]) =
-    val Array(top, bottom) = Source.fromResource(s"$day.txt").mkString.split("\n\n")
+    val Array(top, bottom) = input.split("\n\n")
 
     val rs = top.linesIterator
       .map:

@@ -3,8 +3,6 @@ package aoc2024
 import nmcb.*
 import nmcb.predef.*
 
-import scala.io.*
-
 object Day16 extends AoC:
 
   enum Dir:
@@ -125,8 +123,7 @@ object Day16 extends AoC:
       Iterator.iterate(state)(_.next).findMap(_.solution)
 
 
-  val maze: Maze =
-    Maze(Source.fromResource(s"$day.txt").getLines.map(_.toVector).toVector)
+  val maze: Maze = Maze(lines.map(_.toVector).toVector)
 
   lazy val answer1: Long = maze.solve1
   lazy val answer2: Long = maze.solve2

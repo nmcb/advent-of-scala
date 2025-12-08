@@ -2,7 +2,6 @@ package aoc2022
 
 import nmcb.*
 import scala.annotation.tailrec
-import scala.io.Source
 
 object Day23 extends AoC:
 
@@ -15,10 +14,8 @@ object Day23 extends AoC:
         case (a,('#',x)) => a + Pos(x,y)
         case (a,_)       => a
 
-  val input: Set[Pos] =
-    Source
-      .fromResource(s"$day.txt")
-      .getLines
+  val positions: Set[Pos] =
+    lines
       .zipWithIndex
       .foldLeft(Set.empty):
         case (a,(s,y)) => a ++ Pos.fromString(y,s)
@@ -113,5 +110,5 @@ object Day23 extends AoC:
       solve2(next, c + 1)
 
 
-  lazy val answer1: Int = (1 to 10).foldLeft(Mat(input))((m,_) => m.next).countEmpty
-  lazy val answer2: Long = solve2(Mat(input))
+  lazy val answer1: Int = (1 to 10).foldLeft(Mat(positions))((m, _) => m.next).countEmpty
+  lazy val answer2: Long = solve2(Mat(positions))

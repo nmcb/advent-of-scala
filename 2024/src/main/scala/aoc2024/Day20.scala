@@ -4,11 +4,8 @@ import nmcb.*
 
 import scala.Option.*
 import scala.annotation.*
-import scala.io.*
 
 object Day20 extends AoC:
-
-  val input: String = Source.fromResource(s"$day.txt").mkString.trim
 
   def cheats(path: Vector[Pos], timeframe: Long): Long =
     @tailrec
@@ -23,7 +20,7 @@ object Day20 extends AoC:
 
     trace(path.zipWithIndex, 0L)
 
-  val path: Vector[Pos] = Grid.fromLines(input.linesIterator).extractPath('S', 'E', '.').shortest
+  val path: Vector[Pos] = Grid.fromLines(lines).extractPath('S', 'E', '.').shortest
 
   lazy val answer1: Long = cheats(path, 2)
   lazy val answer2: Long = cheats(path, 20)

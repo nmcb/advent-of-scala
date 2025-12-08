@@ -2,15 +2,7 @@ package aoc2023
 
 import nmcb.*
 
-import scala.io.*
-
 object Day01 extends AoC:
-
-  val values: List[String] =
-    Source
-      .fromResource(s"$day.txt")
-      .getLines
-      .toList
 
   val digits: Map[String, Char] =
     (0 to 9).map(_.toString).map(n => n -> n.head).toMap
@@ -46,5 +38,5 @@ object Day01 extends AoC:
       "zero"  -> '0'
     )
 
-  lazy val answer1: Int = values.map(recover(digits)).sum
-  lazy val answer2: Int = values.map(recover(digits ++ names)).sum
+  lazy val answer1: Int = lines.map(recover(digits)).sum
+  lazy val answer2: Int = lines.map(recover(digits ++ names)).sum

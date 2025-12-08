@@ -2,15 +2,12 @@ package aoc2024
 
 import nmcb.*
 
-import scala.io.*
-
 object Day25 extends AoC:
 
   type Schematic = Grid[Char]
 
   val schematics: Vector[Schematic] =
-    Source.fromResource(s"$day.txt")
-      .mkString
+    input
       .split("\n\n")
       .map(_.split("\n").iterator)
       .map(Grid.fromLines).toVector

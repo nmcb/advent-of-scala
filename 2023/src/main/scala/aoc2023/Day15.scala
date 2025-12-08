@@ -2,14 +2,10 @@ package aoc2023
 
 import nmcb.*
 
-import scala.io.*
-
 object Day15 extends AoC:
 
   lazy val operations: Vector[Op] =
-    Source
-      .fromResource(s"$day.txt")
-      .mkString
+    input
       .filterNot(_ == '\n')
       .mkString
       .split(',')

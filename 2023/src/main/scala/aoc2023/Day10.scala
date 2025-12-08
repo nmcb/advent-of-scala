@@ -3,7 +3,6 @@ package aoc2023
 import nmcb.*
 
 import scala.annotation.tailrec
-import scala.io.*
 
 object Day10 extends AoC:
 
@@ -68,9 +67,7 @@ object Day10 extends AoC:
     given Ordering[Pos] = Ordering.by(p => (p.x, p.y))
 
   lazy val tiles: Map[Pos,Tile] =
-    Source
-      .fromResource(s"$day.txt")
-      .getLines
+    lines
       .zipWithIndex
       .foldLeft(Map.empty[Pos,Tile]){ case (a,(l,y)) =>
         l.zipWithIndex.foldLeft(a){ case (a,(c,x)) =>

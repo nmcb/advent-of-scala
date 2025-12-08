@@ -3,7 +3,6 @@ package aoc2023
 import nmcb.*
 
 import scala.annotation.tailrec
-import scala.io.*
 import scala.math.Ordered.orderingToOrdered
 
 object Day07 extends AoC:
@@ -126,16 +125,10 @@ object Day07 extends AoC:
         case s"$cards $bid" =>
           Hand(cards.map(Card.apply).toList, bid.toInt)
 
-  val input: List[String] =
-    Source
-      .fromResource(s"$day.txt")
-      .getLines
-      .toList
-
   
   lazy val answer1: Int =
     given Ordering[Card] = orderBy(Game.sortedSet)
-    input
+    lines
       .map(Hand.fromString)
       .sorted(using orderBy(_.strength1))
       .zipWithIndex
@@ -144,7 +137,7 @@ object Day07 extends AoC:
 
   lazy val answer2: Int =
     given Ordering[Card] = orderBy(Game.sortedJokerSet)
-    input
+    lines
       .map(Hand.fromString)
       .sorted(using orderBy(_.strength2))
       .zipWithIndex

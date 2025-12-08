@@ -3,7 +3,6 @@ package aoc2023
 import nmcb.*
 
 import scala.annotation.tailrec
-import scala.io.*
 
 object Day08 extends AoC:
 
@@ -46,7 +45,6 @@ object Day08 extends AoC:
 
 
   lazy val network: Network =
-    val lines: List[String] = Source.fromResource(s"$day.txt").getLines.toList
     Network(Directions(lines.head), lines.drop(2).map { case s"$src = ($left, $right)" => src -> (left, right) }.toMap)
 
   lazy val answer1: Int = network.steps1

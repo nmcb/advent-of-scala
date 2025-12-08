@@ -4,7 +4,6 @@ import nmcb.*
 
 import scala.collection.*
 import scala.collection.immutable.Seq
-import scala.io.*
 
 object Day12 extends AoC:
 
@@ -17,7 +16,7 @@ object Day12 extends AoC:
       val Array(mask, groups) = s.split(' ')
       Line(mask.trim, groups.trim.split(',').map(_.toInt).toList)
 
-  case class Input(lines: List[Line]):
+  case class Puzzle(lines: List[Line]):
 
     val cache = mutable.Map.empty[(String, List[Int]), Long]
 
@@ -46,17 +45,11 @@ object Day12 extends AoC:
     lazy val arrangements: Long =
       lines.map(l => solve(l.mask, l.lengths)).sum
 
-    lazy val unfoldAll: Input =
-      Input(lines.map(_.unfold))
+    lazy val unfoldAll: Puzzle =
+      Puzzle(lines.map(_.unfold))
 
-  lazy val input: Input =
-    Input(
-      Source
-        .fromResource(s"$day.txt")
-        .getLines
-        .map(Line.fromString)
-        .toList)
+  lazy val puzzle: Puzzle = Puzzle(lines.map(Line.fromString).toList)
 
 
-  lazy val answer1: Long = input.arrangements
-  lazy val answer2: Long = input.unfoldAll.arrangements
+  lazy val answer1: Long = puzzle.arrangements
+  lazy val answer2: Long = puzzle.unfoldAll.arrangements

@@ -2,7 +2,6 @@ package aoc2024
 
 import nmcb.*
 
-import scala.io.*
 import scala.math.Integral.Implicits.*
 
 object Day13 extends AoC:
@@ -23,7 +22,6 @@ object Day13 extends AoC:
       if ra == 0 & rb == 0 then Some(cost(ma, nb)) else None
 
   val machines: Vector[Machine] =
-    val lines = Source.fromResource(s"$day.txt").getLines.toVector
     val as = lines.collect:
       case s"Button A: X+$x, Y+$y" => Pos(x.toLong, y.toLong)
     val bs = lines.collect:

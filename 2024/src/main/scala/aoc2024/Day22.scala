@@ -4,12 +4,10 @@ import nmcb.*
 import nmcb.predef.*
 
 import scala.collection.*
-import scala.collection.immutable.Seq
-import scala.io.*
 
 object Day22 extends AoC:
 
-  val input: Vector[Long] = Source.fromResource(s"$day.txt").getLines.map(_.toLong).toVector
+  val numbers: Vector[Long] = lines.map(_.toLong).toVector
 
   inline def mix(l: Long)(n: Long): Long =
     l ^ n
@@ -55,5 +53,5 @@ object Day22 extends AoC:
       .values
       .max
 
-  lazy val answer1: Long = input.map(initial => Iterator.iterate(initial, 2001)(_.nextSecret).drain).sum
-  lazy val answer2: Long = solve(input)
+  lazy val answer1: Long = numbers.map(initial => Iterator.iterate(initial, 2001)(_.nextSecret).drain).sum
+  lazy val answer2: Long = solve(numbers)

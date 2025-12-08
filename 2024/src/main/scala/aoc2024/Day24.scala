@@ -3,7 +3,7 @@ package aoc2024
 import nmcb.*
 
 import scala.annotation.*
-import scala.io.*
+
 
 /** visual inspection - then coded recognizers - see /doc/img/visual-inspection-day25.pdf */
 object Day24 extends AoC:
@@ -115,9 +115,6 @@ object Day24 extends AoC:
         gates.find(g => (g.lhs == op.out || g.rhs == op.out) && g.isXOR) match
           case Some(xor) => if xor.out == s"z${op.lhs.asNumber}" then None else Some(xor.out)
           case None      => Some(op.out)
-
-  val lines: Vector[String] =
-    Source.fromResource(s"$day.txt").getLines.toVector
 
   val (initial, gates) =
     val initial =

@@ -3,17 +3,14 @@ package aoc2022
 import nmcb.*
 
 import scala.annotation.*
-import scala.io.*
 import scala.math.*
 
 object Day18 extends AoC:
 
-  val input: Set[Box] =
-    Source
-      .fromResource(s"$day.txt")
-      .getLines
-      .map(_.trim)
-      .map { case s"$x,$y,$z" => Box(x.toInt, y.toInt, z.toInt) }
+  val boxes: Set[Box] =
+    lines
+      .map:
+        case s"$x,$y,$z" => Box(x.toInt, y.toInt, z.toInt)
       .toSet
 
   case class Box(x: Int, y: Int, z: Int):
@@ -33,8 +30,8 @@ object Day18 extends AoC:
 
 
   def solve2(): Int =
-    val min = input.reduce(_ min _) - Box(1,1,1)
-    val max = input.reduce(_ max _) + Box(1,1,1)
+    val min = boxes.reduce(_ min _) - Box(1,1,1)
+    val max = boxes.reduce(_ max _) + Box(1,1,1)
 
     @tailrec
     def flood(todo: List[Box], visited: Set[Box]): Set[Box] =
@@ -45,15 +42,15 @@ object Day18 extends AoC:
           val reached =
             cur
               .neighbours
-              .diff(input)
+              .diff(boxes)
               .diff(visited + cur)
               .filter(n => n >= min && n <= max)
 
           flood(rest ++ reached, visited ++ reached + cur)
 
     val outer = flood(List(min), Set.empty)
-    input.toSeq.map(_.neighbours.count(outer.contains)).sum
+    boxes.toSeq.map(_.neighbours.count(outer.contains)).sum
 
   
-  lazy val answer1: Int = input.toList.map(p => 6 - (p.neighbours intersect input).size).sum
+  lazy val answer1: Int = boxes.toList.map(p => 6 - (p.neighbours intersect boxes).size).sum
   lazy val answer2: Int = solve2()

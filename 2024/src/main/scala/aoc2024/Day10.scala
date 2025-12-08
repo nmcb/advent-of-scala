@@ -3,13 +3,9 @@ package aoc2024
 import nmcb.*
 import nmcb.predef.*
 
-import scala.io.*
-
 object Day10 extends AoC:
 
-  val grid: Grid[Int] =
-    val matrix = Source.fromResource(s"$day.txt").getLines.map(_.toSeq)
-    Grid.fromMatrix(matrix).map(_.asDigit)
+  val grid: Grid[Int] = Grid.fromLines(lines).map(_.asDigit)
 
   val heads: Set[Pos] =
     grid.filter(_.element == 0).map(_.pos)
