@@ -1,8 +1,11 @@
-import scala.io.*
+package aoc2020
 
-object Day14 extends App:
+import nmcb.*
 
-  val day: String = getClass.getSimpleName.filter(_.isDigit).mkString
+import scala.annotation.tailrec
+import scala.util.matching.Regex
+
+object Day14 extends AoC:
 
   case class UInt36(underlying: Long):
     assert(underlying.toBinaryString.length <= 36)
@@ -16,8 +19,8 @@ object Day14 extends App:
     override def toString: String =
       underlying.toString
 
-  val MaskExpr   = "mask = (.+)".r
-  val UpdateExpr = "mem\\[(\\d+)\\] = (\\d+)".r
+  val MaskExpr: Regex   = "mask = (.+)".r
+  val UpdateExpr: Regex = "mem\\[(\\d+)\\] = (\\d+)".r
 
   sealed trait Inst
 
@@ -62,29 +65,22 @@ object Day14 extends App:
   type Memory  = Map[UInt36,UInt36]
   type Program = List[Inst]
 
-  val program: Program =
-    Source
-      .fromResource(s"input$day.txt")
-      .getLines
-      .toList
-      .map:
-        case UpdateExpr(addr,value) => Update(new UInt36(addr, 10), new UInt36(value, 10))
-        case MaskExpr(mask)         => Mask(mask)
+  val program: Program = lines.toList.map:
+    case UpdateExpr(address,value) => Update(new UInt36(address, 10), new UInt36(value, 10))
+    case MaskExpr(mask)            => Mask(mask)
 
   def run(program: Program)(codec: UInt36 => UInt36 => Mask => Memory => Memory): Long =
+
+    @tailrec
     def loop(program: Program, memory: Memory = Map.empty, mask: Mask = Mask.fill('X')) : Memory =
       program match
         case Nil          => memory
         case inst :: rest => inst match
             case Update(address,value) => loop(rest, codec(address)(value)(mask)(memory), mask)
             case mask: Mask            => loop(rest, memory , mask)
+
     loop(program).values.map(_.underlying).sum
 
-  val start1  = System.currentTimeMillis
-  lazy val answer1 = run(program)(address => value => mask => memory => memory ++ Map(address -> mask.mask(value)))
-  println(s"Answer AOC 2020 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
-  val start2  = System.currentTimeMillis
+  lazy val answer1 = run(program)(address => value => mask => memory => memory ++ Map(address -> mask.mask(value)))
   lazy val answer2 = run(program)(address => value => mask => memory => memory ++ mask.float(address).map(a => a -> value))
-  println(s"Answer AOC 2020 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
-  

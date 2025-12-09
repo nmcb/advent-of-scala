@@ -1,25 +1,24 @@
+package aoc2020
+
+import nmcb.*
+
 import scala.annotation.tailrec
-import scala.io.*
+import scala.util.matching.Regex
 
-object Day07 extends App:
+object Day07 extends AoC:
 
-  val day: Color = getClass.getSimpleName.filter(_.isDigit).mkString
-
-  val Line = """(\w+)\s(\w+)\sbags\scontain\s(.+).""".r
-  val Bags = """(\d+)\s(\w+)\s(\w+)\sbag[s]?""".r
+  val Line: Regex = """(\w+)\s(\w+)\sbags\scontain\s(.+).""".r
+  val Bags: Regex = """(\d+)\s(\w+)\s(\w+)\sbag[s]?""".r
 
   type Color = String
   type Bags  = Vector[Bag]
   case class Bag(from: Color, to: Option[Color], count: Int)
 
   val bags: Bags =
-    Source
-      .fromResource(s"input$day.txt")
-      .getLines.flatMap:
+    lines.flatMap:
         case Line(from1, from2, contains) => contains.split(',').map(_.trim).map:
           case Bags(count, to1, to2) => Bag(from1 + from2, Some(to1 + to2), count.toInt)
           case _                     => Bag(from1 + from2, None, 0)
-      .toVector
 
   extension (bags: Bags)
 
@@ -44,11 +43,6 @@ object Day07 extends App:
           case (child,count) +: cs => solve2(cs, result + count + count * solve2(childrenOf(child)))
           case _                   => sys.error("boom!")
 
-  val start1  = System.currentTimeMillis
-  lazy val answer1 = bags.solve1(bags.parentsOf("shinygold")).distinct.size
-  println(s"Answer AOC 2020 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
-  val start2  = System.currentTimeMillis
-  lazy val answer2 = bags.solve2(bags.childrenOf("shinygold"))
-  println(s"Answer AOC 2020 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
-
+  lazy val answer1: Int = bags.solve1(bags.parentsOf("shinygold")).distinct.size
+  lazy val answer2: Int = bags.solve2(bags.childrenOf("shinygold"))

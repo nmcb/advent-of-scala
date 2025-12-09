@@ -1,9 +1,9 @@
+package aoc2020
+
+import nmcb.*
 import scala.annotation.*
-import scala.io.*
 
-object Day12 extends App:
-
-  val day: String = getClass.getSimpleName.filter(_.isDigit).mkString
+object Day12 extends AoC:
 
   case class Action(override val toString: String):
     def code: Char = toString.head
@@ -46,17 +46,6 @@ object Day12 extends App:
     def manhattan: Int =
       x.abs + y.abs
 
-  val actions: Vector[Action] =
-    Source
-      .fromResource(s"input$day.txt")
-      .getLines
-      .map(Action.fromLine)
-      .toVector
-
-  val start1 = System.currentTimeMillis
-  lazy val answer1: Int = actions.foldLeft(Ship())(_ perform _).manhattan
-  println(s"Answer AOC 2020 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
-
   case class WayPoint(x: Int, y: Int):
 
     @tailrec private final def turn(current: Char, by: Int, x0: Int = x, y0: Int = y): WayPoint =
@@ -84,6 +73,7 @@ object Day12 extends App:
     def manhattan: Int =
       x.abs + y.abs
 
-  val start2  = System.currentTimeMillis
-  lazy val answer2 = actions.foldLeft(WayPointedShip())(_ perform _).manhattan
-  println(s"Answer AOC 2020 day $day part 2: $answer2 [${System.currentTimeMillis - start1}ms]")
+  lazy val actions: Vector[Action] = lines.map(Action.fromLine)
+
+  lazy val answer1: Int = actions.foldLeft(Ship())(_ perform _).manhattan
+  lazy val answer2: Int = actions.foldLeft(WayPointedShip())(_ perform _).manhattan

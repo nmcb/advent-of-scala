@@ -1,10 +1,12 @@
-import scala.io.*
+package aoc2020
 
-object Day08 extends App:
+import nmcb.*
 
-  val day: String = getClass.getSimpleName.filter(_.isDigit).mkString
+import scala.util.matching.Regex
 
-  val Line = """^(\w+) ([\+-]\d+)$""".r
+object Day08 extends AoC:
+
+  val Line: Regex = """^(\w+) ([+-]\d+)$""".r
 
 
   case class Instruction(code: String, arg: Int)
@@ -48,17 +50,6 @@ object Day08 extends App:
         case "acc" => Running(state.pc + 1, state.accumulator + inst.arg)
         case "jmp" => Running(state.pc + inst.arg, state.accumulator)
 
-  val program: Program =
-    Source
-      .fromResource(s"input$day.txt")
-      .getLines.map(Instruction.fromLine)
-      .toVector
-
-  val start1  = System.currentTimeMillis
-  lazy val answer1 = VM(program).run(debug = true).state.accumulator
-  println(s"Answer AOC 2020 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
-
-
   def patch(program: Program): Program =
 
     def patchLine(line: Int): Program =
@@ -74,6 +65,7 @@ object Day08 extends App:
       .find(patch => VM(patch).run(debug = true).state.isTerminated)
       .get
 
-  val start2 = System.currentTimeMillis
-  lazy val answer2 = VM(patch(program)).run(debug = false).state.accumulator
-  println(s"Answer AOC 2020 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  val program: Program = lines.map(Instruction.fromLine)
+
+  lazy val answer1: Int = VM(program).run(debug = true).state.accumulator
+  lazy val answer2: Int = VM(patch(program)).run(debug = false).state.accumulator

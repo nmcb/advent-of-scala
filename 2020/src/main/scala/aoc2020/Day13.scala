@@ -1,19 +1,15 @@
+package aoc2020
+
+import nmcb.*
 import scala.annotation.*
-import scala.io.*
 import scala.util.*
 
-object Day13 extends App:
+object Day13 extends AoC:
 
-  val day: String = getClass.getSimpleName.filter(_.isDigit).mkString
-
-  val List(begin, input) =
-    Source
-      .fromResource(s"input$day.txt")
-      .getLines
-      .toList
+  val Vector(begin, puzzle) = lines
 
   val schedule: List[(Long,Int)] =
-    input
+    puzzle
       .split(',')
       .zipWithIndex
       .foldLeft(List.empty):
@@ -29,10 +25,6 @@ object Day13 extends App:
         case None      => go(time + 1)
         case Some(bus) => (time - start) * bus
     go(start)
-
-  val start1 = System.currentTimeMillis
-  lazy val answer1: Long = solve1(schedule, begin.toLong)
-  println(s"Answer AOC 2020 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   /**
    * Chinese Remainder Theorem, allows you to solve equations of type:
@@ -70,12 +62,11 @@ object Day13 extends App:
       case _          => None
 
   val equations: Map[Long,Long] =
-    input
+    puzzle
       .split(',')
-      .zip((0 until input.length).map(_.toLong).reverse)
+      .zip((0 until puzzle.length).map(_.toLong).reverse)
       .map((b,i) => (Try(b.toLong).getOrElse[Long](1),i))
       .toMap
 
-  val start2 = System.currentTimeMillis
-  lazy val answer2 = crt(equations.keys.toList, equations.values.toList).getOrElse(sys.error("boom")) - input.length + 1
-  println(s"Answer part 2: $answer2 [${System.currentTimeMillis - start1}ms]")
+  lazy val answer1: Long = solve1(schedule, begin.toLong)
+  lazy val answer2: Long = crt(equations.keys.toList, equations.values.toList).getOrElse(sys.error("boom")) - puzzle.length + 1

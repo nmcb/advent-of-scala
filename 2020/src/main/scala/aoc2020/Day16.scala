@@ -1,8 +1,8 @@
-import scala.io.*
+package aoc2020
 
-object Day16 extends App:
+import nmcb.*
 
-  val day: String = getClass.getSimpleName.filter(_.isDigit).mkString
+object Day16 extends AoC:
 
   case class Rule(pattern: String):
 
@@ -12,17 +12,13 @@ object Day16 extends App:
     def check(i: Int): Boolean = (a <= i && i <= b) || (c <= i && i <= d)
 
   val (rules: Set[Rule], mine: Seq[Int], nearby: Seq[Seq[Int]]) =
-    val input = Source.fromResource(s"input$day.txt").getLines.toSeq
+    val input = lines
     val (rules, rest)  = input.splitAt(input.indexOf(""))
     val (your, nearby) = (rest(2), rest.drop(5))
     (rules.map(Rule.apply).toSet, your.split(",").map(_.toInt).toSeq, nearby.map(_.split(",").map(_.toInt).toSeq))
 
   def solve1(rules: Set[Rule], mine: Seq[Int], nearby: Seq[Seq[Int]]): Long =
     nearby.flatMap(ticket => ticket.filterNot(field => rules.exists(rule => rule.check(field)))).sum
-
-  val start1  = System.currentTimeMillis
-  lazy val answer1 = solve1(rules, mine, nearby)
-  println(s"Answer AOC 2020 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   def solve2(rules: Set[Rule], mine: Seq[Int], nearby: Seq[Seq[Int]]): Long =
     val valid = nearby.filter(ticket => ticket.forall(field => rules.exists(rule => rule.check(field))))
@@ -36,6 +32,6 @@ object Day16 extends App:
     val departures = found.zip(mine).filter((rule,field) => rule.pattern.startsWith("departure"))
     departures.map((_,field) => field.toLong).product
 
-  val start2  = System.currentTimeMillis
-  lazy val answer2 = solve2(rules, mine, nearby)
-  println(s"Answer AOC 2020 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+
+  lazy val answer1: Long = solve1(rules, mine, nearby)
+  lazy val answer2: Long = solve2(rules, mine, nearby)

@@ -1,16 +1,16 @@
+package aoc2020
+
+import nmcb.*
 import scala.annotation.tailrec
-import scala.io.*
 
-object Day11 extends App:
-
-  val day: String = getClass.getSimpleName.filter(_.isDigit).mkString
+object Day11 extends AoC:
 
   type Floor = Vector[String]
 
   extension (floor: Floor)
     
-    def sizeX = floor.head.size
-    def sizeY = floor.size
+    def sizeX: Int = floor.head.size
+    def sizeY: Int = floor.size
 
     def within(x: Int, y: Int): Boolean =
       x >= 0 && x < sizeX && y >= 0 && y < sizeY
@@ -74,12 +74,6 @@ object Day11 extends App:
         count += 1
       count
 
-  val floor: Floor =
-    Source
-      .fromResource(s"input$day.txt")
-      .getLines
-      .toVector
-
   def solve(floor: Floor, step: Floor => (Int,Int) => Option[Char]): Floor =
     @tailrec
     def loop(current: Floor): Floor =
@@ -87,10 +81,6 @@ object Day11 extends App:
       if next == current then current else loop(next)
     loop(floor)
 
-  val start1  = System.currentTimeMillis
-  lazy val answer1 = solve(floor, _.nextState1).totalOccupied
-  println(s"Answer AOC 2020 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
-  val start2  = System.currentTimeMillis
-  lazy val answer2 = solve(floor, _.nextState2).totalOccupied
-  println(s"Answer AOC 2020 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  lazy val answer1: Int = solve(lines, _.nextState1).totalOccupied
+  lazy val answer2: Int = solve(lines, _.nextState2).totalOccupied

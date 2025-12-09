@@ -1,8 +1,10 @@
-import scala.io.*
+package aoc2020
 
-object Day19 extends App:
+import nmcb.*
 
-  val day: String = getClass.getSimpleName.filter(_.isDigit).mkString
+import scala.util.matching.Regex
+
+object Day19 extends AoC:
 
   type Rules    = Map[Int, Rule]
   type Messages = Seq[String]
@@ -39,12 +41,12 @@ object Day19 extends App:
   val (rules: Rules, messages: Messages) =
 
     object Parse:
-      val Letter          = "\"(\\w)\"".r
-      val Redirect        = "(\\d+)".r
-      val Sequence        = "(\\d+) (\\d+)".r
-      val TrripleSequence = "(\\d+) (\\d+) (\\d+)".r
-      val SingleChoice    = "(\\d+) \\| (\\d+)".r
-      val DoubleChoice    = "(\\d+) (\\d+) \\| (\\d+) (\\d+)".r
+      val Letter: Regex         = "\"(\\w)\"".r
+      val Redirect: Regex       = "(\\d+)".r
+      val Sequence: Regex       = "(\\d+) (\\d+)".r
+      val TripleSequence: Regex = "(\\d+) (\\d+) (\\d+)".r
+      val SingleChoice: Regex   = "(\\d+) \\| (\\d+)".r
+      val DoubleChoice: Regex   = "(\\d+) (\\d+) \\| (\\d+) (\\d+)".r
 
     def parseRules(input: Seq[String]): Rules =
       val rules = input.map: line =>
@@ -53,25 +55,20 @@ object Day19 extends App:
           case Parse.Letter(s)                => Letter(s)
           case Parse.Redirect(x)              => Redirect(x.toInt)
           case Parse.Sequence(x, y)           => Sequence(x.toInt, y.toInt)
-          case Parse.TrripleSequence(x, y, z) => TripleSequence(x.toInt, y.toInt, z.toInt)
+          case Parse.TripleSequence(x, y, z)  => TripleSequence(x.toInt, y.toInt, z.toInt)
           case Parse.SingleChoice(x, y)       => SingleChoice(x.toInt, y.toInt)
           case Parse.DoubleChoice(w, x, y, z) => DoubleChoice(w.toInt, x.toInt, y.toInt, z.toInt)
         id.toInt -> rule
       rules.toMap
 
-    val input    = Source.fromResource(s"input$day.txt").getLines().toSeq
-    val index    = input.indexOf("")
-    val rules    = parseRules(input.take(index))
-    val messages = input.drop(index + 1)
+    val index    = lines.indexOf("")
+    val rules    = parseRules(lines.take(index))
+    val messages = lines.drop(index + 1)
     (rules, messages)
 
 
   def solve(rules: Rules, messages: Messages): Int =
     messages.count(message => rules(0).prefix(message)(using rules).contains(message.length))
-
-  val start1  = System.currentTimeMillis
-  lazy val answer1 = solve(rules, messages)
-  println(s"Answer AOC 2020 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
 
   case class RuleZero(size: Int) extends Rule:
@@ -87,7 +84,6 @@ object Day19 extends App:
         found   = left && right
       Option.when(found)(line.length)
 
-  val start2  = System.currentTimeMillis
-  lazy val answer2 = solve(rules.updated(0, RuleZero(8)), messages)
-  println(s"Answer AOC 2020 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
 
+  lazy val answer1: Int = solve(rules, messages)
+  lazy val answer2: Int = solve(rules.updated(0, RuleZero(8)), messages)
