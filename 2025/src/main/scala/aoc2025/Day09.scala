@@ -27,15 +27,17 @@ object Day09 extends AoC:
   def perimeter(corners: Vector[Pos]): Set[Pos] =
     corners.zip(corners.tail :+ corners.head).flatMap(line).toSet
 
-  def bounding(p: Pos, q: Pos): (xMin: Long, xMax: Long, yMin: Long, yMax: Long) =
-    (p.x min q.x, p.x max q.x, p.y min q.y, p.y max q.y)
-
   def isValid(p: Pos, q: Pos, perimeter: Set[Pos]): Boolean =
-    val (xMin, xMax, yMin, yMax) = bounding(p,q)
+    val xMin = p.x min q.x
+    val xMax = p.x max q.x
+    val yMin = p.y min q.y
+    val yMax = p.y max q.y
     !perimeter.exists(r => xMin < r.x && r.x < xMax && yMin < r.y && r.y < yMax)
 
   val perimeter: Set[Pos] = perimeter(corners)
+  
+  given order: Ordering[(Pos,Pos)] = Ordering.by(_.area) 
 
-  lazy val answer1: Long = corners.pairs(_.area).drain.area
-  lazy val answer2: Long = corners.allPairs.sortBy(_.area).findLast((a,b) => isValid(a, b, perimeter)).get.area
+  lazy val answer1: Long = corners.pairs(using order).drain.area
+  lazy val answer2: Long = corners.pairs(using order.reverse).findFirst((a,b) => isValid(a, b, perimeter)).area
 

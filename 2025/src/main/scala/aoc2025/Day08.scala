@@ -7,16 +7,16 @@ object Day08 extends AoC:
 
   type Box  = (x: Int, y: Int, z: Int)
 
-  extension (box: Box)
+  extension (pair: (Box, Box))
 
-    infix def distance(that: Box): Double =
-      val xx = (box.x - that.x).toDouble * (box.x - that.x)
-      val yy = (box.y - that.y).toDouble * (box.y - that.y)
-      val zz = (box.z - that.z).toDouble * (box.z - that.z)
+    def distance: Double =
+      val xx = (pair.left.x - pair.right.x).toDouble * (pair.left.x - pair.right.x)
+      val yy = (pair.left.y - pair.right.y).toDouble * (pair.left.y - pair.right.y)
+      val zz = (pair.left.z - pair.right.z).toDouble * (pair.left.z - pair.right.z)
       math.sqrt(xx + yy + zz)
 
   type CircuitId = Long
-  type State     = (ids: Map[Box, CircuitId], circuits: Map[CircuitId, Set[Box]], pair: (Box,Box), id: CircuitId)
+  type State     = (ids: Map[Box, CircuitId], circuits: Map[CircuitId, Set[Box]], pair: (Box, Box), id: CircuitId)
 
   object State:
     def empty: State = (
@@ -28,7 +28,7 @@ object Day08 extends AoC:
 
   def solve(boxes: Vector[Box]): Iterator[State] =
     boxes
-      .pairs((a, b) => a distance b)
+      .pairs(using Ordering.by(_.distance))
       .scanLeft(State.empty):
         case ((ids, circuits, _, id), (a, b)) =>
           (ids.get(a), ids.get(b)) match
