@@ -1,3 +1,5 @@
+
+import nmcb.predef.*
 import scala.annotation.tailrec
 import scala.io.Source
 
@@ -47,9 +49,9 @@ object Day20 extends App:
           fliph  <- 0 to 1
           flipv  <- 0 to 1
         yield
-          val rotated = iterate(this)(_.rotateCW).drop(rotate).next
-          val flipped = iterate(rotated)(_.flipH).drop(fliph).next
-          iterate(flipped)(_.flipV).drop(flipv).next
+          val rotated = iterate(this)(_.rotateCW).nth(rotate)
+          val flipped = iterate(rotated)(_.flipH).nth(fliph)
+          iterate(flipped)(_.flipV).nth(flipv)
       all.distinct.toVector
 
   case class Tile(id: Long, image: Image):

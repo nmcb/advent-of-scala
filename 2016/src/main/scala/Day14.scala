@@ -1,3 +1,5 @@
+import nmcb.predef.*
+
 import java.security.MessageDigest
 
 object Day14 extends App:
@@ -30,7 +32,7 @@ object Day14 extends App:
             case _                      => false
         case _                          => false
 
-    val (_, index) = Iterator.from(0).map(hash).zipWithIndex.sliding(1 + 1000).filter(check).drop(63).next.head
+    val (_, index) = Iterator.from(0).map(hash).zipWithIndex.sliding(1 + 1000).filter(check).nth(63).head
     index
 
   val input = "zpqevtbw"
@@ -40,7 +42,7 @@ object Day14 extends App:
   println(s"Answer AOC 2016 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   def stretched(string: String): String =
-    Iterator.iterate(string)(hash).drop(1 + 2016).next
+    Iterator.iterate(string)(hash).nth(2016 + 1)
 
   val start2  = System.currentTimeMillis
   lazy val answer2 = solve(index => stretched(s"$input$index"))

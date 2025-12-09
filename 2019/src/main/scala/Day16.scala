@@ -1,3 +1,4 @@
+import nmcb.predef.*
 import scala.io.Source
 
 object Day16 extends App:
@@ -36,7 +37,7 @@ object Day16 extends App:
 
     val index   = signal.take(7).mkString.toInt
     val initial = signal.drop(index).map(_.asDigit)
-    iterate(initial)(phase).drop(100).next.take(8).mkString
+    iterate(initial)(phase).nth(100).take(8).mkString
 
   val start2  = System.currentTimeMillis
   lazy val answer2 = solve2(signal.mkString * 10000)

@@ -1,18 +1,14 @@
+package aoc2021
+
+import nmcb.*
 import scala.annotation.tailrec
-import scala.io.*
 
-object Day19 extends App:
-
-  val day: String =
-    getClass.getSimpleName.filter(_.isDigit).mkString
+object Day19 extends AoC:
 
   case class Scanner(idx: Int, report: Set[Vec3])
 
   val scanners: Vector[Scanner] =
-    Source
-      .fromResource(s"input$day.txt")
-      .getLines
-      .toList
+    lines
       .foldLeft(Vector.empty[Vector[Vec3]])((a,l) =>
         if l.startsWith("--- scanner") then
           Vector.empty[Vec3] +: a
@@ -71,16 +67,8 @@ object Day19 extends App:
 
     go(scanners.tail, Set.empty, scanners.head.report, Set(Vec3.origin))
 
-  val start1   = System.currentTimeMillis
-  val (beacons, positions) = solve(scanners)
-  lazy val answer1 = beacons.size
-  println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
-
-  
-  val start2  = System.currentTimeMillis
-  lazy val answer2 = (for a <- positions ; b <- positions yield Vec3.distance(b, a)).max
-  println(s"Answer AOC 2021 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  val (beacons: Set[Vec3], positions: Set[Vec3]) = solve(scanners)
 
 
-  
-
+  lazy val answer1: Int = beacons.size
+  lazy val answer2: Int = (for a <- positions; b <- positions yield Vec3.distance(b, a)).max

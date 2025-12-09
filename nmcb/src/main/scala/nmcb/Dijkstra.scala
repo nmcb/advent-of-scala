@@ -1,6 +1,6 @@
 package nmcb
 
-import Pos.*
+import pos.*
 import predef.*
 
 import scala.annotation.*

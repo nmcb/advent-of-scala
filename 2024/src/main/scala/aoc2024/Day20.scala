@@ -1,6 +1,7 @@
 package aoc2024
 
 import nmcb.*
+import nmcb.pos.*
 
 import scala.Option.*
 import scala.annotation.*

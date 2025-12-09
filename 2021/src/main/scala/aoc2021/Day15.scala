@@ -1,9 +1,10 @@
+package aoc2021
+
+import nmcb.*
+
 import scala.annotation.tailrec
-import scala.io.Source
 
-object Day15 extends App:
-
-  val day = getClass.getSimpleName.filter(_.isDigit).mkString
+object Day15 extends AoC:
 
   case class Pos(x: Int, y: Int):
     infix def +(that: Pos): Pos =
@@ -18,16 +19,9 @@ object Day15 extends App:
       directions.map(_ + pos).filter(grid.contains)
 
   val grid: Grid =
-
-    val input =
-      Source
-        .fromResource(s"input$day.txt")
-        .getLines
-        .toVector
-
     Vector
-      .tabulate(input(0).length, input.length): (x,y) =>
-        Pos(x, y) -> input(y)(x).asDigit
+      .tabulate(lines(0).length, lines.length): (x,y) =>
+        Pos(x, y) -> lines(y)(x).asDigit
       .flatten
       .toMap
 
@@ -55,10 +49,6 @@ object Day15 extends App:
 
     dijkstra(Set(start), Map(start -> 0))
 
-  val start1  = System.currentTimeMillis
-  lazy val answer1 = solve(grid)
-  println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
-
   def expanded(grid: Grid): Grid =
     val end   = grid.keys.maxBy(p => p.x * p.y)
     val sizeX = end.x + 1
@@ -74,6 +64,5 @@ object Day15 extends App:
       .flatten
       .toMap
 
-  val start2  = System.currentTimeMillis
-  lazy val answer2 = solve(expanded(grid))
-  println(s"Answer AOC 2021 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  lazy val answer1: Int = solve(grid)
+  lazy val answer2: Int = solve(expanded(grid))

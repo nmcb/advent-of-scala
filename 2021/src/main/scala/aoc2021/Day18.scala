@@ -1,9 +1,9 @@
+package aoc2021
+
+import nmcb.*
 import scala.annotation.tailrec
-import scala.io.Source
 
-object Day18 extends App:
-
-  val day = getClass.getSimpleName.filter(_.isDigit).mkString
+object Day18 extends AoC:
 
   enum Num derives CanEqual:
     case Pair(left: Num, right: Num)
@@ -97,18 +97,8 @@ object Day18 extends App:
     def np: P[Num] = vp | pp
     run(np)(s)  
 
-  val numbers: List[Num] =
-    Source
-      .fromResource(s"input$day.txt")
-      .getLines
-      .map(parse)
-      .toList
+  val numbers: Vector[Num] = lines.map(parse)
 
-  val start1  = System.currentTimeMillis
-  lazy val answer1 = numbers.reduceLeft(_ + _).magnitude
-  println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
-  
-  val start2  = System.currentTimeMillis
-  lazy val answer2 = numbers.combinations(2).flatMap(ns => List(ns(0) + ns(1), ns(1) + ns(0))).map(_.magnitude).max
-  println(s"Answer AOC 2021 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  lazy val answer1: Long = numbers.reduceLeft(_ + _).magnitude
+  lazy val answer2: Long = numbers.combinations(2).flatMap(ns => List(ns(0) + ns(1), ns(1) + ns(0))).map(_.magnitude).max

@@ -1,3 +1,4 @@
+import nmcb.predef.*
 import scala.annotation.tailrec
 import scala.io.Source
 
@@ -60,5 +61,5 @@ object Day24 extends App:
 
 
   val start2  = System.currentTimeMillis
-  lazy val answer2 = iterate(eris)(step(_, neighbouring3D)).drop(200).next.size
+  lazy val answer2 = iterate(eris)(step(_, neighbouring3D)).nth(200).size
   println(s"Answer AOC 2019 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

@@ -1,6 +1,6 @@
 package aoc2024
 
-import nmcb.*
+import nmcb.pos.*
 
 import org.scalatest.funsuite.AnyFunSuite
 

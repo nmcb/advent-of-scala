@@ -1,9 +1,9 @@
-import scala.io.Source
+package aoc2021
+
+import nmcb.*
 
 /** @see Credits - https://github.com/maneatingape */
-object Day23 extends App:
-
-  val day = getClass.getSimpleName.filter(_.isDigit).mkString
+object Day23 extends AoC:
 
   val spaceCost = Map('A' -> 1, 'B' -> 10, 'C' -> 100, 'D' -> 1000)
   val roomIndex = Map('A' -> 2, 'B' -> 4, 'C' -> 6, 'D' -> 8)
@@ -118,13 +118,6 @@ object Day23 extends App:
 
     move(burrow, None)
 
-  val input: Vector[String] = Source.fromResource("input23.txt").getLines.toVector
 
-  val start1: Long = System.currentTimeMillis
-  lazy val answer1: Int = shuffle(parsePart1(input)).get
-  println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
-
-  
-  val start2: Long = System.currentTimeMillis
-  lazy val answer2: Int = shuffle(parsePart2(input)).get
-  println(s"Answer AOC 2021 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  lazy val answer1: Int = shuffle(parsePart1(lines)).get
+  lazy val answer2: Int = shuffle(parsePart2(lines)).get

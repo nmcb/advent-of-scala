@@ -1,6 +1,7 @@
 package aoc2025
 
 import nmcb.*
+import nmcb.predef.*
 
 object Day08 extends AoC:
 
@@ -14,30 +15,20 @@ object Day08 extends AoC:
       val zz = (box.z - that.z).toDouble * (box.z - that.z)
       math.sqrt(xx + yy + zz)
 
-  type Pair      = (a: Box, b: Box)
   type CircuitId = Long
-  type State     = (ids: Map[Box,CircuitId], circuits: Map[CircuitId,Set[Box]], pair: Pair, id: CircuitId)
+  type State     = (ids: Map[Box, CircuitId], circuits: Map[CircuitId, Set[Box]], pair: (Box,Box), id: CircuitId)
 
   object State:
     def empty: State = (
-      ids      = Map.empty[Box,CircuitId],
-      circuits = Map.empty[CircuitId,Set[Box]],
-      pair     = (x = 0, y = 0, z = 0) -> (0, 0, 0),
+      ids      = Map.empty[Box, CircuitId],
+      circuits = Map.empty[CircuitId, Set[Box]],
+      pair     = (0, 0, 0) -> (0, 0, 0),
       id       = 0L
     )
 
   def solve(boxes: Vector[Box]): Iterator[State] =
-
-    val sortedPairIterator =
-      boxes
-        .tails
-        .toVector
-        .tail
-        .flatMap(boxes.zip)
-        .sortBy((a,b) => a.distance(b))
-        .iterator
-
-    sortedPairIterator
+    boxes
+      .pairs((a, b) => a distance b)
       .scanLeft(State.empty):
         case ((ids, circuits, _, id), (a, b)) =>
           (ids.get(a), ids.get(b)) match
@@ -51,16 +42,15 @@ object Day08 extends AoC:
               (ids ++ circuits(d).map(_ -> c), circuits - d + (c -> (circuits(c) ++ circuits(d))), a -> b, id)
 
   def solve1(boxes: Vector[Box], count: Int): Long =
-    val found = solve(boxes).drop(count).next()
+    val found = solve(boxes).nth(count)
     found.circuits.values.map(_.size).toVector.sorted.takeRight(3).product
 
   def solve2(boxes: Vector[Box]): Long =
-    val found = solve(boxes).dropWhile(state => state.ids.size != boxes.size || state.circuits.size != 1).next()
-    found.pair.a.x.toLong * found.pair.b.x
+    val found = solve(boxes).findFirst(state => state.ids.size == boxes.size && state.circuits.size == 1)
+    found.pair.left.x.toLong * found.pair.right.x
 
-  val boxes: Vector[Box] =
-    lines.collect:
-      case s"$x,$y,$z" => (x = x.toInt, y = y.toInt, z = z.toInt)
+  val boxes: Vector[Box] = lines.collect:
+    case s"$x,$y,$z" => (x = x.toInt, y = y.toInt, z = z.toInt)
 
   lazy val answer1: Long = solve1(boxes, 1000)
   lazy val answer2: Long = solve2(boxes)

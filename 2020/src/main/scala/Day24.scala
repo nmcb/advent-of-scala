@@ -1,3 +1,4 @@
+import nmcb.predef.*
 import scala.annotation.tailrec
 import scala.io.Source
 
@@ -57,7 +58,7 @@ object Day24 extends App:
             case (_, 2) | (true, 3) => Some(tile)
             case _                  => None
 
-    Iterator.iterate(solve1(flips))(step).drop(100).next.size
+    Iterator.iterate(solve1(flips))(step).nth(100).size
 
   val start2  = System.currentTimeMillis
   lazy val answer2 = solve2(flips)

@@ -53,10 +53,10 @@ object Day23 extends AoC:
     val queue = mutable.Queue((start, 0, S, None: Option[Node]))
     val nodes = mutable.Map.empty[Pos, Node]
 
-    while queue.length > 0 do
+    while queue.nonEmpty do
       val (pos, dist, dir, fromNode) = queue.dequeue()
       val nextPair =
-        if Dir.map(pos + _).filter(layout.grid.contains(_)).size != 2 then
+        if Dir.map(pos + _).count(layout.grid.contains) != 2 then
           val newNode = !nodes.contains(pos)
           val node = nodes.getOrElseUpdate(pos, Node(pos))
           fromNode.foreach: fromNode =>

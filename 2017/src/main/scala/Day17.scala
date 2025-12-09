@@ -1,3 +1,5 @@
+import nmcb.predef.*
+
 object Day17 extends App:
 
   val day: String =
@@ -22,7 +24,7 @@ object Day17 extends App:
       Circle1(elements = Vector(0), current = 0)
 
     def spin(steps: Int, amount: Int): Circle1 =
-      Iterator.iterate(Circle1.init)(_.insert(steps)).drop(amount).next()
+      Iterator.iterate(Circle1.init)(_.insert(steps)).nth(amount)
 
   val start1: Long = System.currentTimeMillis
   lazy val answer1: Int = Circle1.spin(370, 2017).nextValue
@@ -44,7 +46,7 @@ object Day17 extends App:
       Circle2(size = 1, value = 0, current = 0)
 
     def spin(steps: Int, amount: Int): Circle2 =
-      Iterator.iterate(Circle2.init)(_.insert(steps)).drop(amount).next()
+      Iterator.iterate(Circle2.init)(_.insert(steps)).nth(amount)
 
 
   val start2: Long = System.currentTimeMillis

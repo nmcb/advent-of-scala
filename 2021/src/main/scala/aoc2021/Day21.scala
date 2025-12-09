@@ -1,7 +1,8 @@
-object Day21 extends App:
+package aoc2021
 
-  val day: String =
-    getClass.getSimpleName.filter(_.isDigit).mkString
+import nmcb.*
+
+object Day21 extends AoC:
 
   case class Dice(min: Int, max: Int, cur: Int = 0, rolled: Int = 0):
 
@@ -42,24 +43,13 @@ object Day21 extends App:
         )
       )
 
-
-  val player1 = Player(name = "#1", start = 7)
-  val player2 = Player(name = "#2", start = 9)
-  val game1   = Game1(player1, player2, player1.start, player2.start, Dice(1, 100), 1000)
-
-
-  val start1  = System.currentTimeMillis
-  lazy val answer1 = solve1(game1)
-  println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
-
-
   case class Pawn(pos: Int, score: Int = 0):
 
     def move(steps: Int): Pawn =
       val npos = ((pos - 1 + steps) % 10) + 1
       Pawn(npos, score + npos)
 
-  val roll3x3x3 =
+  val roll3x3x3: Map[Int, Int] =
     val throws =
       for
         t1 <- 1 to 3
@@ -89,7 +79,9 @@ object Day21 extends App:
     val (score1, score2) = go(pawn1, pawn2)
     score1 max score2
 
+  val player1 = Player(name = "#1", start = 7)
+  val player2 = Player(name = "#2", start = 9)
+  val game1 = Game1(player1, player2, player1.start, player2.start, Dice(1, 100), 1000)
 
-  val start2 = System.currentTimeMillis
-  lazy val answer2 = solve2(Pawn(pos = 7), Pawn(pos = 9))
-  println(s"Answer AOC 2021 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  lazy val answer1: Int  = solve1(game1)
+  lazy val answer2: Long = solve2(Pawn(pos = 7), Pawn(pos = 9))

@@ -1,3 +1,7 @@
+package aoc2021
+
+import aoc2021.P.unit
+
 
 case class P[A](parse: String => Option[(A,String)]) {
 

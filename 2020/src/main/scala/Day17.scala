@@ -1,3 +1,4 @@
+import nmcb.predef.*
 import scala.io.*
 
 object Day17 extends App:
@@ -28,7 +29,7 @@ object Day17 extends App:
 
   def solve1(points: Set[Cube]): Int =
     val offsets = Seq.tabulate(3,3,3)((x,y,z) => Cube(x - 1, y - 1, z - 1, 0)).flatten.flatten.toSet
-    Iterator.iterate(points)(step(offsets)).drop(6).next.size
+    Iterator.iterate(points)(step(offsets)).nth(6).size
 
   val start1 = System.currentTimeMillis
   lazy val answer1 = solve1(points)
@@ -36,7 +37,7 @@ object Day17 extends App:
 
   def solve2(points: Set[Cube]): Int =
     val directions = Seq.tabulate(3,3,3,3)((x,y,z,w) => Cube(x - 1, y - 1, z - 1, w - 1)).flatten.flatten.flatten.toSet
-    Iterator.iterate(points)(step(directions)).drop(6).next.size
+    Iterator.iterate(points)(step(directions)).nth(6).size
 
   val start2 = System.currentTimeMillis
   lazy val answer2 = solve2(points)

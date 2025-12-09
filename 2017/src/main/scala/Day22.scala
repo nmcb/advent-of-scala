@@ -1,5 +1,6 @@
 import Day22.Status.Clean
 
+import nmcb.predef.*
 import scala.io.Source
 
 object Day22 extends App:
@@ -129,7 +130,7 @@ object Day22 extends App:
     Carrier(nodes, current, Dir.N)
 
   def solve(init: Carrier, iterations: Int)(next: Carrier => Carrier): Int =
-    Iterator.iterate(init)(next).drop(iterations).next.infected
+    Iterator.iterate(init)(next).nth(iterations).infected
 
   val start1: Long = System.currentTimeMillis
   lazy val answer1: Int = solve(carrier, 10000)(_.wake1)

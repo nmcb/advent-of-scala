@@ -2,6 +2,7 @@ import scala.collection.*
 import scala.io.Source
 
 import nmcb.*
+import nmcb.predef.*
 
 object Day18 extends App:
 
@@ -71,9 +72,9 @@ object Day18 extends App:
     Landscape(area, sizeX, sizeY)
 
   val start1  = System.currentTimeMillis
-  lazy val answer1 = Iterator.iterate(landscape)(_.tick).drop(10).next.resourceValue
+  lazy val answer1 = Iterator.iterate(landscape)(_.tick).nth(10).resourceValue
   println(s"Answer AOC 2018 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   val start2  = System.currentTimeMillis
-  lazy val answer2 = Cycle.find(landscape)(_.tick).simulate(1000000000).resourceValue
+  lazy val answer2 = Cycle.find(landscape, _.tick).simulate(1000000000).resourceValue
   println(s"Answer AOC 2018 day $day part 2: $answer2 [${System.currentTimeMillis - start1}ms]")

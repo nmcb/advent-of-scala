@@ -1,6 +1,7 @@
 package aoc2024
 
 import nmcb.*
+import pos.*
 import nmcb.predef.*
 
 object Day10 extends AoC:

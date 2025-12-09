@@ -1,9 +1,9 @@
+package aoc2021
+
+import nmcb.*
 import scala.annotation.tailrec
-import scala.io.*
 
-object Day25 extends App:
-
-  val day = getClass.getSimpleName.filter(_.isDigit).mkString
+object Day25 extends AoC:
 
   case class Pos(x: Int, y: Int):
     
@@ -38,7 +38,6 @@ object Day25 extends App:
 
 
   val floor: Floor =
-    val lines = Source.fromResource(s"input$day.txt").getLines.toVector
     val sizeX = lines.head.size
     val sizeY = lines.size
     val tiles = Vector.tabulate(sizeX, sizeY)((x, y) => Pos(x, y) -> lines(y)(x)).flatten.toMap
@@ -52,6 +51,5 @@ object Day25 extends App:
     else
       solve(next, i + 1)
 
-  val start1  = System.currentTimeMillis
-  lazy val answer1 = solve(floor)
-  println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  lazy val answer1: Int    = solve(floor)
+  lazy val answer2: String = "<unimplemented>"

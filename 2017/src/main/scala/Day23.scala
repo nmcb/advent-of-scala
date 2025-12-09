@@ -1,3 +1,5 @@
+
+import nmcb.predef.*
 import scala.io.Source
 import scala.util.Try
 
@@ -58,7 +60,7 @@ object Day23 extends App:
       )
 
   def solve(prog: Vector[Inst]): Long =
-    Iterator.iterate(CPU.load(prog))(_.step).dropWhile(_.running).next.countMUL
+    Iterator.iterate(CPU.load(prog))(_.step).findFirstNot(_.running).countMUL
 
   val start1: Long  = System.currentTimeMillis
   lazy val answer1: Long = solve(instructions)

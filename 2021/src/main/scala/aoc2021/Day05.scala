@@ -1,18 +1,17 @@
+package aoc2021
+
+import nmcb.*
+
 import scala.collection.*
-import scala.io.*
+import scala.collection.immutable.{Map, Set}
+import scala.util.matching.Regex
 
-object Day05 extends App:
+object Day05 extends AoC:
 
-  val day = getClass.getSimpleName.filter(_.isDigit).mkString
+  val LineLit: Regex = """(\d+),(\d+) -> (\d+),(\d+)""".r
 
-  val LineLit =
-    """(\d+),(\d+) -> (\d+),(\d+)""".r 
-
-  val lines: Vector[Line] =
-    Source
-      .fromResource(s"input$day.txt")
-      .getLines
-      .toVector
+  val puzzle: Vector[Line] =
+    lines
       .map:
         case LineLit(x0, y0, x1, y1) if y0 == y1 =>
           HLine(x0.toInt, y0.toInt, x1.toInt, y1.toInt)
@@ -73,10 +72,5 @@ object Day05 extends App:
         Floor(locations.toMap)
 
 
-  val start1  = System.currentTimeMillis
-  lazy val answer1 = Floor(lines.filterNot(_.isInstanceOf[DLine])).crossings
-  println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
-
-  val start2  = System.currentTimeMillis
-  lazy val answer2 = Floor(lines).crossings
-  println(s"Answer AOC 2021 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  lazy val answer1: Int = Floor(puzzle.filterNot(_.isInstanceOf[DLine])).crossings
+  lazy val answer2: Int = Floor(puzzle).crossings

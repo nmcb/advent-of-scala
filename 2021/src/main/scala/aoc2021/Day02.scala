@@ -1,9 +1,8 @@
-import scala.io.*
+package aoc2021
 
-object Day02 extends App:
+import nmcb.*
 
-  val day: String =
-    getClass.getSimpleName.filter(_.isDigit)
+object Day02 extends AoC:
 
   enum Inst:
     case Up(delta: Long)
@@ -25,7 +24,7 @@ object Day02 extends App:
     def move(n: Long): Sub = copy(heading = heading + n)
     def tilt(n: Long): Sub = copy(aim = aim + n)
 
-    def run(is: List[Inst], part2: Boolean = false): Sub =
+    def run(is: Vector[Inst], part2: Boolean = false): Sub =
       is.foldLeft(this): (cur,is) =>
         is match
           case Up(d) =>
@@ -41,19 +40,7 @@ object Day02 extends App:
   object Sub:
     val init: Sub = Sub()
 
-  val instructions: List[Inst] =
-    Source
-      .fromResource(s"input$day.txt")
-      .getLines
-      .map(Inst.fromLine)
-      .toList
+  val instructions: Vector[Inst] = lines.map(Inst.fromLine)
 
-
-  val start1  = System.currentTimeMillis
-  lazy val answer1 = Sub.init.run(instructions).solution
-  println(s"Answer AOC 2021 day $day part 1: ${answer1} [${System.currentTimeMillis - start1}ms]")
-
-  val start2  = System.currentTimeMillis
-  lazy val answer2 = Sub.init.run(instructions, part2 = true).solution
-  println(s"Answer AOC 2021 day $day part 2: ${answer2} [${System.currentTimeMillis - start2}ms]")
-
+  lazy val answer1: Long = Sub.init.run(instructions).solution
+  lazy val answer2: Long = Sub.init.run(instructions, part2 = true).solution

@@ -1,10 +1,9 @@
+package aoc2021
+
+import nmcb.*
 import scala.annotation.tailrec
-import scala.io.*
 
-object Day22 extends App:
-
-  val day: String =
-    getClass.getSimpleName.filter(_.isDigit).mkString
+object Day22 extends AoC:
 
   case class CuboidStep(on: Boolean, xr: Range, yr: Range, zr: Range)
 
@@ -12,9 +11,7 @@ object Day22 extends App:
     """(on|off) x=([-+]?\d+)..([-+]?\d+),y=([-+]?\d+)..([-+]?\d+),z=([-+]?\d+)..([-+]?\d+)""".r
 
   val cuboidSteps: Vector[CuboidStep] =
-    Source
-      .fromResource(s"input$day.txt")
-      .getLines
+    lines
       .map:
         case StepLit(set, x0, x1, y0, y1, z0, z1) =>
           import math.*
@@ -80,11 +77,6 @@ object Day22 extends App:
     def reboot(steps: Vector[CuboidStep], grid: Cuboid = init): Cuboid =
       steps.filter(inside).foldLeft(grid)((g,s) => g.update(cuboid(s)))
 
-  val start1  = System.currentTimeMillis
-  lazy val answer1 = Cuboid.reboot(cuboidSteps).all.values.count(identity)
-  println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
-
-
   case class Cube(min: Pos, max: Pos): 
 
     def size: Long =
@@ -131,18 +123,13 @@ object Day22 extends App:
       go(init, +1, 0L)
 
   lazy val cubeSteps: Vector[CubeStep] =
-    Source
-      .fromResource(s"input$day.txt")
-      .getLines
+    lines
       .map:
         case StepLit(on, x0, x1, y0, y1, z0, z1) =>
           val min = Pos(x0.toInt, y0.toInt, z0.toInt)
           val max = Pos(x1.toInt, y1.toInt, z1.toInt)
           val set = on == "on"
           CubeStep(set, Cube(min, max))
-      .toVector
 
-  
-  val start2  = System.currentTimeMillis
-  lazy val answer2 = Cube.reboot(cubeSteps)
-  println(s"Answer AOC 2021 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  lazy val answer1: Int  = Cuboid.reboot(cuboidSteps).all.values.count(identity)
+  lazy val answer2: Long = Cube.reboot(cubeSteps)

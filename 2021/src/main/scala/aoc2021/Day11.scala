@@ -1,11 +1,9 @@
+package aoc2021
+
+import nmcb.*
 import scala.annotation.tailrec
-import scala.io.Source
 
-
-
-object Day11 extends App:
-
-  val day = getClass.getSimpleName.filter(_.isDigit).mkString
+object Day11 extends AoC:
 
   type Octo = (Int,Int)
 
@@ -13,15 +11,12 @@ object Day11 extends App:
     def x = octo._1
     def y = octo._2
 
-  val input: Map[Octo,Int] =
-    Source
-      .fromResource(s"input$day.txt")
-      .getLines
+  val config: Map[Octo,Int] =
+    lines
       .zipWithIndex.flatMap: (row,y) =>
         row.zipWithIndex.map: (level,x) =>
           (x,y) -> level.toString.toInt
       .toMap
-
 
   object Octopuses:
 
@@ -55,13 +50,8 @@ object Day11 extends App:
       val flashes = updated.filter((_,l) => l > 9).keySet.toList.sorted
       loop(flashes, updated).normaliseEnergies
 
-  val octopuses: Octopuses = Octopuses.make(input)
-
-  val start1  = System.currentTimeMillis
-  lazy val answer1 = Iterator.iterate(octopuses)(_.step).take(101).map(_.flashed).sum
-  println(s"Answer AOC 2021 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  val octopuses: Octopuses = Octopuses.make(config)
 
 
-  val start2 = System.currentTimeMillis
-  lazy val answer2 = Iterator.iterate(octopuses)(_.step).takeWhile(_.flashed != 100).size
-  println(s"Answer AOC 2021 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  lazy val answer1: Int = Iterator.iterate(octopuses)(_.step).take(101).map(_.flashed).sum
+  lazy val answer2: Int = Iterator.iterate(octopuses)(_.step).takeWhile(_.flashed != 100).size

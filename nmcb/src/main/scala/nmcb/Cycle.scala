@@ -1,10 +1,12 @@
 package nmcb
 
+import predef.*
+
 case class Cycle[A](stemSize: Int, cycleSize: Int, cycleHead: A, cycleLast: A, cycleHeadRepeat: A, next: A => A):
 
   def simulate(n: Long): A =
     val iterations = (n - stemSize) % cycleSize
-    Iterator.iterate(cycleHeadRepeat)(next).drop(iterations.toInt).next
+    Iterator.iterate(cycleHeadRepeat)(next).nth(iterations.toInt)
 
 
 object Cycle:
@@ -27,7 +29,7 @@ object Cycle:
           last = Some(current)
           (current, previous)
 
-  def find[A,B](a: A)(next: A => A, invariant: A => B = identity): Cycle[A] =
+  def find[A,B](a: A, next: A => A, invariant: A => B = identity): Cycle[A] =
 
     val trace: mutable.Map[B,(A,Int)] = mutable.Map[B,(A,Int)]()
 

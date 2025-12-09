@@ -1,7 +1,8 @@
 package nmcb
 
 import Dijkstra.*
-import Pos.*
+import pos.*
+import pos.Pos.*
 import predef.*
 
 case class Grid[+A](matrix: Vector[Vector[A]]):

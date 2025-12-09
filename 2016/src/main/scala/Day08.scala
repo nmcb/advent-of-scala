@@ -52,7 +52,7 @@ object Day08 extends App:
     def shiftRow(index: Int, by: Int): Screen =
       val (top, bottom) = pixels.splitAt(index)
       val (row, rest)   = bottom.splitAt(1)
-      val shifted       = Iterator.continually(row.head).flatten.drop(sizeX - by).take(sizeX).toList
+      val shifted       = Iterator.continually(row.head).flatten.slice(sizeX - by, 2 * sizeX - by).toList
       Screen(top :+ shifted :++ rest)
 
     infix def process(op: Operation): Screen =
