@@ -1,6 +1,7 @@
 package nmcb
 
-import nmcb.{Dijkstra, Grid, Pos}
+import nmcb.*
+import pos.*
 import nmcb.Dijkstra.*
 import nmcb.predef.*
 import org.scalatest.funsuite.AnyFunSuite

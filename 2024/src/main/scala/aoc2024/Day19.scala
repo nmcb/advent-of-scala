@@ -12,9 +12,9 @@ object Day19 extends AoC:
     (ts.split(',').map(_.trim).toVector, ds.linesIterator.toVector)
 
   def count(towels: Vector[String], target: String): Long =
+    
     val cache = memo("" -> 1L)
-    def loop(remaining: String): Long =
-      cache.memoize(remaining):
+    def loop(remaining: String): Long = cache.memoize(remaining):
         towels
           .filter(remaining.startsWith)
           .map(t => loop(remaining.drop(t.length)))
