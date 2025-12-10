@@ -44,6 +44,7 @@ object Day13 extends AoC:
     @tailrec
     def go(n: List[Long], a: List[Long], sm: Long): Long =
       def gcd(a: Long, b: Long): Long =
+        @tailrec
         def loop(a: Long, b: Long, x0: Long, x1: Long): Long =
           if (a > 1) loop(b, a % b, x1 - (a / b) * x0, x0) else x1
 
