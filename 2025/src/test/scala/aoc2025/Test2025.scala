@@ -42,4 +42,3 @@ class Test2025 extends AnyFunSuite:
   test("Day 10: Factory"):
     assertResult(542)(Day10.answer1)
     assertResult(20871)(Day10.answer2)
-
