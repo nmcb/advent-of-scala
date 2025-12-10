@@ -1,8 +1,9 @@
+package aoc2020
+
+import nmcb.*
 import scala.annotation.tailrec
 
-object Day23 extends App:
-
-  val day: String = getClass.getSimpleName.filter(_.isDigit).mkString
+object Day23 extends AoC:
 
   /** a singe linked, updatable list of cups */
   case class Cup(value: Int, var next: Cup = null)
@@ -49,12 +50,7 @@ object Day23 extends App:
     val (a, b) = (cup.next.value, cup.next.next.value)
     a.toLong * b.toLong
 
-  val digits = "193467258".trim.map(_.asDigit).toVector
+  val digits: Vector[Int] = "193467258".trim.map(_.asDigit).toVector
 
-  val start1  = System.currentTimeMillis
-  lazy val answer1 = solve1(digits)
-  println(s"Answer AOC 2020 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
-
-  val start2  = System.currentTimeMillis
-  lazy val answer2 = solve2(digits)
-  println(s"Answer AOC 2020 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  lazy val answer1: Long = solve1(digits)
+  lazy val answer2: Long = solve2(digits)

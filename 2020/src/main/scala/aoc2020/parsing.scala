@@ -1,3 +1,6 @@
+package aoc2020
+
+import scala.annotation.tailrec
 
 case class P[A](parse: String => Option[(A,String)]):
 
@@ -24,6 +27,7 @@ case class P[A](parse: String => Option[(A,String)]):
   def ~[B](that: P[B]): P[B] =
     for _ <- this ; b <- that yield b
 
+  @tailrec
   private def loop(s: String, acc: List[A] = List.empty): (List[A], String) =
     parse(s) match
       case None         => (acc.reverse, s)
@@ -35,7 +39,7 @@ case class P[A](parse: String => Option[(A,String)]):
   def oneOrMore: P[List[A]] =
     P(s => parse(s).flatMap((a,ss) => Some(loop(ss, List(a)))))
 
-  def chainl1[B >: A](opp: P[B => A => A]): P[B] =
+  def chainLeftAssoc[B >: A](opp: P[B => A => A]): P[B] =
     def rest(lhs: B): P[B] =
       val result =
         for

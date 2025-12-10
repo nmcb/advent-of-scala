@@ -38,3 +38,8 @@ class Test2025 extends AnyFunSuite:
   test("Day 9: Movie Theater"):
     assertResult(4749672288L)(Day09.answer1)
     assertResult(1479665889L)(Day09.answer2)
+
+  test("Day 10: Factory"):
+    assertResult(542)(Day10.answer1)
+    assertResult(20871)(Day10.answer2)
+

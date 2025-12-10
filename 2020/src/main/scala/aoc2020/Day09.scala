@@ -1,19 +1,13 @@
+package aoc2020
+
+import nmcb.*
 import scala.annotation.tailrec
-import scala.io.*
-import scala.util.control.Breaks.*
+import scala.util.boundary
+import scala.util.boundary.break
 
-object Day09 extends App:
+object Day09 extends AoC:
 
-  val day: String = getClass.getSimpleName.filter(_.isDigit).mkString
-
-  def input: Vector[Long] =
-    Source
-      .fromResource(s"input$day.txt")
-      .getLines
-      .map(_.toLong)
-      .toVector
-
-  val (preamble, inbound) = input.splitAt(25)
+  val (preamble, inbound) = lines.map(_.toLong).splitAt(25)
 
   def solve1(preamble: Vector[Long], inbound: Vector[Long]): Long =
     @tailrec
@@ -27,23 +21,17 @@ object Day09 extends App:
         case _            => sys.error("boom")
     go(inbound)
 
-  val start1 = System.currentTimeMillis
-  lazy val answer1 = solve1(preamble, inbound)
-  println(s"Answer AOC 2020 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
-
   def solve2(inbound: Vector[Long], sum: Long): Option[Long] =
     var result: Option[Long] = None
-    breakable {
+    boundary:
       for size <- 2 to inbound.length do
         for test <- inbound.sliding(size) do
           if test.sum == sum then
             result = Some(test.max + test.min)
-            break
+            break(result)
         if result.isDefined then
-          break
-    }
+          break(result)
     result
 
-  val start2 = System.currentTimeMillis
+  lazy val answer1: Long = solve1(preamble, inbound)
   lazy val answer2: Long = solve2(inbound, answer1).get
-  println(s"Answer AOC 2020 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")

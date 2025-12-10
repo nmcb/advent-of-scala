@@ -1,10 +1,11 @@
+package aoc2020
+
+import nmcb.*
 import nmcb.predef.*
+
 import scala.annotation.tailrec
-import scala.io.Source
 
-object Day24 extends App:
-
-  val day: String = getClass.getSimpleName.filter(_.isDigit).mkString
+object Day24 extends AoC:
 
   case class Tile(x: Int, y: Int):
     def even: Boolean = y % 2 == 0
@@ -43,11 +44,6 @@ object Day24 extends App:
       .filter(_._2 % 2 == 1)
       .keySet
 
-  val flips = Source.fromResource(s"input$day.txt").getLines().toVector
-
-  val start1 = System.currentTimeMillis
-  lazy val answer1 = solve1(flips).size
-  println(s"Answer AOC 2020 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   def solve2(flips: Vector[String]): Int =
     def step(floor: Set[Tile]): Set[Tile] =
@@ -60,6 +56,6 @@ object Day24 extends App:
 
     Iterator.iterate(solve1(flips))(step).nth(100).size
 
-  val start2  = System.currentTimeMillis
-  lazy val answer2 = solve2(flips)
-  println(s"Answer AOC 2020 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+
+  lazy val answer1: Int = solve1(lines).size
+  lazy val answer2: Int = solve2(lines)

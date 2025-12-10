@@ -1,8 +1,9 @@
+package aoc2020
+
+import nmcb.*
 import scala.io.*
 
-object Day04 extends App:
-
-  val day: String = getClass.getSimpleName.filter(_.isDigit).mkString
+object Day04 extends AoC:
 
   type Passport = Map[String,String]
 
@@ -10,14 +11,8 @@ object Day04 extends App:
     val empty: Passport =
       Map.empty[String,String]
 
-  val input =
-      Source
-        .fromResource(s"input$day.txt")
-        .getLines
-        .toList
-
   val passports: Vector[Passport] =
-    input.foldLeft(Vector(Passport.empty)): (acc,line) =>
+    lines.foldLeft(Vector(Passport.empty)): (acc,line) =>
       line.split(' ') match
         case Array("") =>
           Passport.empty +: acc
@@ -52,10 +47,6 @@ object Day04 extends App:
   def solve1(passports: Vector[Passport]): Vector[Passport] =
     passports.filter(p => p.size == 8 || (p.size == 7 && !p.keys.exists(_  == "cid")))
 
-  val start1  = System.currentTimeMillis
-  lazy val answer1 = solve1(passports).size
-  println(s"Answer AOC 2020 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
-
   def solve2(passports: Vector[Passport]): Vector[Passport] =
     solve1(passports)
       .filter(valYear("byr", 1920, 2020))
@@ -66,6 +57,5 @@ object Day04 extends App:
       .filter(valEcl)
       .filter(valPid)
 
-  val start2  = System.currentTimeMillis
-  lazy val answer2 = solve2(passports).size
-  println(s"Answer AOC 2020 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  lazy val answer1: Int = solve1(passports).size
+  lazy val answer2: Int = solve2(passports).size

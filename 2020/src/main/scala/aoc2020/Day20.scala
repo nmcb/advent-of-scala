@@ -1,13 +1,13 @@
+package aoc2020
 
+import nmcb.*
 import nmcb.predef.*
 import scala.annotation.tailrec
-import scala.io.Source
 
-object Day20 extends App:
+object Day20 extends AoC:
 
-  val day: String = getClass.getSimpleName.filter(_.isDigit).mkString
 
-  val monster =
+  val monster: Seq[(Int,Int)] =
     """                  #
       |#    ##    ##    ###
       | #  #  #  #  #  #
@@ -27,10 +27,10 @@ object Day20 extends App:
 
   /** note that images are squares */
   case class Image(size: Int, pixels: Map[Pos, Char]):
-    val top    = (0 until size).map(x => pixels(Pos(x, 0)))
-    val left   = (0 until size).map(y => pixels(Pos(0, y)))
-    val bottom = (0 until size).map(x => pixels(Pos(x, size - 1)))
-    val right  = (0 until size).map(y => pixels(Pos(size - 1, y)))
+    val top: IndexedSeq[Char]    = (0 until size).map(x => pixels(Pos(x, 0)))
+    val left: IndexedSeq[Char]   = (0 until size).map(y => pixels(Pos(0, y)))
+    val bottom: IndexedSeq[Char] = (0 until size).map(x => pixels(Pos(x, size - 1)))
+    val right: IndexedSeq[Char]  = (0 until size).map(y => pixels(Pos(size - 1, y)))
 
     private def rotateCW: Image =
       Image(size, pixels.map((pos, pixel) => Pos(size - pos.y - 1, pos.x) -> pixel))
@@ -57,7 +57,7 @@ object Day20 extends App:
   case class Tile(id: Long, image: Image):
     export image.{top, left, bottom, right}
 
-    val edges =
+    val edges: Set[IndexedSeq[Char]] =
       val forward   = Set(top, left, bottom, right)
       val backwards = forward.map(_.reverse)
       forward ++ backwards
@@ -74,9 +74,7 @@ object Day20 extends App:
     categories(4)
 
   val tiles: Vector[Tile] =
-    Source
-      .fromResource(s"input$day.txt")
-      .mkString
+    input
       .trim.split("\n\n").toSeq
       .map(_.split("\n").map(_.trim))
       .map: tile =>
@@ -88,10 +86,6 @@ object Day20 extends App:
 
   def solve1(tiles: Vector[Tile]): Long =
     corners(tiles).map(_.id).product
-
-  val start1 = System.currentTimeMillis
-  lazy val answer1 = solve1(tiles)
-  println(s"Answer AOC 2020 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
   def unscrambleTiles(tiles: Vector[Tile]): Map[Pos, Tile] =
     val size = math.sqrt(tiles.size).toInt
@@ -140,6 +134,5 @@ object Day20 extends App:
     val roughness     = findMonsters(completeImage)
     roughness.min
 
-  val start2 = System.currentTimeMillis
-  lazy val answer2 = solve2(tiles)
-  println(s"Answer AOC 2020 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  lazy val answer1: Long = solve1(tiles)
+  lazy val answer2: Long = solve2(tiles)

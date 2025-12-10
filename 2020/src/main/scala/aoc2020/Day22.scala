@@ -1,9 +1,9 @@
+package aoc2020
+
+import nmcb.*
 import scala.annotation.tailrec
-import scala.io.Source
 
-object Day22 extends App:
-
-  val day: String = getClass.getSimpleName.filter(_.isDigit).mkString
+object Day22 extends AoC:
 
   enum Winner(val deck: Vector[Int]):
     case Player1(override val deck: Vector[Int]) extends Winner(deck)
@@ -12,13 +12,13 @@ object Day22 extends App:
     def score: Int =
 
       extension (card: (Int, Int))
-        def value: Int     = card._1
-        def multplier: Int = card._2
+        def value: Int      = card._1
+        def multiplier: Int = card._2
 
       (deck :+ 0)
         .reverse
         .zipWithIndex
-        .foldLeft(0)((score, card) => score + card.value * card.multplier)
+        .foldLeft(0)((score, card) => score + card.value * card.multiplier)
 
   import Winner.*
 
@@ -56,16 +56,11 @@ object Day22 extends App:
       go(this)
 
   val game: Game =
-    val input = Source.fromResource(s"input$day.txt").getLines.toVector
-    val index = input.indexOf("")
-    val deck1 = input.slice(1, index).map(_.toInt)
-    val deck2 = input.drop(index + 2).map(_.toInt)
+    val index = lines.indexOf("")
+    val deck1 = lines.slice(1, index).map(_.toInt)
+    val deck2 = lines.drop(index + 2).map(_.toInt)
     Game(deck1, deck2)
 
-  val start1  = System.currentTimeMillis
-  lazy val answer1 = game.combat.score
-  println(s"Answer AOC 2020 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
 
-  val start2  = System.currentTimeMillis
-  lazy val answer2 = game.recursiveCombat.score
-  println(s"Answer AOC 2020 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+  lazy val answer1: Int = game.combat.score
+  lazy val answer2: Int = game.recursiveCombat.score

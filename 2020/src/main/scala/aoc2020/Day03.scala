@@ -1,9 +1,10 @@
+package aoc2020
+
+import nmcb.*
 import scala.annotation.tailrec
-import scala.io.*
 
-object Day03 extends App:
 
-  val day: String = getClass.getSimpleName.filter(_.isDigit).mkString
+object Day03 extends AoC:
 
   case class Forest(tile: Vector[Vector[Char]]):
     val sizeX: Int = tile(0).size
@@ -22,18 +23,7 @@ object Day03 extends App:
           case _         => sys.error(s"boom: x=$x,y=$y,dx=$dx,dy=$dy")
       step(dx,dy)
 
-  val forest: Forest =
-    Forest(
-      Source
-        .fromResource(s"input$day.txt")
-        .getLines
-        .map(_.toVector)
-        .toVector
-    )
-
-  val start1  = System.currentTimeMillis
-  lazy val answer1 = forest.walk(3, 1)
-  println(s"Answer AOC 2020 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
+  val forest: Forest = Forest(lines.map(_.toVector))
 
   val walks: List[Long] =
     List(
@@ -44,6 +34,6 @@ object Day03 extends App:
       forest.walk(1,2)
     )
 
-  val start2  = System.currentTimeMillis
-  lazy val answer2 = walks.product
-  println(s"Answer AOC 2020 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+
+  lazy val answer1: Long = forest.walk(3, 1)
+  lazy val answer2: Long = walks.product

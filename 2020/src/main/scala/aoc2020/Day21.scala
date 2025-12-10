@@ -1,9 +1,11 @@
+package aoc2020
+
+import nmcb.*
+
 import scala.annotation.tailrec
-import scala.io.*
+import scala.util.matching.Regex
 
-object Day21 extends App:
-
-  val day: String = getClass.getSimpleName.filter(_.isDigit).mkString
+object Day21 extends AoC:
 
   type Ingredient  = String
   type Allergen    = String
@@ -11,7 +13,7 @@ object Day21 extends App:
   type Allergens   = Set[Allergen]
   type Input       = Vector[(Ingredients, Allergens)]
 
-  val regex = "(.+) \\(contains (.+)\\)".r
+  val regex: Regex = "(.+) \\(contains (.+)\\)".r
 
   def partition(input: Input): (Map[Ingredient,Allergens], Map[Allergen,Ingredients]) =
 
@@ -49,28 +51,18 @@ object Day21 extends App:
 
     go(risky, Vector.empty).sortBy(_.allergen).map(_.ingredient).mkString(",")
 
-  val input: Input =
-    Source
-      .fromResource(s"input$day.txt")
-      .getLines()
-      .toVector
-      .map:
-        case regex(ingredients, allergens) =>
-          (ingredients.split(" ").toSet, allergens.split(", ").toSet)
+  val puzzle: Input = lines.map:
+    case regex(ingredients, allergens) => (ingredients.split(" ").toSet, allergens.split(", ").toSet)
 
 
   def part1(input: Input): Int =
     val (inert,risky) = partition(input)
     input.map((ingredients,_) => inert.keySet.intersect(ingredients).size).sum
 
-  val start1  = System.currentTimeMillis
-  lazy val answer1 = part1(input)
-  println(s"Answer AOC 2020 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
-
   def part2(input: Input): String =
     val (inert, risky) = partition(input)
     findIngredient(risky)
 
-  val start2  = System.currentTimeMillis
-  lazy val answer2 = part2(input)
-  println(s"Answer AOC 2020 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+
+  lazy val answer1: Int    = part1(puzzle)
+  lazy val answer2: String = part2(puzzle)

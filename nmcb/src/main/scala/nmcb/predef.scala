@@ -28,11 +28,11 @@ object predef:
 
   extension [A](i: Iterable[A])
 
-    def slidingPairs: Iterable[(A, A)] =
+    def slidingPairs: Iterable[(A,A)] =
       if i.isEmpty then Nil else i.zip(i.tail)
 
-    def allPairs: Vector[(A,A)] =
-      i.tails.toVector.tail.flatMap(i.zip)
+    def allPairs: Seq[(A,A)] =
+      i.tails.toSeq.tail.flatMap(i.zip)
 
     def pairs[B](): Iterator[(A,A)] =
       i.tails
@@ -41,12 +41,12 @@ object predef:
         .flatMap(i.zip)
         .iterator
 
-    def pairs[B](order: ((A,A)) => B = identity)(using Ordering[B]): Iterator[(A,A)] =
+    def pairs[B](using Ordering[(A,A)]): Iterator[(A,A)] =
       i.tails
         .toVector
         .tail
         .flatMap(i.zip)
-        .sortBy(order)
+        .sorted
         .iterator
 
     def findMap[B](f: A => Option[B]): B =

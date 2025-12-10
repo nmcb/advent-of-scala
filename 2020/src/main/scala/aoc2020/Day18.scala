@@ -1,15 +1,10 @@
-import scala.io.*
+package aoc2020
 
-object Day18 extends App:
+import nmcb.*
 
-  val day: String = getClass.getSimpleName.filter(_.isDigit).mkString
+object Day18 extends AoC:
 
-  val input =
-      Source
-        .fromResource(s"input$day.txt")
-        .getLines
-        .map(_.filter(_ != ' '))
-        .toList
+  val puzzle: List[String] = lines.map(_.filter(_ != ' ')).toList
 
   enum Expr:
     case Add(l: Expr, r: Expr)
@@ -44,7 +39,7 @@ object Day18 extends App:
   // value  := digit -> { digit }                            => Val(value)
 
   def expr1: P[Expr] =
-    (braced(expr1) | value).chainl1(lassoc)
+    (braced(expr1) | value).chainLeftAssoc(lassoc)
 
   def lassoc: P[BinOp] =
     infix("*")(lhs => rhs => Add(lhs, rhs)) | infix("+")(lhs => rhs => Mul(lhs, rhs))
@@ -55,25 +50,20 @@ object Day18 extends App:
   def parse1(line: String): Expr = 
     P.run(expr1)(line)
 
-
-  val start1  = System.currentTimeMillis
-  lazy val answer1 = input.map(parse1).map(_.eval).sum
-  println(s"Answer AOC 2020 day $day part 1: $answer1 [${System.currentTimeMillis - start1}ms]")
-
-
+  
   // expr2   := lhs@term2 -> { '*' rhs@term2 }                       => Mul(lhs,rhs)
   // term2   := lhs@( '(' expr2 ')' | value ) -> { '+' rhs@expr2 }   => Add(lhs,rhs)
   // value   := digit -> { digit }                                   => Val(value)
 
   def expr2: P[Expr] =
-    term2.chainl1(infix("*")(lhs => rhs => Mul(lhs,rhs)))
+    term2.chainLeftAssoc(infix("*")(lhs => rhs => Mul(lhs,rhs)))
 
   def term2: P[Expr] =
-    (braced(expr2)| value).chainl1(infix("+")(lhs => rhs => Add(lhs,rhs)))
+    (braced(expr2)| value).chainLeftAssoc(infix("+")(lhs => rhs => Add(lhs,rhs)))
   
   def parse2(line: String): Expr =
     run(expr2)(line)
 
-  val start2  = System.currentTimeMillis
-  lazy val answer2 = input.map(parse2).map(_.eval).sum
-  println(s"Answer AOC 2020 day $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
+
+  lazy val answer1: Long = puzzle.map(parse1).map(_.eval).sum
+  lazy val answer2: Long = puzzle.map(parse2).map(_.eval).sum
