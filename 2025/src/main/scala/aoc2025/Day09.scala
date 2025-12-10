@@ -3,15 +3,16 @@ package aoc2025
 import nmcb.*
 import predef.*
 
+/** credits https://www.reddit.com/r/adventofcode/comments/1phzvef/2025_day_9_part_2_python_visualization_of_the */
 object Day09 extends AoC:
 
   type Pos = (x: Long, y: Long)
 
-  extension (pp: (Pos,Pos))
+  extension (pair: (Pos,Pos))
 
     def area: Long =
-      val dx = (pp.left.x - pp.right.x).abs
-      val dy = (pp.left.y - pp.right.y).abs
+      val dx = (pair.left.x - pair.right.x).abs
+      val dy = (pair.left.y - pair.right.y).abs
       (dx  + 1) * (dy + 1)
 
   val corners: Vector[Pos] = lines.collect:
