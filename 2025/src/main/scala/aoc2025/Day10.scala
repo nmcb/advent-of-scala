@@ -105,6 +105,8 @@ object Day10 extends AoC:
       //      i1:     x1                    x5    = 5
       //      i2:           x2  x3    x4          = 4
       //      i3: x0            x3                = 7
+      //
+      //      x0 = 1, x1 = 3, x2 = 3, x4 = 1, x5 = 2
 
 
       val optimizer = mkOptimize()
@@ -125,8 +127,8 @@ object Day10 extends AoC:
           mkAdd(x,y)
       optimizer.MkMinimize(total)
 
-      /** joltage - b(i0) - b(i1) - b(in) = 0 */
-      (buttons lazyZip xs)
+      /** joltage(i) - b(i0) - b(i1) - b(in) = 0 */
+      (buttons zip xs)
         .foldLeft(joltages.map[ArithExpr[IntSort]](mkInt)):
           case (expressions, (b, x)) =>
             b.indices.foldLeft(expressions): (expressions, i) =>
