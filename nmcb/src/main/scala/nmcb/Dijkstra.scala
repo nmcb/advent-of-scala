@@ -9,6 +9,10 @@ object Dijkstra:
 
   final case class Edge[A](from: A, to: A, weight: Int):
     def inverse: Edge[A] = Edge(to, from, weight)
+    
+  object Edge:
+    def unit[A](from: A, to: A): Edge[A] =
+      Edge(from, to, 1)
 
   final case class Graph[A](neighbours: Map[A,Vector[Edge[A]]] = Map.empty):
 
@@ -22,6 +26,9 @@ object Dijkstra:
 
     def empty[A]: Graph[A] =
       Graph(Map.empty)
+
+    def fromEdges[A](edges: Vector[Edge[A]]): Graph[A] =
+      Graph(edges.groupMap(_.from)(identity))
 
     def fromGrid[A](grid: Grid[A], node: A, dist: (Pos,Pos) => Int = (_,_) => 1): Graph[Pos] =
       grid.elements
