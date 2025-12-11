@@ -27,22 +27,22 @@ object Day08 extends AoC:
     def isHalted: Boolean     = this.isInstanceOf[Halted]
     def isTerminated: Boolean = this.isInstanceOf[Terminated]
 
-    def setRunning: Running       = Running(pc, accumulator)
-    def setHalted: Halted         = Halted(pc, accumulator)
-    def setTerminated: Terminated = Terminated(pc, accumulator)
+    def setRunning(): Running       = Running(pc, accumulator)
+    def setHalted(): Halted         = Halted(pc, accumulator)
+    def setTerminated(): Terminated = Terminated(pc, accumulator)
 
   import State.*
 
   case class VM(program: Program, state: State = Running(pc = 0, accumulator = 0), trace: Vector[Int] = Vector.empty):
 
     def run(debug: Boolean): VM =
-      if (debug && trace.contains(state.pc))
-        copy(state = state.setHalted)
+      if debug && trace.contains(state.pc) then
+        copy(state = state.setHalted())
       else
         program
           .lift(state.pc)
           .map(instruction => copy(state = exec(instruction), trace = trace :+ state.pc).run(debug))
-          .getOrElse(copy(state = state.setTerminated))
+          .getOrElse(copy(state = state.setTerminated()))
 
     private def exec(inst: Instruction): State =
       inst.code match

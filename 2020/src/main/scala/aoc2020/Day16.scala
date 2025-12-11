@@ -12,8 +12,7 @@ object Day16 extends AoC:
     def check(i: Int): Boolean = (a <= i && i <= b) || (c <= i && i <= d)
 
   val (rules: Set[Rule], mine: Seq[Int], nearby: Seq[Seq[Int]]) =
-    val input = lines
-    val (rules, rest)  = input.splitAt(input.indexOf(""))
+    val (rules, rest)  = lines.splitAt(lines.indexOf(""))
     val (your, nearby) = (rest(2), rest.drop(5))
     (rules.map(Rule.apply).toSet, your.split(",").map(_.toInt).toSeq, nearby.map(_.split(",").map(_.toInt).toSeq))
 

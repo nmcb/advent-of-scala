@@ -9,7 +9,7 @@ object Day11 extends AoC:
 
   extension (floor: Floor)
     
-    def sizeX: Int = floor.head.size
+    def sizeX: Int = floor.head.length
     def sizeY: Int = floor.size
 
     def within(x: Int, y: Int): Boolean =

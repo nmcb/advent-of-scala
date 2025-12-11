@@ -20,7 +20,7 @@ object Day14 extends AoC:
       underlying.toString
 
   val MaskExpr: Regex   = "mask = (.+)".r
-  val UpdateExpr: Regex = "mem\\[(\\d+)\\] = (\\d+)".r
+  val UpdateExpr: Regex = "mem\\[(\\d+)] = (\\d+)".r
 
   sealed trait Inst
 
@@ -60,7 +60,7 @@ object Day14 extends AoC:
   object Mask:
     def fill(c: Char): Mask = Mask(List.fill(36)(c).mkString)
 
-  case class Update(addr: UInt36, value: UInt36) extends Inst
+  case class Update(addres: UInt36, value: UInt36) extends Inst
 
   type Memory  = Map[UInt36,UInt36]
   type Program = List[Inst]
@@ -82,5 +82,5 @@ object Day14 extends AoC:
     loop(program).values.map(_.underlying).sum
 
 
-  lazy val answer1 = run(program)(address => value => mask => memory => memory ++ Map(address -> mask.mask(value)))
-  lazy val answer2 = run(program)(address => value => mask => memory => memory ++ mask.float(address).map(a => a -> value))
+  lazy val answer1: Long = run(program)(address => value => mask => memory => memory ++ Map(address -> mask.mask(value)))
+  lazy val answer2: Long = run(program)(address => value => mask => memory => memory ++ mask.float(address).map(a => a -> value))
