@@ -48,3 +48,4 @@ object pos:
       def toPos: Pos =
         assert(it.size == 2)
         Pos(it(0).toString.toInt, it(1).toString.toInt)
+        
