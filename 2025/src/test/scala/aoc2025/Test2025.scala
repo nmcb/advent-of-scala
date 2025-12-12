@@ -46,3 +46,7 @@ class Test2025 extends AnyFunSuite:
   test("Day 11: Reactor"):
     assertResult(590)(Day11.answer1)
     assertResult(319473830844560L)(Day11.answer2)
+
+  test("Day 12: Christmas Tree Farm"):
+    assertResult(590)(Day11.answer1)
+    assertResult(319473830844560L)(Day11.answer2)

@@ -104,7 +104,7 @@ object Day10 extends AoC:
       //      i0:                     x4    x5    = 3
       //      i1:     x1                    x5    = 5
       //      i2:           x2  x3    x4          = 4
-      //      i3: x0            x3                = 7
+      //      i3: x0  x1        x3                = 7
       //
       //      x0 = 1, x1 = 3, x2 = 3, x4 = 1, x5 = 2
 

@@ -73,6 +73,19 @@ case class Grid[+A](matrix: Vector[Vector[A]]):
   def transpose: Grid[A] =
     Grid(matrix.transpose)
 
+  def flipX: Grid[A] =
+    Grid(matrix.map(_.reverse))
+
+  def flipY: Grid[A] =
+    Grid(matrix.reverse)
+
+  def rotateCW: Grid[A] =
+    def rotateMatrixCW(matrix: Vector[Vector[A]]): Vector[Vector[A]] =
+      if matrix.isEmpty then
+        matrix
+      else
+        Vector.tabulate(sizeX, sizeY)((x,y) => matrix(sizeX - 1 - y)(x))
+    Grid(rotateMatrixCW(matrix))
 
 object Grid:
 
